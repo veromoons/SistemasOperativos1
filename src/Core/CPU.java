@@ -4,30 +4,42 @@
  * and open the template in the editor.
  */
 package Core;
+import java.util.concurrent.Semaphore;
 
 /**
  *
  * @author verol
  */
+
+
+/**
+ * CPU: simula la CPU. Usa un Semaphore(1) para exclusión (una sola CPU disponible).
+ * El método executeProcess() adquiere el semáforo, duerme el tiempo simulado y libera.
+ *
+ * Comentarios en español para mayor claridad.
+ */
 public class CPU {
-    private int baseQuantum; // quantum estandar que asigna a  c/proceso
+    private final Semaphore cpuSemaphore = new Semaphore(1); // semáforo para exclusión mutua
+    private final int tickTime; // duración de un tick del reloj (en ms)
+    private int systemClock = 0; // reloj del sistema
 
-    public CPU(int baseQuantum) {
-        this.baseQuantum = baseQuantum;
+    public CPU(int tickTime) {
+        this.tickTime = tickTime;
     }
 
-    // ejecuta  proceso usando un hilo
-    public void executeProcess(Process process) {
-        if (process.isFinished()) return;
+    public void execute(Process process, int cpuBurst) throws InterruptedException {
+        cpuSemaphore.acquire();
+        int elapsed = 0;
 
-        process.setQuantum(baseQuantum); // Asigna quantum
-        Thread t = new Thread(process);
-        t.start();
-
-        try {
-            t.join(); // espera a que termine su turno
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+        while (elapsed < cpuBurst) {
+            Thread.sleep(tickTime); // simula 1 tick de CPU
+            systemClock += tickTime;
+            elapsed += tickTime;
+            System.out.println("[Clock " + systemClock + "ms] " + process.getProcessName() + " running...");
         }
+
+        cpuSemaphore.release();
     }
+
+    public int getClock() { return systemClock; }
 }

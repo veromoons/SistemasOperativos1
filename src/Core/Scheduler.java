@@ -12,32 +12,20 @@ import java.util.Queue;
  */
 
 public class Scheduler {
-    private Queue<Process> readyQueue = new LinkedList<>();
-    private CPU cpu;
-
-    public Scheduler(CPU cpu) {
-        this.cpu = cpu;
+    private final MainMemory mainMemory;
+    public Scheduler(MainMemory mainMemory){
+        this.mainMemory = mainMemory;
+    }
+    // Por ahora FIFO
+    public synchronized void addProcess(Process process) {
+        this.mainMemory.addProcess(process);
     }
 
-    public void addProcess(Process process) {
-        readyQueue.add(process);
-        System.out.println(process.getName() + " added to READY queue.");
+    public synchronized Process getNextProcess() {
+        return this.mainMemory.getNextProcess();
     }
 
-    public void run() {
-        while (!readyQueue.isEmpty()) {
-            Process process = readyQueue.poll();
-
-            if (!process.isFinished()) {
-                cpu.executeProcess(process);
-
-                // si todavia no termino lo volvemos a poner al final de la cola
-                if (!process.isFinished()) {
-                    readyQueue.add(process);
-                }
-            }
-        }
-        System.out.println("All processes finished execution.");
+    public boolean hasProcesses() {
+        return this.mainMemory.hasProcesses();
     }
 }
-

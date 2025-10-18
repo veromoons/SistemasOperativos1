@@ -11,21 +11,20 @@ import java.util.Queue;
  * @author verol
  */
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 public class Scheduler {
-    private final MainMemory mainMemory;
-    public Scheduler(MainMemory mainMemory){
-        this.mainMemory = mainMemory;
-    }
-    // Por ahora FIFO
-    public synchronized void addProcess(Process process) {
-        this.mainMemory.addProcess(process);
+    private final ConcurrentLinkedQueue<Process> readyQueue = new ConcurrentLinkedQueue<>();
+
+    public void addProcess(Process process) {
+        readyQueue.add(process);
     }
 
-    public synchronized Process getNextProcess() {
-        return this.mainMemory.getNextProcess();
+    public Process getNextProcess() {
+        return readyQueue.poll();
     }
 
     public boolean hasProcesses() {
-        return this.mainMemory.hasProcesses();
+        return !readyQueue.isEmpty();
     }
 }

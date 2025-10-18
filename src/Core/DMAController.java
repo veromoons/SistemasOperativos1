@@ -11,59 +11,36 @@ import java.util.concurrent.Semaphore;
  * @author verol
  */
 
-/**
- * DMAController: simula un controlador DMA. Puede modelarse con un semáforo
- * si decides limitar la cantidad de canales DMA paralelos.
- *
- * Al completar la transferencia notifica al OperatingSystem (simulando una interrupción).
- */
 public class DMAController extends Thread {
-    private static final Semaphore dmaChannels = new Semaphore(2, true); // ejemplo: 2 canales DMA paralelos
-    private final IODevice device;
-    private final MainMemory memory;
-    private final Process target;
-    private final int sizeMb;
+//    private static final Semaphore dmaChannels = new Semaphore(2, true);
+    private final Semaphore ioSemaphore;
+    private final Process process;
+    private final int ioTime;
     private final OperatingSystem os;
 
-    public DMAController(IODevice device, MainMemory memory, Process target, int sizeMb, OperatingSystem os) {
-        this.device = device;
-        this.memory = memory;
-        this.target = target;
-        this.sizeMb = sizeMb;
+    public DMAController(Semaphore ioSemaphore, Process process, int ioTime, OperatingSystem os) {
+        this.ioSemaphore = ioSemaphore;
+        this.process = process;
+        this.ioTime = ioTime;
         this.os = os;
-        setName("DMA-" + target.getName());
+        setName("DMA-" + process.getName());
     }
 
     @Override
     public void run() {
         try {
-            System.out.println("⚙️ DMA: attempting to acquire channel for " + target.getName());
-            dmaChannels.acquire();
-            System.out.println("⚙️ DMA: channel acquired for " + target.getName() + ", starting transfer (size=" + sizeMb + "MB).");
+//            dmaChannels.acquire();
+            System.out.println("[DMA] Processing I/O for " + process.getProcessName() + " (" + ioTime + "ms)");
+            Thread.sleep(ioTime);
+//            process.addIoTime(ioTime);
 
-            // Simular lectura desde el dispositivo
-            device.readData(target.getName(), sizeMb);
+            // Notificar al SO (simula interrupción)
+            os.handleIOCompletion(process);
 
-            // Simular breve escritura a memoria (no necesitamos reservar memoria adicional aquí,
-            // porque la memoria ya suele ser asignada al proceso; si quieres modelar DMA que escribe
-            // en buffer extra, puedes usar memory.allocateMemory(...) aquí).
-            Thread.sleep(50);
-
-            System.out.println("⚡ DMA: transfer complete for " + target.getName() + ". Releasing channel and notifying OS.");
-            os.handleIOCompletion(target); // notificar al OS (simulación de interrupción)
         } catch (InterruptedException e) {
-            System.out.println("❌ DMA: interrupted for " + target.getName());
-            Thread.currentThread().interrupt();
-        } finally {
-            dmaChannels.release();
+            e.printStackTrace();
         }
     }
-
-    /**
-     * Permite configurar el número de canales DMA si lo deseas (opcional).
-     */
-    public static void setChannels(int num) {
-        // No se puede reasignar fácilmente el Semaphore static sin reiniciar; si necesitas dinámica,
-        // crea instancia de controlador con su propio semáforo. De momento dejamos static por simplicidad.
-    }
+    
+    
 }

@@ -32,75 +32,73 @@ public class Process extends Thread {
     private final int baseTime;
     private final CPU cpu;
     private boolean finished = false;
-    private int totalCpuTime = 0;
-    private int totalIoTime = 0;
-    private final Random random = new Random();
-    private PCB PCB;
-
-    // Semáforo compartido para operaciones de E/S (DMA o dispositivo simulado)
+    private final PCB PCB;
+    private final OperatingSystem os;
     private final Semaphore ioSemaphore;
+    private final Random random = new Random();
 
-    public Process(String name, ProcessType type, int baseTime, CPU cpu, Semaphore ioSemaphore) {
+    public Process(String name, ProcessType type, int baseTime, CPU cpu, Semaphore ioSemaphore, OperatingSystem os) {
+        super(name);
         this.type = type;
         this.baseTime = baseTime;
         this.cpu = cpu;
         this.ioSemaphore = ioSemaphore;
         this.PCB = new PCB("1", name);
+        this.os = os;
     }
 
     @Override
     public void run() {
         try {
             while (!finished) {
-                // Simular ráfaga de CPU
+                // CPU burst
                 int cpuBurst = getCpuBurstTime();
-                System.out.println(this.PCB.getName() + " is using CPU for " + cpuBurst + "ms (" + type + ")");
+                System.out.println(PCB.getName() + " using CPU for " + cpuBurst + "ms (" + type + ")");
                 cpu.execute(this, cpuBurst);
 
-                // Simular posible operación de E/S
+                // Posible operación de E/S
                 if (random.nextDouble() < getIoProbability()) {
                     int ioTime = getIoTime();
-                    performIO(ioTime);
+                    this.PCB.setStatus(StatusType.Blocked);
+                    System.out.println(PCB.getName() + " requesting I/O for " + ioTime + "ms...");
+
+                    // El DMA liberará el semáforo cuando termine
+                    DMAController dma = new DMAController(ioSemaphore, this, ioTime, os);
+
+                    // El hilo se bloquea hasta que el DMA complete
+                    ioSemaphore.acquire();
+                    dma.start();
+                    ioSemaphore.release();
+
+                    this.PCB.setStatus(StatusType.Ready);
+                    System.out.println(PCB.getName() + " resumes after I/O.");
                 } else {
                     finished = true;
-                    System.out.println(this.PCB.getName() + " finished execution.");
+                    this.PCB.setStatus(StatusType.Done);
+                    System.out.println(PCB.getName() + " finished execution.");
                 }
             }
         } catch (InterruptedException e) {
-            System.out.println(this.PCB.getName() + " was interrupted.");
+            System.out.println(PCB.getName() + " was interrupted.");
+            Thread.currentThread().interrupt();
         }
-    }
-
-    private void performIO(int ioTime) throws InterruptedException {
-        System.out.println(this.PCB.getName() + " waiting for I/O for " + ioTime + "ms...");
-        ioSemaphore.acquire(); // acceso exclusivo al dispositivo (simula DMA)
-        Thread.sleep(ioTime);
-        totalIoTime += ioTime;
-        ioSemaphore.release();
-        System.out.println(this.PCB.getName() + " completed I/O and returns to ready queue.");
     }
 
     private int getCpuBurstTime() {
         switch (type) {
-            case CPU_BOUND:
-                return randomBetween((int)(1.0 * baseTime), (int)(2.0 * baseTime));
-            case IO_BOUND:
-                return randomBetween((int)(0.2 * baseTime), (int)(0.6 * baseTime));
+            case CPU_BOUND: return randomBetween((int)(1.0*baseTime),(int)(2.0*baseTime));
+            case IO_BOUND: return randomBetween((int)(0.2*baseTime),(int)(0.6*baseTime));
             case NORMAL:
-            default:
-                return randomBetween((int)(0.5 * baseTime), (int)(1.0 * baseTime));
+            default: return randomBetween((int)(0.5*baseTime),(int)(1.0*baseTime));
         }
     }
 
     private int getIoTime() {
         switch (type) {
-            case CPU_BOUND:
-                return randomBetween((int)(0.2 * baseTime), (int)(0.5 * baseTime));
-            case IO_BOUND:
-                return randomBetween((int)(1.0 * baseTime), (int)(2.0 * baseTime));
+            case CPU_BOUND: return randomBetween((int)(0.2*baseTime),(int)(0.5*baseTime));
+            case IO_BOUND: return randomBetween((int)(1.0*baseTime),(int)(2.0*baseTime));
             case NORMAL:
-            default:
-                return randomBetween((int)(0.5 * baseTime), (int)(1.0 * baseTime));
+            default: return randomBetween((int)(0.5*baseTime),(int)(1.0*baseTime));
         }
     }
 
@@ -113,9 +111,10 @@ public class Process extends Thread {
     }
 
     private int randomBetween(int min, int max) {
-        return random.nextInt(max - min + 1) + min;
+        return random.nextInt(max-min+1) + min;
     }
 
-    public String getProcessName() { return this.PCB.getName(); }
+    public String getProcessName() { return PCB.getName(); }
+    public PCB getPCB() { return PCB; }
+    public ProcessType getType() { return type; }
 }
-

@@ -3,13 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/Core/Mutex.java</file>
+            <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/sistemasoperativos1/Main.java</file>
             <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/Core/Process.java</file>
             <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/Core/CPU.java</file>
-            <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/Core/OperativeSystem.java</file>
-            <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/sistemasoperativos1/SISTEMASOPERATIVOS1.java</file>
             <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/Core/MainMemory.java</file>
+            <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/Core/OperatingSystem.java</file>
+            <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/Core/DMAController.java</file>
             <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/Core/Scheduler.java</file>
+            <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/Core/IODevice.java</file>
+            <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/Core/PCB.java</file>
         </group>
     </open-files>
 </project-private>

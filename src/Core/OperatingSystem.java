@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package Core;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -12,51 +14,47 @@ import java.util.concurrent.Semaphore;
  */
 
 
+import java.util.concurrent.Semaphore;
+
 public class OperatingSystem {
     private final Scheduler scheduler;
     private final CPU cpu;
     private final Semaphore ioSemaphore;
     private final int baseTime;
-    private final MainMemory mainMemory;
 
     public OperatingSystem(int baseTime, MainMemory mainMemory) {
         this.baseTime = baseTime;
-        this.scheduler = new Scheduler(mainMemory);
-        this.cpu = new CPU(baseTime); // tickTime | baseTime
-        this.ioSemaphore = new Semaphore(1); // semáforo para E/S
-        this.mainMemory = mainMemory;
+        this.scheduler = new Scheduler();
+        this.cpu = new CPU(baseTime);
+        this.ioSemaphore = new Semaphore(1); // compartido entre todos los procesos
     }
 
     public void startSystem() {
         System.out.println("Operating System started with base time: " + baseTime + "ms");
 
-        // Crear algunos procesos de distintos tipos
-        Process p1 = new Process("P1", ProcessType.CPU_BOUND, baseTime, cpu, ioSemaphore);
-        Process p2 = new Process("P2", ProcessType.IO_BOUND, baseTime, cpu, ioSemaphore);
-        Process p3 = new Process("P3", ProcessType.NORMAL, baseTime, cpu, ioSemaphore);
+        // Crear procesos (usando tu baseTime input)
+        Process p1 = new Process("P1", ProcessType.CPU_BOUND, baseTime, cpu, ioSemaphore, this);
+        Process p2 = new Process("P2", ProcessType.IO_BOUND, baseTime, cpu, ioSemaphore, this);
+        Process p3 = new Process("P3", ProcessType.NORMAL, baseTime, cpu, ioSemaphore, this);
 
+        // Arrancar hilos y agregarlos al scheduler
         scheduler.addProcess(p1);
         scheduler.addProcess(p2);
         scheduler.addProcess(p3);
 
-        // Lanzar procesos en orden FIFO
-        while (scheduler.hasProcesses()) {
-            Process next = scheduler.getNextProcess();
-            if (next != null) next.start();
-            try {
-                next.join(); // esperar que termine
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        p1.start();
+        p2.start();
+        p3.start();
 
-        System.out.println("All processes have finished execution.");
+        // El OS ya no hace join, los procesos se manejan solos
     }
-    public void handleIOCompletion(Process process) {
-    System.out.println("🛎️ Interrupt: I/O completed for " + process.getProcessName());
-    
-    // Reinsertar el proceso en la cola de listos del scheduler
-    scheduler.addProcess(process);
-}
 
+    // Llamado por DMA al terminar la E/S
+    public void handleIOCompletion(Process p) {
+        System.out.println("[OS] I/O completed for " + p.getProcessName());
+        ioSemaphore.release(); // desbloquear al hilo bloqueado
+        scheduler.addProcess(p); // volver a ready
+    }
+
+    public Scheduler getScheduler() { return scheduler; }
 }

@@ -117,5 +117,9 @@ public class Process extends Thread {
     }
 
     public String getProcessName() { return this.PCB.getName(); }
+    
+    public PCB getPCB() {
+        return this.PCB;
+    }
 }
 

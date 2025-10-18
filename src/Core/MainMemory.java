@@ -5,8 +5,7 @@
  */
 package Core;
 import java.util.concurrent.Semaphore;
-import java.util.LinkedList;
-import java.util.Queue;
+
 
 /**
  *
@@ -16,7 +15,7 @@ import java.util.Queue;
 public class MainMemory {
     private final int totalMemory;
     private final Semaphore memoryPermits; // semáforo contador representando memoria libre en MB
-    private final Queue<Process> readyQueue = new LinkedList<>();
+    private final CustomQueue readyQueue = new CustomQueue();
     public MainMemory(int totalMemory) {
         this.totalMemory = totalMemory;
         this.memoryPermits = new Semaphore(totalMemory, true); // fair = true para orden FIFO de espera
@@ -54,15 +53,19 @@ public class MainMemory {
     }
     
     public synchronized void addProcess(Process process) {
-        readyQueue.add(process);
+        readyQueue.enqueue(process);
         System.out.println(process.getProcessName() + " added to ready queue.");
     }
 
     public synchronized Process getNextProcess() {
-        return readyQueue.poll();
+        return readyQueue.dequeue();
     }
 
     public boolean hasProcesses() {
         return !readyQueue.isEmpty();
+    }
+    
+    public CustomQueue getReadyQueue() {
+        return this.readyQueue;
     }
 }

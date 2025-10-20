@@ -29,12 +29,13 @@ public class DMA {
                 running = true;
                 this.onESComplete = callback;
 
-                long tiempoES = p.getTiempoES(); // en ticks
-                for (long i = 0; i < tiempoES; i++) {
-                    Thread.sleep(unidadTiempoMs); // simula tiempo de E-S
-                }
+                long tiempoES = p.getCiclosParaCompletarES(); // en ticks
+                Thread.sleep(unidadTiempoMs*tiempoES);
+//                for (long i = 0; i < tiempoES; i++) {
+//                    Thread.sleep(unidadTiempoMs); // simula tiempo de E-S
+//                }
 
-                System.out.println("DMA: E-S completada para proceso " + p.getId());
+                System.out.println("DMA: Operación E/S completada → genera interrupción al SO (" + p.getNombre() + ")");
 
                 if (onESComplete != null) {
                     onESComplete.run(); // notificar al SO

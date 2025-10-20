@@ -14,20 +14,45 @@ import java.util.Queue;
  * @author verol
  */
 public class FIFOScheduling implements ISchedulingAlgorithm {
-    private final Queue<Proceso> cola = new LinkedList<>();
+//    private Queue<Proceso> cola = new LinkedList<>();
+    private Queue<Proceso> colaNuevos = new LinkedList<>();
+    private Queue<Proceso> colaListos = new LinkedList<>();
+    private Queue<Proceso> colaBloqueados = new LinkedList<>();
+    private Queue<Proceso> colaTerminados = new LinkedList<>();
+    private Queue<Proceso> colaListoSuspendido = new LinkedList<>();
+    private Queue<Proceso> colaBloqueadoSuspendido = new LinkedList<>();
 
     @Override
-    public void agregarProceso(Proceso p) {
-        cola.add(p);
+    public void agregarProcesoAListos(Proceso p) {
+        colaListos.add(p);
     }
 
     @Override
     public Proceso obtenerSiguienteProceso() {
-        return cola.poll(); // FIFO: primero en entrar, primero en salir
+        return colaListos.poll(); // FIFO: primero en entrar, primero en salir
     }
 
     @Override
     public boolean hayProcesos() {
-        return !cola.isEmpty();
+        return !colaListos.isEmpty();
+    }
+    
+    public void setColaNuevos(Queue<Proceso> cola){
+        this.colaNuevos = cola;
+    }
+    public void setColaListos(Queue<Proceso> cola){
+        this.colaListos = cola;
+    }
+    public void setColaBloqueados(Queue<Proceso> cola){
+        this.colaBloqueados = cola;
+    }
+    public void setColaTerminados(Queue<Proceso> cola){
+        this.colaTerminados = cola;
+    }
+    public void setColaListoSuspendido(Queue<Proceso> cola){
+        this.colaListoSuspendido = cola;
+    }
+    public void setColaBloqueadoSuspendido(Queue<Proceso> cola){
+        this.colaBloqueadoSuspendido = cola;
     }
 }

@@ -19,6 +19,7 @@ import java.util.LinkedList;
 // 🔹 Scheduler que utiliza un algoritmo dinámico
 public class Scheduler {
     private ISchedulingAlgorithm algoritmo;
+    private OperatingSystem so;
 
     public Scheduler(ISchedulingAlgorithm algoritmoInicial) {
         this.algoritmo = algoritmoInicial;
@@ -28,8 +29,8 @@ public class Scheduler {
         this.algoritmo = nuevoAlgoritmo;
     }
 
-    public void agregarProceso(Proceso p) {
-        algoritmo.agregarProceso(p);
+    public void agregarProcesos(Proceso p) {
+        algoritmo.agregarProcesoAListos(p);
     }
 
     public Proceso obtenerSiguienteProceso() {
@@ -39,5 +40,16 @@ public class Scheduler {
     public boolean hayProcesos() {
         return algoritmo.hayProcesos();
     }
+    
+    public void setSO(OperatingSystem so){
+        this.so = so;
+        this.algoritmo.setColaNuevos(so.getColaNuevos());
+        this.algoritmo.setColaListos(so.getColaListos());
+        this.algoritmo.setColaBloqueadoSuspendido(so.getColaBloqueadoSuspendido());
+        this.algoritmo.setColaBloqueados(so.getColaBloqueados());
+        this.algoritmo.setColaTerminados(so.getColaTerminados());
+        this.algoritmo.setColaListoSuspendido(so.getColaListoSuspendido());
+    }
+    
 }
 

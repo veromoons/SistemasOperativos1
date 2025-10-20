@@ -15,6 +15,7 @@ public class Clock {
     private boolean running = false;
     private Thread thread;
     public OperatingSystem so;
+    public CPU cpu;
 
     public Clock(long ticTimeMs) {
         this.ticTimeMs = ticTimeMs;
@@ -36,7 +37,8 @@ public class Clock {
                 try {
                     Thread.sleep(ticTimeMs);
                     ticGlobal++;
-	        notifySO();
+//                    cpu.tick(ticGlobal);
+                    notifySO();
                     System.out.println("Tic Global: " + ticGlobal);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -53,6 +55,10 @@ public class Clock {
     
     public void setSO(OperatingSystem so){
         this.so = so;
+    }
+    
+    public void setCPU(CPU cpu){
+        this.cpu = cpu;
     }
 }
 

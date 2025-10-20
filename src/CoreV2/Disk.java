@@ -14,14 +14,13 @@ import java.util.concurrent.Semaphore;
  * @author verol
  */
 public class Disk {
-    private final Queue<Proceso> colaLargoPlazo = new LinkedList<>();
     private final Semaphore mutex = new Semaphore(1); // protege acceso concurrente
 
     // 🔹 Guardar un proceso en disco (long-term)
     public void guardarProceso(Proceso p) {
         try {
             mutex.acquire();
-            colaLargoPlazo.add(p);
+//            colaLargoPlazo.add(p);
             System.out.println("Disk: Proceso " + p.getId() + " guardado en disco");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -31,34 +30,34 @@ public class Disk {
     }
 
     // 🔹 Cargar un proceso desde disco (para pasar a memoria principal)
-    public Proceso cargarProceso() {
-        try {
-            mutex.acquire();
-            Proceso p = colaLargoPlazo.poll();
-            if (p != null) {
-                System.out.println("Disk: Proceso " + p.getId() + " cargado desde disco");
-            }
-            return p;
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return null;
-        } finally {
-            mutex.release();
-        }
-    }
+//    public Proceso cargarProceso() {
+//        try {
+//            mutex.acquire();
+//            Proceso p = colaLargoPlazo.poll();
+//            if (p != null) {
+//                System.out.println("Disk: Proceso " + p.getId() + " cargado desde disco");
+//            }
+//            return p;
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//            return null;
+//        } finally {
+//            mutex.release();
+//        }
+//    }
 
 
     // 🔹 Consultar si hay procesos en disco
-    public boolean hayProcesosLongTerm() {
-        try {
-            mutex.acquire();
-            return !colaLargoPlazo.isEmpty();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return false;
-        } finally {
-            mutex.release();
-        }
-    }
+//    public boolean hayProcesosLongTerm() {
+//        try {
+//            mutex.acquire();
+//            return !colaLargoPlazo.isEmpty();
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//            return false;
+//        } finally {
+//            mutex.release();
+//        }
+//    }
 }
 

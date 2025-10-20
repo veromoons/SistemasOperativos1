@@ -16,13 +16,6 @@ import java.util.concurrent.Semaphore;
  *
  * @author verol
  */
-// Representa un bloque libre dentro de la memoria
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Queue;
-import java.util.LinkedList;
-import java.util.concurrent.Semaphore;
 
 // Representa un bloque libre dentro de la memoria
 class MemoryBlock {
@@ -41,8 +34,10 @@ public class MainMemory {
     private final List<MemoryBlock> bloquesLibres;    // lista de bloques libres
     private final List<Proceso> procesosEnMemoria;   // procesos actualmente en memoria
 
-    private final Queue<Proceso> colaCortoPlazo = new LinkedList<>();
-    private final Queue<Proceso> colaMedianoPlazo = new LinkedList<>();
+//    private final Queue<Proceso> colaCortoPlazo = new LinkedList<>();
+//    private final Queue<Proceso> colaMedianoPlazo = new LinkedList<>();
+//    private final Queue<Proceso> colaLargoPlazo = new LinkedList<>();
+
 
     private final Semaphore mutex = new Semaphore(1); // protege acceso concurrente
 
@@ -118,86 +113,86 @@ public class MainMemory {
         bloquesLibres.addAll(fusionados);
     }
 
-    // 🔹 Métodos para la cola de corto plazo
-    public void agregarAColaCortoPlazo(Proceso p) {
-        try {
-            mutex.acquire();
-            colaCortoPlazo.add(p);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } finally {
-            mutex.release();
-        }
-    }
-
-    public Proceso sacarDeColaCortoPlazo() {
-        try {
-            mutex.acquire();
-            return colaCortoPlazo.poll();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return null;
-        } finally {
-            mutex.release();
-        }
-    }
-
-    public boolean hayProcesosCortoPlazo() {
-        try {
-            mutex.acquire();
-            return !colaCortoPlazo.isEmpty();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return false;
-        } finally {
-            mutex.release();
-        }
-    }
-
-    // 🔹 Métodos para la cola de mediano plazo
-    public void agregarAColaMedianoPlazo(Proceso p) {
-        try {
-            mutex.acquire();
-            colaMedianoPlazo.add(p);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } finally {
-            mutex.release();
-        }
-    }
-
-    public Proceso sacarDeColaMedianoPlazo() {
-        try {
-            mutex.acquire();
-            return colaMedianoPlazo.poll();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return null;
-        } finally {
-            mutex.release();
-        }
-    }
-
-    public boolean hayProcesosMedianoPlazo() {
-        try {
-            mutex.acquire();
-            return !colaMedianoPlazo.isEmpty();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return false;
-        } finally {
-            mutex.release();
-        }
-    }
-
-    // 🔹 Getters públicos para SO
-    public List<Proceso> getProcesosCortoPlazo() {
-        return new ArrayList<>(colaCortoPlazo);
-    }
-
-    public List<Proceso> getProcesosMedianoPlazo() {
-        return new ArrayList<>(colaMedianoPlazo);
-    }
+//    // 🔹 Métodos para la cola de corto plazo
+//    public void agregarAColaCortoPlazo(Proceso p) {
+//        try {
+//            mutex.acquire();
+//            colaCortoPlazo.add(p);
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//        } finally {
+//            mutex.release();
+//        }
+//    }
+//
+//    public Proceso sacarDeColaCortoPlazo() {
+//        try {
+//            mutex.acquire();
+//            return colaCortoPlazo.poll();
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//            return null;
+//        } finally {
+//            mutex.release();
+//        }
+//    }
+//
+//    public boolean hayProcesosCortoPlazo() {
+//        try {
+//            mutex.acquire();
+//            return !colaCortoPlazo.isEmpty();
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//            return false;
+//        } finally {
+//            mutex.release();
+//        }
+//    }
+//
+//    // 🔹 Métodos para la cola de mediano plazo
+//    public void agregarAColaMedianoPlazo(Proceso p) {
+//        try {
+//            mutex.acquire();
+//            colaMedianoPlazo.add(p);
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//        } finally {
+//            mutex.release();
+//        }
+//    }
+//
+//    public Proceso sacarDeColaMedianoPlazo() {
+//        try {
+//            mutex.acquire();
+//            return colaMedianoPlazo.poll();
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//            return null;
+//        } finally {
+//            mutex.release();
+//        }
+//    }
+//
+//    public boolean hayProcesosMedianoPlazo() {
+//        try {
+//            mutex.acquire();
+//            return !colaMedianoPlazo.isEmpty();
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//            return false;
+//        } finally {
+//            mutex.release();
+//        }
+//    }
+//
+//    // 🔹 Getters públicos para SO
+//    public List<Proceso> getProcesosCortoPlazo() {
+//        return new ArrayList<>(colaCortoPlazo);
+//    }
+//
+//    public List<Proceso> getProcesosMedianoPlazo() {
+//        return new ArrayList<>(colaMedianoPlazo);
+//    }
 }
 
 

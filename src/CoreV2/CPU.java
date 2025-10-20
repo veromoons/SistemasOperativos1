@@ -44,7 +44,7 @@ public class CPU {
     }
 
     // ✅ Avanza un tic del reloj
-    public void tick(int tiempoActual) {
+    public void tick(long tiempoActual) {
         if (procesoActual != null) {
             procesoActual.incrementarTiempoEjecutado(); // +1 tick
             tiempoOcupado++;
@@ -55,6 +55,36 @@ public class CPU {
             }
         }
     }
+    
+    // ✅ Nuevo: ejecuta un ciclo completo de CPU y avisa al SO si el proceso termina
+    public void ejecutarInstruccion( OperatingSystem os) {
+        if (procesoActual == null) return;
+        
+        procesoActual.nextInstruccion();
+        // Simular ejecución de una instrucción
+        procesoActual.incrementarTiempoEjecutado();
+        procesoActual.setProgramCounter(procesoActual.getProgramCounter() + 1);
+        procesoActual.setMemoryAddressRegister(procesoActual.getStartAddress() + procesoActual.getProgramCounter());
+        tiempoOcupado++;
+        
+        // 🔹 Simular solicitud de E/S (interrupción de inicio)
+        if (procesoActual.getTipo() == Proceso.Tipo.IO_BOUND  && !procesoActual.isLastInstruccion() && procesoActual.getActualInstruccion() == procesoActual.getInstruccionesParaES()) { // 15% chance y restric de que E/S no puede ser en ult instruc
+            System.out.println("CPU: " + procesoActual.getNombre() + " solicita E/S");
+            os.bloquearProcesoES(procesoActual);
+            procesoActual = null;
+            ocupado = false;
+            return;
+        }
+
+        // Verificar si el proceso completó su ejecución
+        if (procesoActual.isLastInstruccion()) {
+            System.out.println("CPU: Proceso " + procesoActual.getId() + " ha completado su ejecución.");
+            os.procesoFinalizado(procesoActual); // 🔹 cambia a TERMINADO y libera memoria
+            procesoActual = null;
+            ocupado = false;
+        }
+    }
+
 
     public boolean estaOcupado() {
         return ocupado;
@@ -62,6 +92,7 @@ public class CPU {
 
     public Proceso getProcesoActual() {
         return procesoActual;
+       
     }
 
     public int getTiempoOcupado() {

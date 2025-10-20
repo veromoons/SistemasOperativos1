@@ -6,13 +6,20 @@
 package CoreV2.AlgorithmsStrategies;
 
 import CoreV2.Proceso;
+import java.util.Queue;
 
 /**
  *
  * @author verol
  */
 public interface ISchedulingAlgorithm {
-    void agregarProceso(Proceso p);
+    void agregarProcesoAListos(Proceso p);
     Proceso obtenerSiguienteProceso();
     boolean hayProcesos();
+    void setColaNuevos(Queue<Proceso> cola);
+    void setColaListos(Queue<Proceso> cola);
+    void setColaBloqueados(Queue<Proceso> cola);
+    void setColaTerminados(Queue<Proceso> cola);
+    void setColaListoSuspendido(Queue<Proceso> cola);
+    void setColaBloqueadoSuspendido(Queue<Proceso> cola);
 }

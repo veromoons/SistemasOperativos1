@@ -43,6 +43,7 @@ public class Main {
 
         // 🔹 Seteamos el SO en la CPU
         cpu = new CPU();
+        so.setCPUQuantum(10);
         clock.startClock();
 
         // 🔹 Creamos procesos

@@ -22,6 +22,10 @@ public class Clock {
 
     }
 
+    public long getTicTimeMs() {
+        return ticTimeMs;
+    }
+
     public long getTic() {
         return ticGlobal;
     }

@@ -5,8 +5,10 @@
  */
 package CoreV2;
 import CoreV2.AlgorithmsStrategies.ISchedulingAlgorithm;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.Semaphore;
-import java.util.*;
+//import java.util.*;
 
 
 /**
@@ -29,6 +31,9 @@ public class OperatingSystem {
     private Queue<Proceso> colaTerminados = new LinkedList<>();
     private Queue<Proceso> colaListoSuspendido = new LinkedList<>();
     private Queue<Proceso> colaBloqueadoSuspendido = new LinkedList<>();
+    private Thread quantumThread;
+    private boolean stopQuantumThread;
+    
 
     private final Semaphore mutex = new Semaphore(1); // protege acceso concurrente
 
@@ -40,6 +45,7 @@ public class OperatingSystem {
         this.scheduler = scheduler;
         this.clock = clock;
         this.processCounter = 1;
+        this.stopQuantumThread = false;
     }
     
     public void crearProceso(int id, Proceso.Tipo tipo, int instrucciones, long tamano, long tiempoES, int prioridad) {
@@ -140,11 +146,39 @@ public class OperatingSystem {
         System.out.println("SO: Algoritmo de planificación cambiado");
     }
     
+    public void startQuantumTime(){
+        this.quantumThread = new Thread(()->{
+            while(this.cpu.getActualQuantumCiclosCounter() > 0 && !stopQuantumThread){
+                try {
+                    Thread.sleep(clock.getTicTimeMs());
+                    this.cpu.decreaseQuantumCounter();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+            if(!stopQuantumThread){
+                this.cpu.throwInterruptToCPU();
+                System.out.println("Interrupcion por quantum de "+ this.cpu.getQuantumCiclos()+ "ms excedido");
+            }
+            this.cpu.resetQuantumCounter();
+            this.stopQuantumThread = false;
+        });
+        this.quantumThread.start();
+    }
+    
+    public void stopQuantumTime(){
+        this.stopQuantumThread = true;
+    }
+    
     public void validacionAgregarAlCPU(Proceso siguiente){
         if (siguiente != null) {
             cpu.asignarProceso(siguiente, clock.getTic());
             System.out.println("Proceso a ejecutar según planificador (algoritmo) --> "+siguiente.getNombre());
             siguiente.setEstado(Proceso.Estado.EJECUCION);
+            if (this.cpu.getQuantumCiclos()>0){            
+                startQuantumTime();
+            }
         }
     }
     public void notifyTic() {
@@ -233,6 +267,10 @@ public class OperatingSystem {
 
     public void moverATerminados(Proceso p) {
         colaTerminados.add(p);
+    }
+    
+    public void setCPUQuantum(int quantum){
+        this.cpu.setQuantumCiclos(quantum);
     }
 
 }

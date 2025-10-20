@@ -74,6 +74,14 @@ public class MainMemory {
             mutex.release();
         }
     }
+    
+    public boolean hayEspacioDisponible() {
+        for (MemoryBlock block : bloquesLibres) {
+            if (block.size > 0) return true;
+        }
+        return false;
+    }
+
 
     // 🔹 Libera la memoria de un proceso
     public void liberarProceso(Proceso p) {
@@ -112,7 +120,16 @@ public class MainMemory {
         bloquesLibres.clear();
         bloquesLibres.addAll(fusionados);
     }
+    
+    public boolean findAvailableBlock(Proceso p) {
+        for (MemoryBlock block : bloquesLibres) {
+            if (block.size >= p.getTamano()) return true;
+        }
+        return false;
+    }
 
+   
+    
 //    // 🔹 Métodos para la cola de corto plazo
 //    public void agregarAColaCortoPlazo(Proceso p) {
 //        try {

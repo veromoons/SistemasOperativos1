@@ -23,7 +23,7 @@ public class FIFOScheduling implements ISchedulingAlgorithm {
     private Queue<Proceso> colaBloqueadoSuspendido = new LinkedList<>();
 
     @Override
-    public void agregarProcesoAListos(Proceso p) {
+        public void agregarProcesoAListos(Proceso p) {
         colaListos.add(p);
     }
 

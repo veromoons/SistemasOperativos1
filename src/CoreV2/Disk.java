@@ -7,6 +7,8 @@ package CoreV2;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -21,13 +23,23 @@ public class Disk {
         try {
             mutex.acquire();
 //            colaLargoPlazo.add(p);
-            System.out.println("Disk: Proceso " + p.getId() + " guardado en disco");
+            System.out.println("Disk: " + p.getNombre() + " guardado en disco");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
             mutex.release();
         }
     }
+    
+    public void sacarProcesoDisco(Proceso p){
+        try {
+            mutex.acquire();
+            System.out.println("Disk: " + p.getNombre() + " sacado de disco");
+        } catch (InterruptedException ex) {
+        }finally{
+        mutex.release();}
+    }
+    
 
     // 🔹 Cargar un proceso desde disco (para pasar a memoria principal)
 //    public Proceso cargarProceso() {

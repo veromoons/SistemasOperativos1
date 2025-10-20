@@ -78,19 +78,21 @@ public class OperatingSystem {
             if (memory.cargarProceso(p)) {
 //                memory.agregarAColaCortoPlazo(p);
                 System.out.println("SO: " + p.getNombre() + " cargado en memoria principal");
+                colaNuevos.remove(p);
                 p.setEstado(Proceso.Estado.LISTO);
                 
 //        System.out.println("---"+colaListos.size());
                 moverAColaListos(p);
-                
 //        System.out.println("+++"+colaListos.size());
-            } else {
-                // Si no hay espacio, lo mandamos a disco
-                p.setEstado(Proceso.Estado.LISTOSUSPENDIDO);
-                moverAListoSuspendidos(p);
-                
-                disk.guardarProceso(p);
-            }
+            } else{verificarYSuspenderProcesos(p);}
+//            else {
+//                // Si no hay espacio, lo mandamos a disco
+//                p.setEstado(Proceso.Estado.LISTOSUSPENDIDO);
+//                colaNuevos.remove(p);
+//                moverAListoSuspendidos(p);
+//                
+//                disk.guardarProceso(p);
+//            }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
@@ -133,9 +135,15 @@ public class OperatingSystem {
         moverABloqueados(p);
         dma.ejecutarES(p, () -> {
             System.out.println("SO: E/S completada para " + p.getNombre());
-            p.setEstado(Proceso.Estado.LISTO);
-            this.colaBloqueados.remove(p);
-            moverAColaListos(p);
+            if (p.getEstado()==Proceso.Estado.BLOQUEADO){
+                this.colaBloqueados.remove(p);
+                p.setEstado(Proceso.Estado.LISTO);
+                moverAColaListos(p);
+            } else if (p.getEstado()==Proceso.Estado.BLOQUEADOSUSPENDIDO){
+                this.colaBloqueadoSuspendido.remove(p);
+                p.setEstado(Proceso.Estado.LISTOSUSPENDIDO);
+                moverAListoSuspendidos(p);
+            }
 //            validacionAgregarAlCPU(siguiente);
         });
     }
@@ -184,11 +192,9 @@ public class OperatingSystem {
     public void notifyTic() {
         try {
             mutex.acquire();
-            
             if (cpu.getProcesoActual() != null) {
                 cpu.ejecutarInstruccion( this);
             }
-
             // 🔹 Actualizamos tiempos de espera para los procesos en cola de corto plazo
             for (Proceso p : this.colaListos) {
 //                System.out.println(this.colaListos.size());
@@ -208,6 +214,8 @@ public class OperatingSystem {
                     validacionAgregarAlCPU(siguiente);
                 }
             }
+            
+            verificarMoverListosSuspendidosAListos();
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -215,6 +223,83 @@ public class OperatingSystem {
             mutex.release();
         }
     }
+    
+    public void verificarMoverListosSuspendidosAListos(){
+        int cantidadDeListosSuspendidos = this.colaListoSuspendido.size();
+        for (int i = 0; i<cantidadDeListosSuspendidos; i++){
+            Proceso pActual = this.colaListoSuspendido.poll(); //aqui ya se hace remove con poll
+            disk.sacarProcesoDisco(pActual);
+            boolean procesoCargadoEnMainMemory = this.memory.cargarProceso(pActual);
+            if (procesoCargadoEnMainMemory){
+                this.colaListos.add(pActual);
+                pActual.setEstado(Proceso.Estado.LISTO);
+            }else {
+                this.colaListoSuspendido.add(pActual);
+            }
+        }
+    }
+    // 🔹 Verifica si hay falta de memoria y suspende procesos si es necesario
+    public void verificarYSuspenderProcesos(Proceso p) {
+        if (!memory.hayEspacioDisponible()) {
+            Proceso candidato = null;
+            
+            boolean keepVerifying = true;
+            
+            while (keepVerifying){
+                if (!colaBloqueados.isEmpty()) {
+                candidato = colaBloqueados.poll(); // Saca el primero bloqueado
+                } 
+                // Si no hay bloqueados, pasa nuevo proceso a Listo Susp (menos ideal, pero necesario)
+                else {
+                    candidato = null;
+                    // Si no hay espacio, lo mandamos a disco
+                    colaNuevos.remove(p);
+                    p.setEstado(Proceso.Estado.LISTOSUSPENDIDO);
+                    moverAListoSuspendidos(p);
+                    disk.guardarProceso(p);
+                    keepVerifying = false;
+                    break;
+                }
+
+                if (candidato != null) {
+                    this.memory.liberarProceso(candidato);
+                    suspenderProceso(candidato);
+                    System.out.println("🔸 Proceso " + candidato.getNombre() + " suspendido por falta de memoria.");
+                    if (memory.hayEspacioDisponible() && this.memory.findAvailableBlock(p)){
+                        this.memory.cargarProceso(p);
+                        keepVerifying = false;
+                        break;
+                    }
+                    candidato = null; 
+                }
+            }
+            // Primero busca un proceso bloqueado (porque suspender bloqueados es más realista)
+            
+        }
+    }
+
+    // 🔹 Suspende un proceso (lo pasa de memoria principal a disco)
+    public void suspenderProceso(Proceso p) {
+//        colaBloqueados.remove(p); //ya se hace POLL de candidato
+        memory.liberarProceso(p);
+        p.setEstado(Proceso.Estado.BLOQUEADOSUSPENDIDO);
+        moverABloqueadoSuspendidos(p);
+        disk.guardarProceso(p);
+        System.out.println("SO: " + p.getNombre() + " suspendido (bloqueado/suspendido) para liberar memoria.");
+    }
+    
+//    // 🔹 Reactiva un proceso suspendido si hay memoria libre en bloqueados
+//    public void reactivarProcesosBloqueadoSuspendidos() {
+//        if (!colaBloqueadoSuspendido.isEmpty()) {
+//            Proceso p = colaBloqueadoSuspendido.peek();
+//            if (memory.cargarProceso(p)) {
+//                colaBloqueadoSuspendido.remove(p);
+//                p.setEstado(Proceso.Estado.BLOQUEADO);
+//                moverABloqueados(p);
+//                System.out.println("SO: " + p.getNombre() + " reactivado y cargado en memoria en lista de Bloqueados.");
+//            }
+//        }
+//    }
 
     public Queue<Proceso> getColaNuevos() {
         return colaNuevos;

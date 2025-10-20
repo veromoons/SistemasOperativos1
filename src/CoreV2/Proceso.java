@@ -11,12 +11,14 @@ package CoreV2;
  */
 
 public class Proceso {
-    public enum Tipo { NORMAL, IO_BOUND, CPU_BOUND }
-    private final Tipo tipo;
+    public enum Tipo { NORMAL, IO_BOUND, CPU_BOUND };
     public enum Estado { NUEVO, LISTO, EJECUCION, BLOQUEADO, LISTOSUSPENDIDO, BLOQUEADOSUSPENDIDO, TERMINADO };
     private Estado estado;
+    private final Tipo tipo;
     private final int id;
     private final String nombre;
+    private int programCounter; // PC: instrucción actual
+    private int memoryAddressRegister; // MAR: última dirección de memoria accedida
     private final int instrucciones;
     private final long duracionTotal; // en ticks
     private final long quantum;       // 0 si no tiene quantum
@@ -27,8 +29,6 @@ public class Proceso {
     private long tiempoEjecutado = 0;        // ticks ya ejecutados
     private long tiempoEsperando = 0;        // ticks total en espera
     private boolean interrumpido = false;
-    private int programCounter; // PC: instrucción actual
-    private int memoryAddressRegister; // MAR: última dirección de memoria accedida
     private int actualInstruccion;
     private int instruccionesParaES;
     private int ciclosParaCompletarES;
@@ -70,7 +70,7 @@ public class Proceso {
         this.programCounter = 0;
         this.memoryAddressRegister = -1;
         this.instruccionesParaES = instruccionesParaES;
-        this.ciclosParaCompletarES = ciclosParaCopletarES;
+        this.ciclosParaCompletarES = ciclosParaCompletarES;
     }
     
 
@@ -115,7 +115,7 @@ public class Proceso {
     public long getTiempoEsperando() { return tiempoEsperando; }
 
     public boolean estaCompletado() {
-//        System.out.println("[Proceso a validar "+this.id+"] "+"Validando completacion --> tiempo ejecutado: "+ tiempoEjecutado+ " duracionTotal: "+ duracionTotal);
+//      System.out.println("[Proceso a validar "+this.id+"] "+"Validando completacion --> tiempo ejecutado: "+ tiempoEjecutado+ " duracionTotal: "+ duracionTotal);
         return tiempoEjecutado >= duracionTotal;
     }
 

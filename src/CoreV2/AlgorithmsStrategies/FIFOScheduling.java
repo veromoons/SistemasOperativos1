@@ -5,25 +5,30 @@
  */
 package CoreV2.AlgorithmsStrategies;
 
+import CoreV2.Cola;
 import CoreV2.Proceso;
-import java.util.LinkedList;
-import java.util.Queue;
+
 
 /**
  *
  * @author verol
  */
 public class FIFOScheduling implements ISchedulingAlgorithm {
-//    private Queue<Proceso> cola = new LinkedList<>();
-    private Queue<Proceso> colaNuevos = new LinkedList<>();
-    private Queue<Proceso> colaListos = new LinkedList<>();
-    private Queue<Proceso> colaBloqueados = new LinkedList<>();
-    private Queue<Proceso> colaTerminados = new LinkedList<>();
-    private Queue<Proceso> colaListoSuspendido = new LinkedList<>();
-    private Queue<Proceso> colaBloqueadoSuspendido = new LinkedList<>();
+    private Cola colaNuevos = new Cola();
+    private Cola colaListos = new Cola();
+    private Cola colaBloqueados = new Cola();
+    private Cola colaTerminados = new Cola();
+    private Cola colaListoSuspendido = new Cola();
+    private Cola colaBloqueadoSuspendido = new Cola();
     private SchedulingType type = SchedulingType.FCFS;
+    private boolean hasQuantum = false;
 
+    @Override
+    public boolean hasQuantum() {
+        return hasQuantum;
+    }
 
+    
     @Override
         public void agregarProcesoAListos(Proceso p) {
         colaListos.add(p);
@@ -44,22 +49,22 @@ public class FIFOScheduling implements ISchedulingAlgorithm {
         return !colaListos.isEmpty();
     }
     
-    public void setColaNuevos(Queue<Proceso> cola){
+    public void setColaNuevos(Cola cola){
         this.colaNuevos = cola;
     }
-    public void setColaListos(Queue<Proceso> cola){
+    public void setColaListos(Cola cola){
         this.colaListos = cola;
     }
-    public void setColaBloqueados(Queue<Proceso> cola){
+    public void setColaBloqueados(Cola cola){
         this.colaBloqueados = cola;
     }
-    public void setColaTerminados(Queue<Proceso> cola){
+    public void setColaTerminados(Cola cola){
         this.colaTerminados = cola;
     }
-    public void setColaListoSuspendido(Queue<Proceso> cola){
+    public void setColaListoSuspendido(Cola cola){
         this.colaListoSuspendido = cola;
     }
-    public void setColaBloqueadoSuspendido(Queue<Proceso> cola){
+    public void setColaBloqueadoSuspendido(Cola cola){
         this.colaBloqueadoSuspendido = cola;
     }
 }

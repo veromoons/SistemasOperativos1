@@ -5,8 +5,8 @@
  */
 package CoreV2.AlgorithmsStrategies;
 
+import CoreV2.Cola;
 import CoreV2.Proceso;
-import java.util.Queue;
 
 /**
  *
@@ -20,10 +20,11 @@ public interface ISchedulingAlgorithm {
     Proceso obtenerSiguienteProceso();
     SchedulingType getSchedulingType();
     boolean hayProcesos();
-    void setColaNuevos(Queue<Proceso> cola);
-    void setColaListos(Queue<Proceso> cola);
-    void setColaBloqueados(Queue<Proceso> cola);
-    void setColaTerminados(Queue<Proceso> cola);
-    void setColaListoSuspendido(Queue<Proceso> cola);
-    void setColaBloqueadoSuspendido(Queue<Proceso> cola);
+    void setColaNuevos(Cola cola);
+    void setColaListos(Cola cola);
+    void setColaBloqueados(Cola cola);
+    void setColaTerminados(Cola cola);
+    void setColaListoSuspendido(Cola cola);
+    void setColaBloqueadoSuspendido(Cola cola);
+    boolean hasQuantum();
 }

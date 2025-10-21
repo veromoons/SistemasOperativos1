@@ -4,11 +4,7 @@
  * and open the template in the editor.
  */
 package CoreV2;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
-import java.util.Queue;
-import java.util.LinkedList;
 import java.util.concurrent.Semaphore;
 
 
@@ -31,8 +27,8 @@ class MemoryBlock {
 // Simulación de la memoria principal
 public class MainMemory {
     private final int capacidad;                      // tamaño total de memoria
-    private final List<MemoryBlock> bloquesLibres;    // lista de bloques libres
-    private final List<Proceso> procesosEnMemoria;   // procesos actualmente en memoria
+    private final Lista<MemoryBlock> bloquesLibres;    // lista de bloques libres
+    private final Lista<Proceso> procesosEnMemoria;   // procesos actualmente en memoria
 
 //    private final Queue<Proceso> colaCortoPlazo = new LinkedList<>();
 //    private final Queue<Proceso> colaMedianoPlazo = new LinkedList<>();
@@ -43,17 +39,18 @@ public class MainMemory {
 
     public MainMemory(int capacidad) {
         this.capacidad = capacidad;
-        this.bloquesLibres = new ArrayList<>();
+        this.bloquesLibres = new Lista<>();
         this.bloquesLibres.add(new MemoryBlock(0, capacidad)); // todo libre al inicio
-        this.procesosEnMemoria = new ArrayList<>();
+        this.procesosEnMemoria = new Lista<>();
     }
 
     // 🔹 Intenta cargar un proceso en memoria
     public boolean cargarProceso(Proceso p) {
         try {
             mutex.acquire();
-            for (MemoryBlock block : bloquesLibres) {
-//                System.out.println(block.size+"--"+ p.getTamano());
+            for (int i = 0; i < bloquesLibres.size(); i++) {
+                MemoryBlock block = bloquesLibres.get(i);
+
                 if (block.size >= p.getTamano()) {
                     p.setStartAddress(block.start);
                     procesosEnMemoria.add(p);
@@ -64,7 +61,7 @@ public class MainMemory {
                         block.start += p.getTamano();
                         block.size -= p.getTamano();
                     }
-                    System.out.println("Memoria: "+p.getNombre()+" cargado en memoria principal");
+                    System.out.println("Memoria: " + p.getNombre() + " cargado en memoria principal");
                     return true;
                 }
             }
@@ -78,7 +75,8 @@ public class MainMemory {
     }
     
     public boolean hayEspacioDisponible() {
-        for (MemoryBlock block : bloquesLibres) {
+        for (int i = 0; i < bloquesLibres.size(); i++) {
+            MemoryBlock block = bloquesLibres.get(i);
             if (block.size > 0) return true;
         }
         return false;
@@ -98,14 +96,33 @@ public class MainMemory {
             mutex.release();
         }
     }
+    
+    // Ordena la lista de MemoryBlock por start ascendente
+    public void sortByStart(Lista<MemoryBlock> lista) {
+        int n = lista.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                MemoryBlock current = lista.get(j);
+                MemoryBlock next = lista.get(j + 1);
+                if (current.start > next.start) {
+                    // Intercambiar
+                    lista.set(j, next);
+                    lista.set(j + 1, current);
+                }
+            }
+        }
+    }
+
 
     // 🔹 Fusiona bloques contiguos para evitar fragmentación
     private void fusionarBloquesLibres() {
-        bloquesLibres.sort(Comparator.comparingInt(b -> b.start));
-        List<MemoryBlock> fusionados = new ArrayList<>();
+        sortByStart(bloquesLibres);
+        Lista<MemoryBlock> fusionados = new Lista<>();
         MemoryBlock prev = null;
 
-        for (MemoryBlock b : bloquesLibres) {
+        for (int i = 0; i < bloquesLibres.size(); i++) {
+            MemoryBlock b = bloquesLibres.get(i);
+
             if (prev == null) {
                 prev = b;
             } else {
@@ -117,6 +134,7 @@ public class MainMemory {
                 }
             }
         }
+
         if (prev != null) fusionados.add(prev);
 
         bloquesLibres.clear();
@@ -124,10 +142,12 @@ public class MainMemory {
     }
     
     public boolean findAvailableBlock(Proceso p) {
-        for (MemoryBlock block : bloquesLibres) {
+        for (int i = 0; i < bloquesLibres.size(); i++) {
+            MemoryBlock block = bloquesLibres.get(i);
             if (block.size >= p.getTamano()) return true;
         }
         return false;
+
     }
 
    

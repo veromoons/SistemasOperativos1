@@ -4,8 +4,6 @@
  * and open the template in the editor.
  */
 package CoreV2;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;

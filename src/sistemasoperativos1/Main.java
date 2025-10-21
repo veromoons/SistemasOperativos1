@@ -39,7 +39,7 @@ public class Main {
         Disk disk = new Disk();
         DMA dma = new DMA(unidadTiempoMs);
         CPU cpu = new CPU(); // SO se setea después
-        Scheduler scheduler = new Scheduler(new HRRNScheduling()); // FIFO inicial
+        Scheduler scheduler = new Scheduler(new FIFOScheduling()); // FIFO inicial
         Clock clock = new Clock(unidadTiempoMs);
         OperatingSystem so = new OperatingSystem(cpu, memory, disk, dma, scheduler, clock);
         clock.setSO(so);
@@ -47,7 +47,11 @@ public class Main {
 
         // 🔹 Seteamos el SO en la CPU
         cpu = new CPU();
-        so.setCPUQuantum(5); // SI ES 0 ES SIN QUANTUM (para los preemptivos debe ser >0)
+        int quantumDefault=0;
+        if(scheduler.algoritmoTieneQuantum()){
+            quantumDefault = 5;
+        }
+        so.setCPUQuantum(quantumDefault); // SI ES 0 ES SIN QUANTUM (para los preemptivos debe ser >0)
         clock.startClock();
 
         // 🔹 Creamos procesos

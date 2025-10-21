@@ -5,28 +5,33 @@
  */
 package CoreV2.AlgorithmsStrategies;
 
+import CoreV2.Cola;
 import CoreV2.Proceso;
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  *
  * @author verol
  */
 public class FeedbackScheduling implements ISchedulingAlgorithm {
-    private Queue<Proceso> colaNuevos = new LinkedList<>();
-    private Queue<Proceso> colaListos = new LinkedList<>();
-    private Queue<Proceso> colaBloqueados = new LinkedList<>();
-    private Queue<Proceso> colaTerminados = new LinkedList<>();
-    private Queue<Proceso> colaListoSuspendido = new LinkedList<>();
-    private Queue<Proceso> colaBloqueadoSuspendido = new LinkedList<>();
+    private Cola colaNuevos = new Cola();
+    private Cola colaListos = new Cola();
+    private Cola colaBloqueados = new Cola();
+    private Cola colaTerminados = new Cola();
+    private Cola colaListoSuspendido = new Cola();
+    private Cola colaBloqueadoSuspendido = new Cola();
     private SchedulingType type = SchedulingType.FEEDBACK;
+    private boolean hasQuantum = true;
+
+    @Override
+    public boolean hasQuantum() {
+        return hasQuantum;
+    }
 
 
     // 🔹 Tres niveles fijos
-    private Queue<Proceso> colaAlta = new LinkedList<>();
-    private Queue<Proceso> colaMedia = new LinkedList<>();
-    private Queue<Proceso> colaBaja = new LinkedList<>();
+    private Cola colaAlta = new Cola();
+    private Cola colaMedia = new Cola();
+    private Cola colaBaja = new Cola();
 
     @Override
     public void agregarProcesoAListos(Proceso p) {
@@ -41,13 +46,12 @@ public class FeedbackScheduling implements ISchedulingAlgorithm {
     //No se contempla inanicion
     @Override
     public Proceso obtenerSiguienteProceso() { // se resetean colas cada vez que llega un nuevo proceso para simplificar el rearreglo de las 3 listas de Listos
-        colaAlta = new LinkedList<>();
-        colaMedia = new LinkedList<>();
-        colaBaja = new LinkedList<>();
+        colaAlta = new Cola();
+        colaMedia = new Cola();
+        colaBaja = new Cola();
         
-        for (Proceso p : colaListos) {
-            agregarProcesoAListos(p);
-        }
+        colaListos.forEach(p -> agregarProcesoAListos(p));
+        
         Proceso siguiente = null;
 
         if (!colaAlta.isEmpty()) siguiente = colaAlta.poll();
@@ -79,11 +83,23 @@ public class FeedbackScheduling implements ISchedulingAlgorithm {
     }
 
     // 🔹 Métodos para setear las colas (aunque aquí no se usan tanto)
-    public void setColaNuevos(Queue<Proceso> cola){ this.colaNuevos = cola; }
-    public void setColaListos(Queue<Proceso> cola){ this.colaListos = cola; }
-    public void setColaBloqueados(Queue<Proceso> cola){ this.colaBloqueados = cola; }
-    public void setColaTerminados(Queue<Proceso> cola){ this.colaTerminados = cola; }
-    public void setColaListoSuspendido(Queue<Proceso> cola){ this.colaListoSuspendido = cola; }
-    public void setColaBloqueadoSuspendido(Queue<Proceso> cola){ this.colaBloqueadoSuspendido = cola; }
+    public void setColaNuevos(Cola cola){
+        this.colaNuevos = cola;
+    }
+    public void setColaListos(Cola cola){
+        this.colaListos = cola;
+    }
+    public void setColaBloqueados(Cola cola){
+        this.colaBloqueados = cola;
+    }
+    public void setColaTerminados(Cola cola){
+        this.colaTerminados = cola;
+    }
+    public void setColaListoSuspendido(Cola cola){
+        this.colaListoSuspendido = cola;
+    }
+    public void setColaBloqueadoSuspendido(Cola cola){
+        this.colaBloqueadoSuspendido = cola;
+    }
 
 }

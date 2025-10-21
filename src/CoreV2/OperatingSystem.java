@@ -5,8 +5,7 @@
  */
 package CoreV2;
 import CoreV2.AlgorithmsStrategies.ISchedulingAlgorithm;
-import java.util.LinkedList;
-import java.util.Queue;
+
 import java.util.concurrent.Semaphore;
 //import java.util.*;
 
@@ -25,12 +24,19 @@ public class OperatingSystem {
     private final Clock clock;
     public int processCounter;
     
-    private Queue<Proceso> colaNuevos = new LinkedList<>();
-    private Queue<Proceso> colaListos = new LinkedList<>();
-    private Queue<Proceso> colaBloqueados = new LinkedList<>();
-    private Queue<Proceso> colaTerminados = new LinkedList<>();
-    private Queue<Proceso> colaListoSuspendido = new LinkedList<>();
-    private Queue<Proceso> colaBloqueadoSuspendido = new LinkedList<>();
+    private Cola colaNuevos = new Cola();
+    private Cola colaListos = new Cola();
+    private Cola colaBloqueados = new Cola();
+    private Cola colaTerminados = new Cola();
+    private Cola colaListoSuspendido = new Cola();
+    private Cola colaBloqueadoSuspendido = new Cola();
+    
+//    private Queue<Proceso> colaNuevos = new LinkedList<>();
+//    private Queue<Proceso> colaListos = new LinkedList<>();
+//    private Queue<Proceso> colaBloqueados = new LinkedList<>();
+//    private Queue<Proceso> colaTerminados = new LinkedList<>();
+//    private Queue<Proceso> colaListoSuspendido = new LinkedList<>();
+//    private Queue<Proceso> colaBloqueadoSuspendido = new LinkedList<>();
     private Thread quantumThread;
     private boolean stopQuantumThread;
     
@@ -204,10 +210,11 @@ public class OperatingSystem {
                 cpu.ejecutarInstruccion( this);
             }
             // 🔹 Actualizamos tiempos de espera para los procesos en cola de corto plazo
-            for (Proceso p : this.colaListos) {
-//                System.out.println(this.colaListos.size());
-                p.actualizarTiempoEsperando(clock.getTic());
-            }
+            colaListos.forEach(p -> p.actualizarTiempoEsperando(clock.getTic()));
+//            for (Proceso p : this.colaListos) {
+////                System.out.println(this.colaListos.size());
+//                p.actualizarTiempoEsperando(clock.getTic());
+//            }
 
             // 🔹 Intentamos asignar proceso a CPU
             if (!cpu.estaOcupado() && scheduler.hayProcesos()) {
@@ -312,27 +319,27 @@ public class OperatingSystem {
 //        }
 //    }
 
-    public Queue<Proceso> getColaNuevos() {
+    public Cola getColaNuevos() {
         return colaNuevos;
     }
 
-    public Queue<Proceso> getColaListos() {
+    public Cola getColaListos() {
         return colaListos;
     }
 
-    public Queue<Proceso> getColaBloqueados() {
+    public Cola getColaBloqueados() {
         return colaBloqueados;
     }
 
-    public Queue<Proceso> getColaTerminados() {
+    public Cola getColaTerminados() {
         return colaTerminados;
     }
 
-    public Queue<Proceso> getColaListoSuspendido() {
+    public Cola getColaListoSuspendido() {
         return colaListoSuspendido;
     }
 
-    public Queue<Proceso> getColaBloqueadoSuspendido() {
+    public Cola getColaBloqueadoSuspendido() {
         return colaBloqueadoSuspendido;
     }
     

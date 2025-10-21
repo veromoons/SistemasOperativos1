@@ -5,9 +5,7 @@
  */
 package CoreV2;
 import CoreV2.AlgorithmsStrategies.ISchedulingAlgorithm;
-import java.util.List;
-import java.util.Queue;
-import java.util.LinkedList;
+//
 
 /**
  *
@@ -40,6 +38,10 @@ public class Scheduler {
 
     public boolean hayProcesos() {
         return algoritmo.hayProcesos();
+    }
+    
+    public boolean algoritmoTieneQuantum(){
+        return algoritmo.hasQuantum();
     }
     
     public void setSO(OperatingSystem so){  //para pasarle al scheduler el SO, necesitas cosas del SO en el scheduler

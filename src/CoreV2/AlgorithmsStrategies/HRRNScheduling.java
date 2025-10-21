@@ -5,22 +5,29 @@
  */
 package CoreV2.AlgorithmsStrategies;
 
+import CoreV2.Cola;
+import CoreV2.Nodo;
 import CoreV2.Proceso;
-import java.util.LinkedList;
-import java.util.Queue;
+
 
 /**
  *
  * @author verol
  */
 public class HRRNScheduling implements ISchedulingAlgorithm {
-    private Queue<Proceso> colaNuevos = new LinkedList<>();
-    private Queue<Proceso> colaListos = new LinkedList<>();
-    private Queue<Proceso> colaBloqueados = new LinkedList<>();
-    private Queue<Proceso> colaTerminados = new LinkedList<>();
-    private Queue<Proceso> colaListoSuspendido = new LinkedList<>();
-    private Queue<Proceso> colaBloqueadoSuspendido = new LinkedList<>();    
+    private Cola colaNuevos = new Cola();
+    private Cola colaListos = new Cola();
+    private Cola colaBloqueados = new Cola();
+    private Cola colaTerminados = new Cola();
+    private Cola colaListoSuspendido = new Cola();
+    private Cola colaBloqueadoSuspendido = new Cola();  
     private SchedulingType type = SchedulingType.HRRN;
+    private boolean hasQuantum = false;
+
+    @Override
+    public boolean hasQuantum() {
+        return hasQuantum;
+    }
 
 
     @Override
@@ -34,17 +41,31 @@ public class HRRNScheduling implements ISchedulingAlgorithm {
 
         Proceso mejor = null;
         double mejorRR = -1;
-
-        for (Proceso p : colaListos) {
-            long tiempoEsperando = p.getTiempoEsperando(); // en ticks
-            long duracion = p.getDuracionTotal(); // duración total
+        
+        Nodo actual = colaListos.getFrente();
+        while (actual != null) {
+            Proceso p = actual.getProceso();
+            long tiempoEsperando = p.getTiempoEsperando();
+            long duracion = p.getDuracionTotal();
             double rr = ((double) tiempoEsperando + duracion) / duracion;
 
             if (rr > mejorRR) {
                 mejorRR = rr;
                 mejor = p;
             }
+
+            actual = actual.getSiguiente();
         }
+//        for (Proceso p : colaListos) {
+//            long tiempoEsperando = p.getTiempoEsperando(); // en ticks
+//            long duracion = p.getDuracionTotal(); // duración total
+//            double rr = ((double) tiempoEsperando + duracion) / duracion;
+//
+//            if (rr > mejorRR) {
+//                mejorRR = rr;
+//                mejor = p;
+//            }
+//        }
 
         // Quitar el proceso elegido de la cola
         colaListos.remove(mejor);
@@ -61,11 +82,34 @@ public class HRRNScheduling implements ISchedulingAlgorithm {
     public boolean hayProcesos() {
         return !colaListos.isEmpty();
     }
-
-    @Override public void setColaNuevos(Queue<Proceso> cola){ this.colaNuevos = cola; }
-    @Override public void setColaListos(Queue<Proceso> cola){ this.colaListos = cola; }
-    @Override public void setColaBloqueados(Queue<Proceso> cola){ this.colaBloqueados = cola; }
-    @Override public void setColaTerminados(Queue<Proceso> cola){ this.colaTerminados = cola; }
-    @Override public void setColaListoSuspendido(Queue<Proceso> cola){ this.colaListoSuspendido = cola; }
-    @Override public void setColaBloqueadoSuspendido(Queue<Proceso> cola){ this.colaBloqueadoSuspendido = cola; }
+    
+    @Override
+    public void setColaNuevos(Cola cola){
+        this.colaNuevos = cola;
+    }
+    
+    @Override
+    public void setColaListos(Cola cola){
+        this.colaListos = cola;
+    }
+    
+    @Override
+    public void setColaBloqueados(Cola cola){
+        this.colaBloqueados = cola;
+    }
+    
+    @Override
+    public void setColaTerminados(Cola cola){
+        this.colaTerminados = cola;
+    }
+    
+    @Override
+    public void setColaListoSuspendido(Cola cola){
+        this.colaListoSuspendido = cola;
+    }
+    
+    @Override
+    public void setColaBloqueadoSuspendido(Cola cola){
+        this.colaBloqueadoSuspendido = cola;
+    }
 }

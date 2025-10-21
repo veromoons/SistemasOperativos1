@@ -5,22 +5,28 @@
  */
 package CoreV2.AlgorithmsStrategies;
 
+import CoreV2.Cola;
+import CoreV2.Nodo;
 import CoreV2.Proceso;
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  *
  * @author verol
  */
 public class SPNScheduling implements ISchedulingAlgorithm {
-    private Queue<Proceso> colaNuevos = new LinkedList<>();
-    private Queue<Proceso> colaListos = new LinkedList<>();
-    private Queue<Proceso> colaBloqueados = new LinkedList<>();
-    private Queue<Proceso> colaTerminados = new LinkedList<>();
-    private Queue<Proceso> colaListoSuspendido = new LinkedList<>();
-    private Queue<Proceso> colaBloqueadoSuspendido = new LinkedList<>();
+    private Cola colaNuevos = new Cola();
+    private Cola colaListos = new Cola();
+    private Cola colaBloqueados = new Cola();
+    private Cola colaTerminados = new Cola();
+    private Cola colaListoSuspendido = new Cola();
+    private Cola colaBloqueadoSuspendido = new Cola();  
     private SchedulingType type = SchedulingType.SPN;
+    private boolean hasQuantum = false;
+
+    @Override
+    public boolean hasQuantum() {
+        return hasQuantum;
+    }
 
 
     @Override
@@ -36,11 +42,20 @@ public class SPNScheduling implements ISchedulingAlgorithm {
 
         // Buscar el proceso con menor duración estimada (burst)
         Proceso masCorto = null;
-        for (Proceso p : colaListos) {
+        Nodo actual = colaListos.getFrente(); // getter que devuelva el frente
+        while (actual != null) {
+            Proceso p = actual.getProceso();
             if (masCorto == null || p.getDuracionTotal() < masCorto.getDuracionTotal()) {
                 masCorto = p;
             }
+            actual = actual.getSiguiente();
         }
+//        Proceso masCorto = null;
+//        for (Proceso p : colaListos) {
+//            if (masCorto == null || p.getDuracionTotal() < masCorto.getDuracionTotal()) {
+//                masCorto = p;
+//            }
+//        }
 
         // Quitar el proceso seleccionado de la cola
         colaListos.remove(masCorto);
@@ -57,33 +72,24 @@ public class SPNScheduling implements ISchedulingAlgorithm {
         return !colaListos.isEmpty();
     }
 
+
     @Override
-    public void setColaNuevos(Queue<Proceso> cola) {
+    public void setColaNuevos(Cola cola){
         this.colaNuevos = cola;
     }
-
-    @Override
-    public void setColaListos(Queue<Proceso> cola) {
+    public void setColaListos(Cola cola){
         this.colaListos = cola;
     }
-
-    @Override
-    public void setColaBloqueados(Queue<Proceso> cola) {
+    public void setColaBloqueados(Cola cola){
         this.colaBloqueados = cola;
     }
-
-    @Override
-    public void setColaTerminados(Queue<Proceso> cola) {
+    public void setColaTerminados(Cola cola){
         this.colaTerminados = cola;
     }
-
-    @Override
-    public void setColaListoSuspendido(Queue<Proceso> cola) {
+    public void setColaListoSuspendido(Cola cola){
         this.colaListoSuspendido = cola;
     }
-
-    @Override
-    public void setColaBloqueadoSuspendido(Queue<Proceso> cola) {
+    public void setColaBloqueadoSuspendido(Cola cola){
         this.colaBloqueadoSuspendido = cola;
     }
 }

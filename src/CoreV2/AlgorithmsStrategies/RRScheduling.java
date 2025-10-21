@@ -13,7 +13,8 @@ import java.util.Queue;
  *
  * @author verol
  */
-public class FIFOScheduling implements ISchedulingAlgorithm {
+
+public class RRScheduling implements ISchedulingAlgorithm { //esta clase debe cumplir con estas reglas de ISchedulling, sino empieza a arrojar errores (si no tienes los metodos adecuados(
 //    private Queue<Proceso> cola = new LinkedList<>();
     private Queue<Proceso> colaNuevos = new LinkedList<>();
     private Queue<Proceso> colaListos = new LinkedList<>();
@@ -21,8 +22,7 @@ public class FIFOScheduling implements ISchedulingAlgorithm {
     private Queue<Proceso> colaTerminados = new LinkedList<>();
     private Queue<Proceso> colaListoSuspendido = new LinkedList<>();
     private Queue<Proceso> colaBloqueadoSuspendido = new LinkedList<>();
-    private SchedulingType type = SchedulingType.FCFS;
-
+    private SchedulingType type = SchedulingType.ROUNDROBIN;
 
     @Override
         public void agregarProcesoAListos(Proceso p) {
@@ -33,15 +33,15 @@ public class FIFOScheduling implements ISchedulingAlgorithm {
     public Proceso obtenerSiguienteProceso() {
         return colaListos.poll(); // FIFO: primero en entrar, primero en salir
     }
-    
-    @Override
-    public SchedulingType getSchedulingType() {
-        return this.type;
-    }
 
     @Override
     public boolean hayProcesos() {
         return !colaListos.isEmpty();
+    }
+    
+    @Override
+    public SchedulingType getSchedulingType() {
+        return this.type;
     }
     
     public void setColaNuevos(Queue<Proceso> cola){
@@ -62,4 +62,5 @@ public class FIFOScheduling implements ISchedulingAlgorithm {
     public void setColaBloqueadoSuspendido(Queue<Proceso> cola){
         this.colaBloqueadoSuspendido = cola;
     }
+
 }

@@ -42,27 +42,30 @@ public class OperatingSystem {
         this.memory = memory;
         this.disk = disk;
         this.dma = dma;
-        this.scheduler = scheduler;
+        this.scheduler = scheduler; 
         this.clock = clock;
         this.processCounter = 1;
         this.stopQuantumThread = false;
     }
     
-    public void crearProceso(int id, Proceso.Tipo tipo, int instrucciones, long tamano, long tiempoES, int prioridad) {
+    //NO IO Bound
+    public void crearProceso(int id, Proceso.Tipo tipo, int instrucciones, int tamano, long tiempoES, int prioridad) {
 //        System.out.println("entro A CRar");
         String nombre = "P"+processCounter;
         processCounter++;
-        Proceso p = new Proceso(id, tipo, nombre, instrucciones, tamano, tiempoES, prioridad, 0, 0);
+        Proceso p = new Proceso(id, tipo, nombre, instrucciones, this.cpu.getQuantumCiclos(),tiempoES, tamano, 0, 0);
         p.setEstado(Proceso.Estado.NUEVO);
         moverANuevos(p);
         this.agregarProceso(p);
     }
     
-    public void crearProceso(int id, Proceso.Tipo tipo, int instrucciones, long tamano, long tiempoES, int prioridad, int instruccionesParaES, int ciclosParaCopletarES) {
+    //IO Bound
+    public void crearProceso(int id, Proceso.Tipo tipo, int instrucciones, int tamano, long tiempoES, int prioridad, int instruccionesParaES, int ciclosParaCopletarES) {
 //        System.out.println("entro A CRar");
         String nombre = "P"+processCounter;
         processCounter++;
-        Proceso p = new Proceso(id, tipo, nombre, instrucciones, tamano, tiempoES, prioridad, instruccionesParaES, ciclosParaCopletarES);
+
+        Proceso p = new Proceso(id, tipo, nombre, instrucciones, this.cpu.getQuantumCiclos(),tiempoES, tamano, instruccionesParaES, ciclosParaCopletarES);
         p.setEstado(Proceso.Estado.NUEVO);
         moverANuevos(p);
         this.agregarProceso(p);
@@ -84,7 +87,9 @@ public class OperatingSystem {
 //        System.out.println("---"+colaListos.size());
                 moverAColaListos(p);
 //        System.out.println("+++"+colaListos.size());
-            } else{verificarYSuspenderProcesos(p);}
+            } else{
+                verificarYSuspenderProcesos(p);
+            }
 //            else {
 //                // Si no hay espacio, lo mandamos a disco
 //                p.setEstado(Proceso.Estado.LISTOSUSPENDIDO);
@@ -159,6 +164,7 @@ public class OperatingSystem {
             while(this.cpu.getActualQuantumCiclosCounter() > 0 && !stopQuantumThread){
                 try {
                     Thread.sleep(clock.getTicTimeMs());
+//                    System.out.println(this.cpu.getActualQuantumCiclosCounter());
                     this.cpu.decreaseQuantumCounter();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -177,6 +183,7 @@ public class OperatingSystem {
     
     public void stopQuantumTime(){
         this.stopQuantumThread = true;
+        this.cpu.resetQuantumCounter();
     }
     
     public void validacionAgregarAlCPU(Proceso siguiente){
@@ -184,6 +191,7 @@ public class OperatingSystem {
             cpu.asignarProceso(siguiente, clock.getTic());
             System.out.println("Proceso a ejecutar según planificador (algoritmo) --> "+siguiente.getNombre());
             siguiente.setEstado(Proceso.Estado.EJECUCION);
+            //System.out.println(this.cpu.getActualQuantumCiclosCounter()); //descomentar solo cuando no quiera funcionar bien el quantum!!!
             if (this.cpu.getQuantumCiclos()>0){            
                 startQuantumTime();
             }
@@ -228,19 +236,20 @@ public class OperatingSystem {
         int cantidadDeListosSuspendidos = this.colaListoSuspendido.size();
         for (int i = 0; i<cantidadDeListosSuspendidos; i++){
             Proceso pActual = this.colaListoSuspendido.poll(); //aqui ya se hace remove con poll
-            disk.sacarProcesoDisco(pActual);
             boolean procesoCargadoEnMainMemory = this.memory.cargarProceso(pActual);
             if (procesoCargadoEnMainMemory){
                 this.colaListos.add(pActual);
                 pActual.setEstado(Proceso.Estado.LISTO);
+                disk.sacarProcesoDisco(pActual);
             }else {
                 this.colaListoSuspendido.add(pActual);
+                
             }
         }
     }
     // 🔹 Verifica si hay falta de memoria y suspende procesos si es necesario
     public void verificarYSuspenderProcesos(Proceso p) {
-        if (!memory.hayEspacioDisponible()) {
+        if (!memory.findAvailableBlock(p)) {
             Proceso candidato = null;
             
             boolean keepVerifying = true;
@@ -264,9 +273,11 @@ public class OperatingSystem {
                 if (candidato != null) {
                     this.memory.liberarProceso(candidato);
                     suspenderProceso(candidato);
-                    System.out.println("🔸 Proceso " + candidato.getNombre() + " suspendido por falta de memoria.");
+//                    System.out.println("🔸 Proceso " + candidato.getNombre() + " suspendido por falta de memoria.");
                     if (memory.hayEspacioDisponible() && this.memory.findAvailableBlock(p)){
                         this.memory.cargarProceso(p);
+                        p.setEstado(Proceso.Estado.LISTO);
+                        this.moverAColaListos(p);
                         keepVerifying = false;
                         break;
                     }

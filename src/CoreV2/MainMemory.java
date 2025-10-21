@@ -53,6 +53,7 @@ public class MainMemory {
         try {
             mutex.acquire();
             for (MemoryBlock block : bloquesLibres) {
+//                System.out.println(block.size+"--"+ p.getTamano());
                 if (block.size >= p.getTamano()) {
                     p.setStartAddress(block.start);
                     procesosEnMemoria.add(p);
@@ -63,6 +64,7 @@ public class MainMemory {
                         block.start += p.getTamano();
                         block.size -= p.getTamano();
                     }
+                    System.out.println("Memoria: "+p.getNombre()+" cargado en memoria principal");
                     return true;
                 }
             }

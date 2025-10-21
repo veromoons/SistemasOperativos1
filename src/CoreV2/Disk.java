@@ -23,7 +23,7 @@ public class Disk {
         try {
             mutex.acquire();
 //            colaLargoPlazo.add(p);
-            System.out.println("Disk: " + p.getNombre() + " guardado en disco");
+            System.out.println("Disco: " + p.getNombre() + " guardado en disco");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
@@ -34,7 +34,7 @@ public class Disk {
     public void sacarProcesoDisco(Proceso p){
         try {
             mutex.acquire();
-            System.out.println("Disk: " + p.getNombre() + " sacado de disco");
+            System.out.println("Disco: " + p.getNombre() + " sacado de disco");
         } catch (InterruptedException ex) {
         }finally{
         mutex.release();}

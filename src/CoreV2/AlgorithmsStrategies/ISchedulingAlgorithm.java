@@ -12,9 +12,13 @@ import java.util.Queue;
  *
  * @author verol
  */
+
 public interface ISchedulingAlgorithm {
+    public enum SchedulingType { FCFS, ROUNDROBIN, SPN, SRT, HRRN, FEEDBACK};
+    
     void agregarProcesoAListos(Proceso p);
     Proceso obtenerSiguienteProceso();
+    SchedulingType getSchedulingType();
     boolean hayProcesos();
     void setColaNuevos(Queue<Proceso> cola);
     void setColaListos(Queue<Proceso> cola);

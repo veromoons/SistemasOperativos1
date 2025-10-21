@@ -13,27 +13,39 @@ import java.util.Queue;
  *
  * @author verol
  */
-public class FIFOScheduling implements ISchedulingAlgorithm {
-//    private Queue<Proceso> cola = new LinkedList<>();
+public class SRTScheduling implements ISchedulingAlgorithm {
     private Queue<Proceso> colaNuevos = new LinkedList<>();
     private Queue<Proceso> colaListos = new LinkedList<>();
     private Queue<Proceso> colaBloqueados = new LinkedList<>();
     private Queue<Proceso> colaTerminados = new LinkedList<>();
     private Queue<Proceso> colaListoSuspendido = new LinkedList<>();
     private Queue<Proceso> colaBloqueadoSuspendido = new LinkedList<>();
-    private SchedulingType type = SchedulingType.FCFS;
+    private SchedulingType type = SchedulingType.SRT;
 
 
     @Override
-        public void agregarProcesoAListos(Proceso p) {
+    public void agregarProcesoAListos(Proceso p) {
         colaListos.add(p);
     }
 
     @Override
     public Proceso obtenerSiguienteProceso() {
-        return colaListos.poll(); // FIFO: primero en entrar, primero en salir
+        if (colaListos.isEmpty()) {
+            return null;
+        }
+
+        // Selecciona el proceso con menor tiempo restante
+        Proceso menorRestante = null;
+        for (Proceso p : colaListos) {
+            if (menorRestante == null || p.getRemainingTime() < menorRestante.getRemainingTime()) {
+                menorRestante = p;
+            }
+        }
+
+        // Quitar el proceso elegido de la cola
+        colaListos.remove(menorRestante);
+        return menorRestante;
     }
-    
     @Override
     public SchedulingType getSchedulingType() {
         return this.type;
@@ -43,23 +55,34 @@ public class FIFOScheduling implements ISchedulingAlgorithm {
     public boolean hayProcesos() {
         return !colaListos.isEmpty();
     }
-    
-    public void setColaNuevos(Queue<Proceso> cola){
+
+    @Override
+    public void setColaNuevos(Queue<Proceso> cola) {
         this.colaNuevos = cola;
     }
-    public void setColaListos(Queue<Proceso> cola){
+
+    @Override
+    public void setColaListos(Queue<Proceso> cola) {
         this.colaListos = cola;
     }
-    public void setColaBloqueados(Queue<Proceso> cola){
+
+    @Override
+    public void setColaBloqueados(Queue<Proceso> cola) {
         this.colaBloqueados = cola;
     }
-    public void setColaTerminados(Queue<Proceso> cola){
+
+    @Override
+    public void setColaTerminados(Queue<Proceso> cola) {
         this.colaTerminados = cola;
     }
-    public void setColaListoSuspendido(Queue<Proceso> cola){
+
+    @Override
+    public void setColaListoSuspendido(Queue<Proceso> cola) {
         this.colaListoSuspendido = cola;
     }
-    public void setColaBloqueadoSuspendido(Queue<Proceso> cola){
+
+    @Override
+    public void setColaBloqueadoSuspendido(Queue<Proceso> cola) {
         this.colaBloqueadoSuspendido = cola;
     }
 }

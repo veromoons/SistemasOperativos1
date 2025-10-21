@@ -21,13 +21,14 @@ public class Scheduler {
     private ISchedulingAlgorithm algoritmo;
     private OperatingSystem so;
 
-    public Scheduler(ISchedulingAlgorithm algoritmoInicial) {
+    public Scheduler(ISchedulingAlgorithm algoritmoInicial) {  //constructor
         this.algoritmo = algoritmoInicial;
     }
 
-    public void setAlgoritmo(ISchedulingAlgorithm nuevoAlgoritmo) {
+    public void setAlgoritmo(ISchedulingAlgorithm nuevoAlgoritmo) {  //para pasar el algoritmo sig
         this.algoritmo = nuevoAlgoritmo;
     }
+    
 
     public void agregarProcesos(Proceso p) {
         algoritmo.agregarProcesoAListos(p);
@@ -41,7 +42,7 @@ public class Scheduler {
         return algoritmo.hayProcesos();
     }
     
-    public void setSO(OperatingSystem so){
+    public void setSO(OperatingSystem so){  //para pasarle al scheduler el SO, necesitas cosas del SO en el scheduler
         this.so = so;
         this.algoritmo.setColaNuevos(so.getColaNuevos());
         this.algoritmo.setColaListos(so.getColaListos());

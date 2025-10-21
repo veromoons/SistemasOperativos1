@@ -30,6 +30,7 @@ public class DMA {
                 this.onESComplete = callback;
 
                 long tiempoES = p.getCiclosParaCompletarES(); // en ticks
+//                System.out.println(unidadTiempoMs+"---"+tiempoES);
                 Thread.sleep(unidadTiempoMs*tiempoES);
 //                for (long i = 0; i < tiempoES; i++) {
 //                    Thread.sleep(unidadTiempoMs); // simula tiempo de E-S

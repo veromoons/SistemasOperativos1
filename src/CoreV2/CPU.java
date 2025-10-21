@@ -69,6 +69,7 @@ public class CPU {
         if (interrupt){
             System.out.println("CPU: Proceso " + procesoActual.getId() + " sale de ejecucion por interrupcion de quantum");
             this.procesoActual.setEstado(Proceso.Estado.LISTO);
+            this.procesoActual.penalizar();
             os.moverAColaListos(procesoActual); // 🔹 cambia a TERMINADO y libera memoria
             procesoActual = null;
             ocupado = false;

@@ -14,6 +14,10 @@ import CoreV2.MainMemory;
 import CoreV2.OperatingSystem;
 import CoreV2.*;
 import CoreV2.AlgorithmsStrategies.FIFOScheduling;
+import CoreV2.AlgorithmsStrategies.HRRNScheduling;
+import CoreV2.AlgorithmsStrategies.RRScheduling;
+import CoreV2.AlgorithmsStrategies.SPNScheduling;
+import CoreV2.AlgorithmsStrategies.SRTScheduling;
 
 /**
  *
@@ -28,14 +32,14 @@ import CoreV2.AlgorithmsStrategies.FIFOScheduling;
 public class Main {
      public static void main(String[] args) throws InterruptedException {
         long unidadTiempoMs = 500; // duración de un tick (0.5s)
-        int memoriaTotal = 100;    // tamaño de memoria
+        int memoriaTotal = 1000;    // tamaño de memoria
 
         // 🔹 Instanciamos los componentes
         MainMemory memory = new MainMemory(memoriaTotal);
         Disk disk = new Disk();
         DMA dma = new DMA(unidadTiempoMs);
         CPU cpu = new CPU(); // SO se setea después
-        Scheduler scheduler = new Scheduler(new FIFOScheduling()); // FIFO inicial
+        Scheduler scheduler = new Scheduler(new HRRNScheduling()); // FIFO inicial
         Clock clock = new Clock(unidadTiempoMs);
         OperatingSystem so = new OperatingSystem(cpu, memory, disk, dma, scheduler, clock);
         clock.setSO(so);
@@ -43,13 +47,15 @@ public class Main {
 
         // 🔹 Seteamos el SO en la CPU
         cpu = new CPU();
-        so.setCPUQuantum(10);
+        so.setCPUQuantum(5); // SI ES 0 ES SIN QUANTUM (para los preemptivos debe ser >0)
         clock.startClock();
 
         // 🔹 Creamos procesos
-        so.crearProceso(1, Proceso.Tipo.NORMAL, 10, 20L, 2L, 8);      // tamaño 20, 2 ticks de E/S
-        so.crearProceso(2, Proceso.Tipo.IO_BOUND, 20, 10L, 10, 6, 5, 2);    // tamaño 30, 5 ticks de E/S
-        so.crearProceso(3,Proceso.Tipo.CPU_BOUND,15, 30L, 5L, 7);   // tamaño 10, sin E/S
+        so.crearProceso(1, Proceso.Tipo.CPU_BOUND, 20, 20, 2L, 8);      // tamaño 20, 2 ticks de E/S
+        so.crearProceso(2, Proceso.Tipo.IO_BOUND, 5, 5, 10, 1, 3, 10);    // tamaño 30, 5 ticks de E/S
+        so.crearProceso(3,Proceso.Tipo.NORMAL,10, 10, 5L, 7);   // tamaño 10, sin E/S
+//        Thread.sleep(10*unidadTiempoMs);
+        so.crearProceso(4,Proceso.Tipo.NORMAL,8, 8, 5L, 7);   // tamaño 10, sin E/S
 
 
         // 🔹 Asignamos procesos a CPU según disponibilidad

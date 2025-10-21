@@ -52,6 +52,19 @@ public class Main {
             quantumDefault = 5;
         }
         so.setCPUQuantum(quantumDefault); // SI ES 0 ES SIN QUANTUM (para los preemptivos debe ser >0)
+        
+        //Creamos la GUI y pasamos el SO
+        SimuladorGUI ventana = new SimuladorGUI(so);
+        
+        //Pasamos GUI al SO
+        so.setGUI(ventana);
+        
+        // MOSTRAR VENTANA
+        java.awt.EventQueue.invokeLater(() -> {
+            ventana.setVisible(true);
+        });
+        
+        
         clock.startClock();
 
         // 🔹 Creamos procesos

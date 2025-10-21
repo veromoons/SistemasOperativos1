@@ -7,6 +7,8 @@ package CoreV2;
 import CoreV2.AlgorithmsStrategies.ISchedulingAlgorithm;
 
 import java.util.concurrent.Semaphore;
+import sistemasoperativos1.SimuladorGUI;
+import javax.swing.SwingUtilities;
 //import java.util.*;
 
 
@@ -23,6 +25,7 @@ public class OperatingSystem {
     private final DMA dma;
     private final Clock clock;
     public int processCounter;
+    private SimuladorGUI gui;
     
     private Cola colaNuevos = new Cola();
     private Cola colaListos = new Cola();
@@ -43,6 +46,10 @@ public class OperatingSystem {
 
     private final Semaphore mutex = new Semaphore(1); // protege acceso concurrente
 
+    private int stat_procesosTotalesTerminados = 0;
+    private int stat_ioBoundTerminados = 0;
+    private int stat_cpuBoundTerminados = 0;
+
     public OperatingSystem(CPU cpu, MainMemory memory, Disk disk, DMA dma, Scheduler scheduler, Clock clock) {
         this.cpu = cpu;
         this.memory = memory;
@@ -52,6 +59,10 @@ public class OperatingSystem {
         this.clock = clock;
         this.processCounter = 1;
         this.stopQuantumThread = false;
+    }
+    
+    public void setGUI(SimuladorGUI gui) {
+        this.gui = gui;
     }
     
     //NO IO Bound
@@ -137,6 +148,13 @@ public class OperatingSystem {
         moverATerminados(p);
         memory.liberarProceso(p);
         System.out.println("SO: " + p.getNombre() + " finalizado y liberado de memoria");
+        
+        this.stat_procesosTotalesTerminados++;
+        if (p.getTipo() == Proceso.Tipo.IO_BOUND) {
+            this.stat_ioBoundTerminados++;
+        } else if (p.getTipo() == Proceso.Tipo.CPU_BOUND) {
+            this.stat_cpuBoundTerminados++;
+        }
     }
 
     // 🔹 Bloquear proceso por E/S
@@ -231,6 +249,13 @@ public class OperatingSystem {
             }
             
             verificarMoverListosSuspendidosAListos();
+            
+            if (this.gui != null) {
+                // Pide al hilo de la GUI que ejecute la actualización
+                SwingUtilities.invokeLater(() -> {
+                    gui.actualizarGUI();
+                });
+            }
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -374,6 +399,26 @@ public class OperatingSystem {
     
     public void setCPUQuantum(int quantum){
         this.cpu.setQuantumCiclos(quantum);
+    }
+
+    public CPU getCpu() {
+        return this.cpu;
+    }
+
+    public Clock getClock() {
+        return this.clock;
+    }
+    
+    public int getStatProcesosTotalesTerminados() {
+    return this.stat_procesosTotalesTerminados;
+    }
+
+    public int getStatIoBoundTerminados() {
+        return this.stat_ioBoundTerminados;
+    }
+
+    public int getStatCpuBoundTerminados() {
+        return this.stat_cpuBoundTerminados;
     }
 
 }

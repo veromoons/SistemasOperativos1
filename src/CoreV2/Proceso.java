@@ -183,5 +183,5 @@ public class Proceso {
     public void setQueuePriority(int queuePriority) {
         this.queuePriority = queuePriority;
     }
-    
+
 }

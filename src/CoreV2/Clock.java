@@ -11,7 +11,7 @@ package CoreV2;
  */
 public class Clock {
     private volatile long ticGlobal = 0;
-    private final long ticTimeMs;
+    private volatile long ticTimeMs;
     private boolean running = false;
     private Thread thread;
     public OperatingSystem so;
@@ -20,6 +20,15 @@ public class Clock {
     public Clock(long ticTimeMs) {
         this.ticTimeMs = ticTimeMs;
 
+    }
+    
+    public void setTicTimeMs(long nuevoTiempoMs) {
+        if (nuevoTiempoMs > 0) { // Asegurarse de que no sea cero o negativo
+            this.ticTimeMs = nuevoTiempoMs;
+            System.out.println("Clock: Duración del tick cambiada a " + nuevoTiempoMs + " ms");
+        } else {
+            System.out.println("Clock: Intento de poner duración inválida: " + nuevoTiempoMs);
+        }
     }
 
     public long getTicTimeMs() {
@@ -39,9 +48,16 @@ public class Clock {
         thread = new Thread(() -> {
             while (running) {
                 try {
-                    Thread.sleep(ticTimeMs);
+                    // ⬇️ LEER ticTimeMs DENTRO DEL BUCLE ⬇️
+                    long currentTicTime = this.ticTimeMs; 
+                    if (currentTicTime > 0) { // Evita sleep(0)
+                       Thread.sleep(currentTicTime); 
+                    } else {
+                        // Si es 0 o menos, espera un poco para no bloquear la CPU
+                        Thread.sleep(10); 
+                    }
+
                     ticGlobal++;
-//                    cpu.tick(ticGlobal);
                     notifySO();
                     System.out.println("Tic Global: " + ticGlobal);
                 } catch (InterruptedException e) {

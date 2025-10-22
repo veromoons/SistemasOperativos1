@@ -90,6 +90,9 @@ public SimuladorGUI(OperatingSystem so) {
         jScrollPane3 = new javax.swing.JScrollPane();
         areaTerminados = new javax.swing.JTextArea();
         Configuracion = new javax.swing.JPanel();
+        jLabel22 = new javax.swing.JLabel();
+        spinnerDuracionCiclo = new javax.swing.JSpinner();
+        btnAplicarDuracion = new javax.swing.JButton();
         Graficos = new javax.swing.JPanel();
         panelGrafico = new javax.swing.JPanel();
         Estadisticas = new javax.swing.JPanel();
@@ -111,7 +114,7 @@ public SimuladorGUI(OperatingSystem so) {
 
         nombre.setText("Nombre");
 
-        txtNombre.setText("jTextField1");
+        txtNombre.setToolTipText("Ingrese nombre del proceso");
         txtNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNombreActionPerformed(evt);
@@ -440,15 +443,40 @@ public SimuladorGUI(OperatingSystem so) {
 
         jTabbedPane1.addTab("Simulador", Simulador);
 
+        jLabel22.setText("Duracion de Ciclo (ms)");
+
+        spinnerDuracionCiclo.setModel(new javax.swing.SpinnerNumberModel(500, 10, 5000, 50));
+
+        btnAplicarDuracion.setText("Aplicar Duración");
+        btnAplicarDuracion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAplicarDuracionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout ConfiguracionLayout = new javax.swing.GroupLayout(Configuracion);
         Configuracion.setLayout(ConfiguracionLayout);
         ConfiguracionLayout.setHorizontalGroup(
             ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1086, Short.MAX_VALUE)
+            .addGroup(ConfiguracionLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jLabel22)
+                .addGap(18, 18, 18)
+                .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAplicarDuracion)
+                    .addComponent(spinnerDuracionCiclo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(801, Short.MAX_VALUE))
         );
         ConfiguracionLayout.setVerticalGroup(
             ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 668, Short.MAX_VALUE)
+            .addGroup(ConfiguracionLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spinnerDuracionCiclo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel22))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnAplicarDuracion)
+                .addContainerGap(585, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Configuracion", Configuracion);
@@ -699,6 +727,24 @@ public SimuladorGUI(OperatingSystem so) {
         } 
     }//GEN-LAST:event_comboTipoItemStateChanged
 
+    private void btnAplicarDuracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarDuracionActionPerformed
+        // TODO add your handling code here:
+        try {
+            // Leer el valor del spinner
+            int nuevoTiempoMs = (int) spinnerDuracionCiclo.getValue();
+
+            // Validar (aunque el spinner ya tiene límites, una doble verificación es buena)
+            if (nuevoTiempoMs > 0) {
+                // Llamar al método del SO para aplicar el cambio
+                so.setDuracionCiclo(nuevoTiempoMs);
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "La duración debe ser mayor que cero.");
+            }
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al aplicar duración: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnAplicarDuracionActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -820,6 +866,7 @@ private void actualizarGraficoThroughput() {
     private javax.swing.JTextArea areaBloqueados;
     private javax.swing.JTextArea areaListos;
     private javax.swing.JTextArea areaTerminados;
+    private javax.swing.JButton btnAplicarDuracion;
     private javax.swing.JButton btnCrearProceso;
     private javax.swing.JButton btnGuardarCambios;
     private javax.swing.JComboBox<String> comboPolitica;
@@ -838,6 +885,7 @@ private void actualizarGraficoThroughput() {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -870,6 +918,7 @@ private void actualizarGraficoThroughput() {
     private javax.swing.JPanel panelIzquierdo;
     private javax.swing.JSpinner spinnerCiclosExcepcion;
     private javax.swing.JSpinner spinnerCiclosSatisfacer;
+    private javax.swing.JSpinner spinnerDuracionCiclo;
     private javax.swing.JSpinner spinnerInstrucciones;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables

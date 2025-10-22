@@ -425,6 +425,10 @@ public class OperatingSystem {
         return this.processCounter;
     }
 
+    public void setDuracionCiclo(long nuevoTiempoMs) {
+        // Simplemente pasa la llamada al clock
+        this.clock.setTicTimeMs(nuevoTiempoMs);
+    }
 }
 
 

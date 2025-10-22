@@ -30,6 +30,10 @@ public class SimuladorGUI extends javax.swing.JFrame {
 public SimuladorGUI(OperatingSystem so) {
         initComponents();
         this.so = so;
+        
+        boolean ioInicial = comboTipo.getSelectedItem().equals("I/O bound");
+        spinnerCiclosExcepcion.setEnabled(ioInicial);
+        spinnerCiclosSatisfacer.setEnabled(ioInicial);
     }
 
     /**
@@ -119,6 +123,16 @@ public SimuladorGUI(OperatingSystem so) {
         jLabel2.setText("Tipo:");
 
         comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CPU bound", "I/O bound", " " }));
+        comboTipo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboTipoItemStateChanged(evt);
+            }
+        });
+        comboTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboTipoActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Ciclos para generar Excepcion");
 
@@ -380,20 +394,18 @@ public SimuladorGUI(OperatingSystem so) {
                 .addContainerGap(255, Short.MAX_VALUE))
             .addGroup(panelCentralLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2)))
+                .addComponent(jScrollPane1))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(285, 285, 285))
-            .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelCentralLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane3)
-                    .addContainerGap()))
+            .addComponent(jScrollPane3)
+            .addGroup(panelCentralLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
         panelCentralLayout.setVerticalGroup(
             panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -404,16 +416,13 @@ public SimuladorGUI(OperatingSystem so) {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
                 .addComponent(jLabel8)
-                .addGap(130, 130, 130)
-                .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(265, Short.MAX_VALUE))
-            .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelCentralLayout.createSequentialGroup()
-                    .addGap(173, 173, 173)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(395, Short.MAX_VALUE)))
         );
 
         jPanel5.add(panelCentral, java.awt.BorderLayout.CENTER);
@@ -574,35 +583,64 @@ public SimuladorGUI(OperatingSystem so) {
     private void btnCrearProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearProcesoActionPerformed
         // TODO add your handling code here:
         try {
-            // 1. Leer datos de la interfaz
-            // Nota: El PDF dice que el ID es dinámico[cite: 52], tu SO usa processCounter
-            int id = so.processCounter; 
+                // 1. Leer datos comunes de la interfaz
+                int id = so.getProcessCounter(); // Usamos un getter ahora (lo crearemos)
+                String nombreManual = txtNombre.getText(); // Leemos el nombre
 
-            int instrucciones = (int) spinnerInstrucciones.getValue();
-            int tamano = 20; // El PDF no tiene campo para esto, lo pongo fijo. 
-                             // Deberías añadir un JSpinner para "Tamaño"
-            long tiempoES = 5; // Lo mismo, pon un JSpinner para esto.
+                // Validar que el nombre no esté vacío
+                if (nombreManual == null || nombreManual.trim().isEmpty()) {
+                    // Si está vacío, usamos el contador automático del SO
+                    // (No hacemos nada aquí, el SO ya genera P + contador)
+                } else {
+                     // Si el usuario escribió algo, intentamos usarlo
+                     // Necesitaríamos un método en SO para esto, ej: so.setNextProcessName(nombreManual)
+                     // Por simplicidad ahora, lo ignoramos y dejamos que SO use P + contador
+                     // O podrías modificar el constructor de Proceso/SO para aceptarlo
+                }
 
-            // Determinar tipo
-            String tipoStr = (String) comboTipo.getSelectedItem();
-            Proceso.Tipo tipo = (tipoStr.equals("CPU bound")) ? Proceso.Tipo.CPU_BOUND : Proceso.Tipo.IO_BOUND;
+                int instrucciones = (int) spinnerInstrucciones.getValue();
 
-            if (tipo == Proceso.Tipo.IO_BOUND) {
-                // Usar el constructor de I/O Bound [cite: 14]
-                int instParaES = (int) spinnerCiclosExcepcion.getValue();
-                int ciclosParaES = (int) spinnerCiclosSatisfacer.getValue();
+                // --- VALORES FIJOS TEMPORALES (¡DEBERÍAS AÑADIR SPINNERS PARA ESTOS!) ---
+                int tamano = 20; // Tamaño fijo temporal
+                long tiempoESFijo = 5L; // Tiempo ES fijo temporal (usado por CPU Bound)
+                int prioridad = 0; // Prioridad fija temporal
+                // --- FIN VALORES FIJOS ---
 
-                so.crearProceso(id, tipo, instrucciones, tamano, tiempoES, 0, instParaES, ciclosParaES);
+                // Determinar tipo
+                String tipoStr = (String) comboTipo.getSelectedItem();
+                Proceso.Tipo tipo;
+                if (tipoStr.equals("CPU bound")) {
+                    tipo = Proceso.Tipo.CPU_BOUND;
+                } else if (tipoStr.equals("I/O bound")) {
+                    tipo = Proceso.Tipo.IO_BOUND;
+                } else {
+                    tipo = Proceso.Tipo.NORMAL; // Asumimos Normal si no es ninguno
+                }
 
-            } else {
-                // Usar el constructor normal
-                so.crearProceso(id, tipo, instrucciones, tamano, tiempoES, 0);
+                // 2. Llamar al método crearProceso adecuado
+                if (tipo == Proceso.Tipo.IO_BOUND) {
+                    // Leer valores específicos de I/O Bound
+                    int instParaES = (int) spinnerCiclosExcepcion.getValue();
+                    int ciclosParaES = (int) spinnerCiclosSatisfacer.getValue();
+
+                    // Llamar a la versión IO Bound de crearProceso
+                    so.crearProceso(id, tipo, instrucciones, tamano, 0, prioridad, instParaES, ciclosParaES); 
+                    // Nota: Pasé 0 como tiempoES porque este constructor no lo usa directamente para I/O
+
+                } else { 
+                    // Para CPU_BOUND o NORMAL
+                    // Llamar a la versión NO IO Bound de crearProceso
+                    so.crearProceso(id, tipo, instrucciones, tamano, tiempoESFijo, prioridad);
+                }
+
+                // Limpiar campo de nombre después de crear (opcional)
+                txtNombre.setText(""); 
+
+            } catch (Exception e) {
+                // Mostrar un error si algo sale mal
+                javax.swing.JOptionPane.showMessageDialog(this, "Error al crear proceso: " + e.getMessage());
+                e.printStackTrace(); // Imprime más detalles del error en la consola
             }
-
-        } catch (Exception e) {
-            // Mostrar un error si algo sale mal (ej. texto en un número)
-            javax.swing.JOptionPane.showMessageDialog(this, "Error al crear proceso: " + e.getMessage());
-        }
     }//GEN-LAST:event_btnCrearProcesoActionPerformed
 
     private void btnGuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCambiosActionPerformed
@@ -643,6 +681,23 @@ public SimuladorGUI(OperatingSystem so) {
             so.setCPUQuantum(0); // 0 significa sin quantum
         }
     }//GEN-LAST:event_btnGuardarCambiosActionPerformed
+
+    private void comboTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboTipoActionPerformed
+
+    private void comboTipoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboTipoItemStateChanged
+// Verifica si el estado del item cambió (fue seleccionado o deseleccionado)
+        if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+            String tipoSeleccionado = (String) comboTipo.getSelectedItem();
+
+            boolean esIOBound = tipoSeleccionado.equals("I/O bound");
+
+            // Habilita o deshabilita los spinners basados en la selección
+            spinnerCiclosExcepcion.setEnabled(esIOBound);
+            spinnerCiclosSatisfacer.setEnabled(esIOBound);
+        } 
+    }//GEN-LAST:event_comboTipoItemStateChanged
 
     /**
      * @param args the command line arguments

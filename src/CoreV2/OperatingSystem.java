@@ -420,6 +420,10 @@ public class OperatingSystem {
     public int getStatCpuBoundTerminados() {
         return this.stat_cpuBoundTerminados;
     }
+    
+    public int getProcessCounter() {
+        return this.processCounter;
+    }
 
 }
 

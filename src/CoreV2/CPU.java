@@ -104,6 +104,8 @@ public class CPU {
                 this.interrupt = false;
             }
             os.procesoFinalizado(procesoActual); // 🔹 cambia a TERMINADO y libera memoria
+//                     System.out.println("Cola Terminados: "+os.getColaTerminados().size());
+
             procesoActual = null;
             ocupado = false;
         }

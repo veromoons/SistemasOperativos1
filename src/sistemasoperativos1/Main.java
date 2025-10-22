@@ -31,7 +31,7 @@ import CoreV2.AlgorithmsStrategies.SRTScheduling;
 
 public class Main {
      public static void main(String[] args) throws InterruptedException {
-        long unidadTiempoMs = 500; // duración de un tick (0.5s)
+        long unidadTiempoMs = 50; // duración de un tick (0.5s)
         int memoriaTotal = 1000;    // tamaño de memoria
 
         // 🔹 Instanciamos los componentes
@@ -56,10 +56,11 @@ public class Main {
 
         // 🔹 Creamos procesos
         so.crearProceso(1, Proceso.Tipo.CPU_BOUND, 20, 20, 2L, 8);      // tamaño 20, 2 ticks de E/S
-        so.crearProceso(2, Proceso.Tipo.IO_BOUND, 5, 5, 10, 1, 3, 10);    // tamaño 30, 5 ticks de E/S
+        so.crearProceso(2, Proceso.Tipo.IO_BOUND, 5, 5, 10, 1, 3, 2);    // tamaño 30, 5 ticks de E/S
         so.crearProceso(3,Proceso.Tipo.NORMAL,10, 10, 5L, 7);   // tamaño 10, sin E/S
 //        Thread.sleep(10*unidadTiempoMs);
         so.crearProceso(4,Proceso.Tipo.NORMAL,8, 8, 5L, 7);   // tamaño 10, sin E/S
+        
 
 
         // 🔹 Asignamos procesos a CPU según disponibilidad

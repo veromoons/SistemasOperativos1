@@ -67,6 +67,7 @@ public class CPU {
     public void ejecutarInstruccion( OperatingSystem os) {
         if (procesoActual == null) return;
         if (interrupt){
+            os.logEvent("CPU: Proceso " + procesoActual.getNombre() + " interrumpido por fin de quantum."); // <-- Añadir log
             System.out.println("CPU: Proceso " + procesoActual.getId() + " sale de ejecucion por interrupcion de quantum");
             this.procesoActual.setEstado(Proceso.Estado.LISTO);
             this.procesoActual.penalizar();
@@ -86,6 +87,7 @@ public class CPU {
         
         // 🔹 Simular solicitud de E/S (interrupción de inicio)
         if (procesoActual.getTipo() == Proceso.Tipo.IO_BOUND  && !procesoActual.isLastInstruccion() && procesoActual.getActualInstruccion() == procesoActual.getInstruccionesParaES()) { // 15% chance y restric de que E/S no puede ser en ult instruc
+            os.logEvent("CPU: Proceso " + procesoActual.getNombre() + " solicita E/S."); // <-- Añadir log
             System.out.println("CPU: " + procesoActual.getNombre() + " solicita E/S");
             if (getQuantumCiclos()>0){            
                 os.stopQuantumTime();
@@ -98,6 +100,7 @@ public class CPU {
 
         // Verificar si el proceso completó su ejecución
         if (procesoActual.isLastInstruccion()) {
+            os.logEvent("CPU: Proceso " + procesoActual.getNombre() + " completó su ejecución."); // <-- Añadir log
             System.out.println("CPU: Proceso " + procesoActual.getId() + " ha completado su ejecución.");
             if (getQuantumCiclos()>0){            
                 os.stopQuantumTime();

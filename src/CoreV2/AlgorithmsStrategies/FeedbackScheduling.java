@@ -7,6 +7,7 @@ package CoreV2.AlgorithmsStrategies;
 
 import CoreV2.Cola;
 import CoreV2.Proceso;
+import CoreV2.Nodo;
 
 /**
  *
@@ -44,34 +45,66 @@ public class FeedbackScheduling implements ISchedulingAlgorithm {
     }
     
     //No se contempla inanicion
-    @Override
-    public Proceso obtenerSiguienteProceso() { // se resetean colas cada vez que llega un nuevo proceso para simplificar el rearreglo de las 3 listas de Listos
+@Override
+    public Proceso obtenerSiguienteProceso() {
+
+        // --- INICIO DE CÓDIGO AÑADIDO PARA RESINCRONIZAR ---
+        // Resincronizar colas internas con la colaListos principal ANTES de seleccionar
+
+        // 1. Vaciar colas internas
         colaAlta = new Cola();
         colaMedia = new Cola();
         colaBaja = new Cola();
-        
-        colaListos.forEach(p -> agregarProcesoAListos(p));
-        
+
+        // 2. Recorrer la colaListos principal (la del SO)
+        //    Iteramos usando getFrente() y getSiguiente() de tu clase Cola/Nodo
+        if (colaListos != null && !colaListos.isEmpty()) { // Asegurarse que colaListos no sea null
+             Nodo actual = colaListos.getFrente(); // Obtener el primer nodo
+             while (actual != null) { // Mientras haya nodos
+                 Proceso p = actual.getProceso(); // Obtener el proceso del nodo
+                 if (p != null) { // Comprobar que el proceso no sea null
+                     // 3. Recolocar en la cola interna según prioridad actual
+                     switch (p.getQueuePriority()) {
+                         case 0: colaAlta.add(p); break;
+                         case 1: colaMedia.add(p); break;
+                         case 2: colaBaja.add(p); break;
+                         default: colaAlta.add(p);
+                     }
+                 }
+                 actual = actual.getSiguiente(); // Moverse al siguiente nodo
+             }
+        }
+        // --- FIN DE CÓDIGO AÑADIDO PARA RESINCRONIZAR ---
+
+
+        // Ahora el resto del método funciona como antes, pero con las colas internas actualizadas
         Proceso siguiente = null;
 
-        if (!colaAlta.isEmpty()) siguiente = colaAlta.poll();
-        else if (!colaMedia.isEmpty()) siguiente = colaMedia.poll();
-        else if (!colaBaja.isEmpty()) siguiente = colaBaja.poll();
-        
-        //comentado por ahora, es el quantum de los procesos a ejecutar
-//        if (siguiente != null) {
-//            // 🔹 Asigna quantum según prioridad
-//            long quantum;
-//            switch (siguiente.getQueuePriority()) {
-//                case 0: quantum = 2; break;  // más corto
-//                case 1: quantum = 4; break;
-//                default: quantum = 6; break;
-//            }
-//            siguiente.setUltimoTicEjecucion(quantum); // o setQuantum() si lo agregas al Proceso
-//        }
+        // Busca en las colas internas por prioridad (ahora están actualizadas)
+        if (!colaAlta.isEmpty()) {
+            siguiente = colaAlta.poll(); // poll() ya lo quita de colaAlta
+        } else if (!colaMedia.isEmpty()) {
+            siguiente = colaMedia.poll(); // poll() ya lo quita de colaMedia
+        } else if (!colaBaja.isEmpty()) {
+            siguiente = colaBaja.poll(); // poll() ya lo quita de colaBaja
+        }
+
+        // Si se encontró un proceso, quítalo TAMBIÉN de la colaListos principal
+        if (siguiente != null) {
+            boolean removed = colaListos.remove(siguiente);
+             if (!removed) {
+                 // Este warning podría aparecer si el proceso se eliminó de colaListos
+                 // entre la resincronización y este punto (poco probable pero posible).
+                 System.err.println("WARN: Proceso " + siguiente.getNombre() + " no encontrado en colaListos principal al intentar remover en Feedback (resync).");
+             }
+        }
+
+        // Nota: La lógica para asignar quantum según prioridad estaba comentada,
+        // se deja así por ahora. El quantum global lo maneja CPU/OS.
 
         return siguiente;
     }
+    
     @Override
     public SchedulingType getSchedulingType() {
         return this.type;
@@ -79,7 +112,7 @@ public class FeedbackScheduling implements ISchedulingAlgorithm {
 
     @Override
     public boolean hayProcesos() {
-        return !(colaAlta.isEmpty() && colaMedia.isEmpty() && colaBaja.isEmpty());
+        return !colaListos.isEmpty();
     }
 
     // 🔹 Métodos para setear las colas (aunque aquí no se usan tanto)

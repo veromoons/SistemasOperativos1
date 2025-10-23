@@ -84,6 +84,17 @@ public class OperatingSystem {
 
         Proceso p = new Proceso(id, tipo, nombre, instrucciones, this.cpu.getQuantumCiclos(),tiempoES, tamano, instruccionesParaES, ciclosParaCopletarES);
         p.setEstado(Proceso.Estado.NUEVO);
+        
+        logEvent("Proceso " + p.getNombre() + " creado.");
+        // ...
+        if (memory.cargarProceso(p)) {
+             logEvent("Proceso " + p.getNombre() + " cargado en memoria principal (LISTO).");
+             // ...
+        } else {
+             logEvent("Memoria llena. Intentando suspender para Proceso " + p.getNombre() + ".");
+             // ...
+        }
+        
         moverANuevos(p);
         this.agregarProceso(p);
     }
@@ -147,6 +158,7 @@ public class OperatingSystem {
         p.setEstado(Proceso.Estado.TERMINADO);
         moverATerminados(p);
         memory.liberarProceso(p);
+        logEvent("Proceso " + p.getNombre() + " pasa a TERMINADO y se libera memoria."); // <-- Añadir log
         System.out.println("SO: " + p.getNombre() + " finalizado y liberado de memoria");
         
         this.stat_procesosTotalesTerminados++;
@@ -159,18 +171,22 @@ public class OperatingSystem {
 
     // 🔹 Bloquear proceso por E/S
     public void bloquearProcesoES(Proceso p) {
+        logEvent("Proceso " + p.getNombre() + " pasa a BLOQUEADO por E/S."); // <-- Añadir log
         System.out.println("SO: " + p.getNombre() + " bloqueado por E/S");
         p.setEstado(Proceso.Estado.BLOQUEADO);
         moverABloqueados(p);
         dma.ejecutarES(p, () -> {
+            logEvent("DMA: E/S completada para Proceso " + p.getNombre() + "."); // <-- Añadir log
             System.out.println("SO: E/S completada para " + p.getNombre());
             if (p.getEstado()==Proceso.Estado.BLOQUEADO){
                 this.colaBloqueados.remove(p);
                 p.setEstado(Proceso.Estado.LISTO);
+                logEvent("Proceso " + p.getNombre() + " pasa de BLOQUEADO a LISTO."); // <-- Añadir log
                 moverAColaListos(p);
             } else if (p.getEstado()==Proceso.Estado.BLOQUEADOSUSPENDIDO){
                 this.colaBloqueadoSuspendido.remove(p);
                 p.setEstado(Proceso.Estado.LISTOSUSPENDIDO);
+                logEvent("Proceso " + p.getNombre() + " pasa de BLOQUEADOSUSPENDIDO a LISTOSUSPENDIDO."); // <-- Añadir log
                 moverAListoSuspendidos(p);
             }
 //            validacionAgregarAlCPU(siguiente);
@@ -180,6 +196,7 @@ public class OperatingSystem {
     // 🔹 Cambiar algoritmo de planificación
     public void setAlgoritmo(ISchedulingAlgorithm algoritmo) {
         scheduler.setAlgoritmo(algoritmo);
+        logEvent("SO: Algoritmo de planificación cambiado a " + algoritmo.getSchedulingType()); // <-- Añadir log
         System.out.println("SO: Algoritmo de planificación cambiado");
     }
     
@@ -215,6 +232,7 @@ public class OperatingSystem {
             cpu.asignarProceso(siguiente, clock.getTic());
             System.out.println("Proceso a ejecutar según planificador (algoritmo) --> "+siguiente.getNombre());
             siguiente.setEstado(Proceso.Estado.EJECUCION);
+            logEvent("Proceso " + siguiente.getNombre() + " pasa a EJECUCIÓN."); // <-- Añadir log
             //System.out.println(this.cpu.getActualQuantumCiclosCounter()); //descomentar solo cuando no quiera funcionar bien el quantum!!!
             if (this.cpu.getQuantumCiclos()>0){            
                 startQuantumTime();
@@ -244,6 +262,7 @@ public class OperatingSystem {
 //                        siguiente.setEstado(Proceso.Estado.EJECUCION);
 //                        System.out.println("Proceso a ejecutar según planificador (algoritmo) --> "+siguiente);
 //                    }
+                    logEvent("Planificador selecciona Proceso " + siguiente.getNombre() + "."); // <-- Añadir log
                     validacionAgregarAlCPU(siguiente);
                 }
             }
@@ -273,6 +292,7 @@ public class OperatingSystem {
                 this.colaListos.add(pActual);
                 pActual.setEstado(Proceso.Estado.LISTO);
                 disk.sacarProcesoDisco(pActual);
+                logEvent("SO: Proceso " + pActual.getNombre() + " reactivado (LISTOSUSPENDIDO -> LISTO)."); // <-- Añadir log
             }else {
                 this.colaListoSuspendido.add(pActual);
                 
@@ -328,6 +348,7 @@ public class OperatingSystem {
         p.setEstado(Proceso.Estado.BLOQUEADOSUSPENDIDO);
         moverABloqueadoSuspendidos(p);
         disk.guardarProceso(p);
+        logEvent("SO: Proceso " + p.getNombre() + " suspendido (BLOQUEADOSUSPENDIDO) por falta de memoria."); // <-- Añadir log
         System.out.println("SO: " + p.getNombre() + " suspendido (bloqueado/suspendido) para liberar memoria.");
     }
     
@@ -378,6 +399,7 @@ public class OperatingSystem {
 //        scheduler.agregarProcesos(p);
         colaListos.add(p);
 //        System.out.println(colaListos.size());
+        logEvent("Proceso " + p.getNombre() + " movido a Cola de Listos."); // <-- Añade/Verifica este log
         System.out.println("SO: " + p.getNombre() + " pasa a la cola de listos");
     }
 
@@ -428,6 +450,24 @@ public class OperatingSystem {
     public void setDuracionCiclo(long nuevoTiempoMs) {
         // Simplemente pasa la llamada al clock
         this.clock.setTicTimeMs(nuevoTiempoMs);
+    }
+    
+    public void logEvent(String message) {
+    // Asegurarnos de que tenemos una GUI y el área de log existe
+        if (this.gui != null && this.gui.getAreaLog() != null) {
+            // Formatear el mensaje con el tick actual
+            String logMessage = String.format("[Tick %d] %s%n", clock.getTic(), message);
+
+            // Usar invokeLater para actualizar la GUI desde el hilo correcto
+            SwingUtilities.invokeLater(() -> {
+                gui.getAreaLog().append(logMessage);
+                // Opcional: Auto-scroll hacia abajo
+                gui.getAreaLog().setCaretPosition(gui.getAreaLog().getDocument().getLength());
+            });
+        } else {
+            // Si no hay GUI, imprimir en consola como fallback
+            System.out.printf("[Tick %d] %s%n", clock.getTic(), message);
+        }   
     }
 }
 

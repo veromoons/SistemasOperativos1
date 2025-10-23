@@ -5,16 +5,17 @@
             <url>src/CoreV2/Proceso.java</url>
             <bookmark id="1">
                 <name/>
-                <line>131</line>
+                <line>153</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/sistemasoperativos1/Main.java</file>
-            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/CoreV2/OperatingSystem.java</file>
-            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/sistemasoperativos1/SimuladorGUI.java</file>
+            <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/CoreV2/Scheduler.java</file>
+            <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/sistemasoperativos1/Main.java</file>
+            <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/sistemasoperativos1/SimuladorGUI.java</file>
+            <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/CoreV2/OperatingSystem.java</file>
         </group>
     </open-files>
 </project-private>

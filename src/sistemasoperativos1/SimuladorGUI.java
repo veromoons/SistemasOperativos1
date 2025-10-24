@@ -4,6 +4,15 @@
  */
 package sistemasoperativos1;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.nio.file.Files;
+import java.nio.charset.StandardCharsets;
+import CoreV2.ProcesoConfig; // ¡Importante!
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.FileReader;
@@ -19,6 +28,8 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 import java.awt.BorderLayout;
+import CoreV2.Lista;
+import CoreV2.AlgorithmsStrategies.ISchedulingAlgorithm.SchedulingType;
 
 
 /**
@@ -74,6 +85,7 @@ public SimuladorGUI(OperatingSystem so) {
         jLabel6 = new javax.swing.JLabel();
         lblRelojGlobal = new javax.swing.JLabel();
         btnGuardarDefaultsProceso = new javax.swing.JButton();
+        btnCargarProcesosArchivo = new javax.swing.JButton();
         panelDerecho = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
@@ -183,104 +195,114 @@ public SimuladorGUI(OperatingSystem so) {
             }
         });
 
+        btnCargarProcesosArchivo.setText("Cargar Procesos Archivo");
+        btnCargarProcesosArchivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCargarProcesosArchivoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelIzquierdoLayout = new javax.swing.GroupLayout(panelIzquierdo);
         panelIzquierdo.setLayout(panelIzquierdoLayout);
         panelIzquierdoLayout.setHorizontalGroup(
             panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIzquierdoLayout.createSequentialGroup()
-                .addGap(0, 41, Short.MAX_VALUE)
-                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel1))
-                .addGap(44, 44, 44))
             .addGroup(panelIzquierdoLayout.createSequentialGroup()
                 .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(95, 95, 95)
-                        .addComponent(nombre))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(78, 78, 78)
-                        .addComponent(comboPolitica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(btnGuardarCambios, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(jLabel6))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(110, 110, 110)
-                        .addComponent(lblRelojGlobal))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(77, 77, 77)
-                        .addComponent(spinnerCiclosExcepcion, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(spinnerCiclosSatisfacer, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelIzquierdoLayout.createSequentialGroup()
-                            .addGap(68, 68, 68)
-                            .addComponent(btnCrearProceso))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(80, 80, 80)
-                        .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(jLabel2))
-                            .addComponent(spinnerInstrucciones, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(panelIzquierdoLayout.createSequentialGroup()
                         .addGap(85, 85, 85)
-                        .addComponent(btnGuardarDefaultsProceso)))
+                        .addComponent(btnGuardarDefaultsProceso))
+                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(nombre)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(spinnerInstrucciones, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(spinnerCiclosExcepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spinnerCiclosSatisfacer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblRelojGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnCargarProcesosArchivo)
+                            .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel5)
+                                .addComponent(btnGuardarCambios, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(13, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIzquierdoLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIzquierdoLayout.createSequentialGroup()
+                        .addComponent(btnCrearProceso)
+                        .addGap(75, 75, 75))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIzquierdoLayout.createSequentialGroup()
+                        .addComponent(comboPolitica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(77, 77, 77))))
         );
         panelIzquierdoLayout.setVerticalGroup(
             panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                .addComponent(nombre)
-                .addGap(12, 12, 12)
-                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spinnerInstrucciones, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spinnerCiclosExcepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spinnerCiclosSatisfacer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nombre)
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(btnCrearProceso)
+                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(spinnerInstrucciones, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(spinnerCiclosExcepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(spinnerCiclosSatisfacer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCrearProceso)
+                .addGap(32, 32, 32)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(comboPolitica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnGuardarCambios)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblRelojGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnGuardarDefaultsProceso)
-                .addContainerGap(165, Short.MAX_VALUE))
+                .addComponent(btnGuardarCambios)
+                .addGap(10, 10, 10)
+                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(48, 48, 48)
+                        .addComponent(btnGuardarDefaultsProceso))
+                    .addComponent(lblRelojGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
+                .addComponent(btnCargarProcesosArchivo)
+                .addContainerGap(221, Short.MAX_VALUE))
         );
 
         jPanel5.add(panelIzquierdo, java.awt.BorderLayout.LINE_START);
@@ -389,7 +411,7 @@ public SimuladorGUI(OperatingSystem so) {
                 .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
                     .addComponent(lblCpuTipo))
-                .addContainerGap(377, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.add(panelDerecho, java.awt.BorderLayout.LINE_END);
@@ -450,7 +472,7 @@ public SimuladorGUI(OperatingSystem so) {
             .addGroup(panelCentralLayout.createSequentialGroup()
                 .addGap(341, 341, 341)
                 .addComponent(jLabel7)
-                .addContainerGap(255, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(panelCentralLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane4)
@@ -475,7 +497,7 @@ public SimuladorGUI(OperatingSystem so) {
                 .addComponent(jLabel23)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(162, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.add(panelCentral, java.awt.BorderLayout.CENTER);
@@ -526,7 +548,7 @@ public SimuladorGUI(OperatingSystem so) {
                     .addComponent(jLabel22))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnAplicarDuracion)
-                .addContainerGap(585, Short.MAX_VALUE))
+                .addContainerGap(606, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Configuracion", Configuracion);
@@ -545,7 +567,7 @@ public SimuladorGUI(OperatingSystem so) {
             GraficosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(GraficosLayout.createSequentialGroup()
                 .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 209, Short.MAX_VALUE))
+                .addGap(0, 230, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Graficos", Graficos);
@@ -635,7 +657,7 @@ public SimuladorGUI(OperatingSystem so) {
             EstadisticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EstadisticasLayout.createSequentialGroup()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 545, Short.MAX_VALUE))
+                .addGap(0, 566, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Estadisticas", Estadisticas);
@@ -804,6 +826,13 @@ public SimuladorGUI(OperatingSystem so) {
         
     }//GEN-LAST:event_btnGuardarDefaultsProcesoActionPerformed
 
+    private void btnCargarProcesosArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarProcesosArchivoActionPerformed
+        // TODO add your handling code here:
+            
+        cargarProcesosDesdeArchivo();
+        
+    }//GEN-LAST:event_btnCargarProcesosArchivoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -966,44 +995,232 @@ private void actualizarAreaCola(Cola cola, javax.swing.JTextArea area) {
 private void actualizarGraficoThroughput() {
     // 1. Crear el set de datos para el gráfico de barras
     DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    String seriesKey = "Throughput"; // Nombre de la serie (leyenda)
 
-    // 2. Añadir los datos
-    // NOTA: ¡Esto necesita la lógica de backend de "estadísticas por política"!
-    // Por ahora, usaremos datos de ejemplo y el throughput general.
-    // Cuando tengas las estadísticas por política, podrás reemplazar esto.
+    // 2. Iterar sobre todos los tipos de políticas definidos en el Enum
+    for (SchedulingType tipo : SchedulingType.values()) {
+        // Obtener datos del backend para esta política específica
+        int terminados = so.getTerminadosPorPolitica(tipo); // Usa el nuevo getter
+        long ciclos = so.getCiclosPorPolitica(tipo); // Usa el nuevo getter
 
-    double throughputGeneral = 0.0;
-    if (so.getClock().getTic() > 0) {
-        throughputGeneral = (double) so.getStatProcesosTotalesTerminados() / so.getClock().getTic();
+        // Calcular el throughput específico (procesos terminados / ciclos activos)
+        double throughput = 0.0;
+        if (ciclos > 0) { // Evitar división por cero
+            throughput = (double) terminados / ciclos;
+        }
+
+        // Usar el nombre del Enum como etiqueta para la barra en el eje X
+        String nombrePolitica = tipo.toString(); // Ej: FCFS, ROUNDROBIN, SPN...
+
+        // Añadir el valor calculado al dataset
+        dataset.addValue(throughput, seriesKey, nombrePolitica);
     }
 
-    // (Datos de ejemplo)
-    dataset.addValue(throughputGeneral, "Throughput", "FCFS");
-    dataset.addValue(0.0, "Throughput", "Round Robin");
-    dataset.addValue(0.0, "Throughput", "SPN");
-    dataset.addValue(0.0, "Throughput", "SRT");
-    dataset.addValue(0.0, "Throughput", "HRRN");
+    // --- El resto del código para crear y mostrar el gráfico sigue igual ---
 
     // 3. Crear el gráfico de barras
     JFreeChart barChart = ChartFactory.createBarChart(
-        "Comparación de Throughputs", // Título del gráfico
-        "Política",                   // Etiqueta eje X
-        "Throughput",                 // Etiqueta eje Y
-        dataset                       // Los datos
+        "Comparación de Throughputs", // Título
+        "Política",                   // Eje X
+        "Throughput",                 // Eje Y
+        dataset                       // Datos actualizados
     );
 
     // 4. Crear el panel que contiene el gráfico
     ChartPanel chartPanel = new ChartPanel(barChart);
 
-    // 5. Añadir el panel del gráfico a nuestro 'panelGrafico' del diseñador
-    panelGrafico.removeAll(); // Limpia el panel por si había un gráfico anterior
-    panelGrafico.add(chartPanel, BorderLayout.CENTER); // Añade el nuevo
+    // 5. Añadir/Actualizar el panel del gráfico en nuestro 'panelGrafico'
+    panelGrafico.removeAll(); // Limpia el panel
+    panelGrafico.add(chartPanel, BorderLayout.CENTER); // Añade el gráfico actualizado
     panelGrafico.validate(); // Refresca el panel
+    panelGrafico.repaint(); // Asegura redibujado
 }
 
     public javax.swing.JTextArea getAreaLog() {
         return areaLog;
     }
+    
+    // Método principal llamado por el botón
+private void cargarProcesosDesdeArchivo() {
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setCurrentDirectory(new File(".")); // Directorio del proyecto
+    fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos de Procesos (.json, .csv)", "json", "csv"));
+    fileChooser.setDialogTitle("Seleccionar archivo de procesos (.json o .csv)");
+
+    int result = fileChooser.showOpenDialog(this);
+
+    if (result == JFileChooser.APPROVE_OPTION) {
+        File selectedFile = fileChooser.getSelectedFile();
+        String fileName = selectedFile.getName().toLowerCase();
+        Lista<ProcesoConfig> procesosParaCargar = null; // Usa tu clase Lista
+
+        try {
+            // Determinar tipo y parsear
+            if (fileName.endsWith(".json")) {
+                procesosParaCargar = parseJson(selectedFile);
+            } else if (fileName.endsWith(".csv")) {
+                procesosParaCargar = parseCsv(selectedFile);
+            } else {
+                mostrarError("Tipo de archivo no soportado. Seleccione .json o .csv.");
+                return;
+            }
+
+            // Validar resultado del parseo
+            if (procesosParaCargar == null || procesosParaCargar.isEmpty()) {
+               mostrarAdvertencia("El archivo está vacío o tiene un formato incorrecto.");
+               return;
+            }
+
+            // Crear los procesos en el SO
+            crearProcesosDesdeConfig(procesosParaCargar);
+
+            mostrarInformacion("Procesos cargados desde " + selectedFile.getName());
+
+        } catch (FileNotFoundException e) {
+             mostrarError("Archivo no encontrado:\n" + e.getMessage());
+        } catch (IOException e) {
+             mostrarError("Error al leer el archivo:\n" + e.getMessage());
+        } catch (com.google.gson.JsonSyntaxException e) {
+             mostrarError("Error en el formato del archivo JSON:\n" + e.getMessage());
+        } catch (Exception e) {
+             mostrarError("Ocurrió un error inesperado al procesar el archivo:\n" + e.getMessage());
+             e.printStackTrace(); // Imprime detalles en consola
+        }
+    }
+}
+
+// Método para parsear JSON
+private Lista<ProcesoConfig> parseJson(File file) throws IOException, com.google.gson.JsonSyntaxException {
+    Gson gson = new Gson();
+    Lista<ProcesoConfig> listaProcesos = new Lista<>(); // Crea tu Lista
+    try (FileReader reader = new FileReader(file)) {
+        // Gson parsea a un array normal
+        ProcesoConfig[] procesosArray = gson.fromJson(reader, ProcesoConfig[].class);
+
+        // Copia manualmente del array a tu Lista
+        if (procesosArray != null) {
+            for (ProcesoConfig proc : procesosArray) {
+                if (proc != null) { // Evitar nulls si el JSON tiene entradas vacías
+                   listaProcesos.add(proc);
+                }
+            }
+        }
+    }
+    return listaProcesos;
+}
+
+private Lista<ProcesoConfig> parseCsv(File file) throws IOException, NumberFormatException {
+    // Usa tu clase Lista directamente
+    Lista<ProcesoConfig> procesos = new Lista<>();
+    try (BufferedReader br = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
+        String line;
+        boolean isFirstLine = true;
+
+        while ((line = br.readLine()) != null) {
+            if (isFirstLine) {
+                isFirstLine = false;
+                continue;
+            }
+            if (line.trim().isEmpty() || line.trim().startsWith("#")) {
+                continue;
+            }
+            String[] fields = line.split(",");
+
+            if (fields.length < 4) {
+                 System.err.println("WARN: Línea CSV con campos insuficientes, omitida: " + line);
+                 continue;
+            }
+
+            try {
+                ProcesoConfig proc = new ProcesoConfig();
+
+                // Asignar usando setters
+                proc.setNombreManual(fields[0].trim());
+                proc.setInstruccionesManual(Integer.parseInt(fields[1].trim()));
+                proc.setTipoManual(fields[2].trim());
+                proc.setTamanoManual(Integer.parseInt(fields[3].trim()));
+
+                // Campos opcionales IO_BOUND
+                if (fields.length > 4 && !fields[4].trim().isEmpty()) {
+                    proc.setInstruccionesParaESManual(Integer.parseInt(fields[4].trim()));
+                }
+                if (fields.length > 5 && !fields[5].trim().isEmpty()) {
+                    proc.setCiclosParaCompletarESManual(Integer.parseInt(fields[5].trim()));
+                }
+
+                // Añade a tu Lista personalizada
+                procesos.add(proc);
+
+            } catch (NumberFormatException e) {
+                System.err.println("WARN: Error de formato numérico en línea CSV, omitida: " + line + " -> " + e.getMessage());
+            } catch (ArrayIndexOutOfBoundsException e) {
+                 System.err.println("WARN: Faltan campos esperados en línea CSV, omitida: " + line);
+            } catch (Exception e) {
+                System.err.println("WARN: Error procesando línea CSV, omitida: " + line + " -> " + e.getMessage());
+            }
+        }
+    }
+    return procesos;
+}
+
+// Nuevo método para centralizar la creación de procesos
+// Cambia el tipo del parámetro y la forma de iterar
+    private void crearProcesosDesdeConfig(Lista<ProcesoConfig> configs) { // <-- Cambio 1: Usa tu clase Lista
+         // Iterar sobre tu Lista personalizada usando índices
+         for (int i = 0; i < configs.size(); i++) { // <-- Cambio 2: Bucle for normal
+             ProcesoConfig configProc = configs.get(i); // <-- Cambio 2: Obtener por índice
+
+             if (configProc == null) continue; // Saltar si el elemento es null
+
+            // --- El RESTO del código dentro del bucle SIGUE IGUAL ---
+
+            // Validaciones básicas (mejoradas)
+            if (configProc.getTipo() == null || configProc.getTipo().trim().isEmpty() ||
+                configProc.getInstrucciones() <= 0 || configProc.getTamano() <= 0) {
+                System.err.println("WARN: Proceso inválido o incompleto, omitido: Nombre=" + configProc.getNombre());
+                continue;
+            }
+
+            // Convertir String a Enum
+            Proceso.Tipo tipoEnum;
+            try {
+                tipoEnum = Proceso.Tipo.valueOf(configProc.getTipo().trim().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.err.println("WARN: Tipo de proceso desconocido '" + configProc.getTipo() + "' para " + configProc.getNombre() + ", usando NORMAL.");
+                tipoEnum = Proceso.Tipo.NORMAL;
+            }
+
+            int id = so.getProcessCounter(); // SO asigna ID incremental
+            int prioridad = 0; // Fijo por ahora
+
+            // Pasar nombre opcional al SO
+            if (configProc.getNombre() != null && !configProc.getNombre().trim().isEmpty()) {
+                so.setNextProcessName(configProc.getNombre());
+            }
+
+            // Llamar al método crearProceso adecuado
+            if (tipoEnum == Proceso.Tipo.IO_BOUND) {
+                so.crearProceso(id, tipoEnum, configProc.getInstrucciones(), configProc.getTamano(),
+                                0, // tiempoES no usado aquí
+                                prioridad, configProc.getInstruccionesParaES(), configProc.getCiclosParaCompletarES());
+            } else {
+                long tiempoESFijo = 5L; // Valor placeholder
+                so.crearProceso(id, tipoEnum, configProc.getInstrucciones(), configProc.getTamano(),
+                                tiempoESFijo, prioridad);
+            }
+         } // Fin del bucle for
+    } // Fin del método
+
+// Métodos ayudantes para mostrar mensajes (opcional, pero ordena el código)
+private void mostrarError(String mensaje) {
+    javax.swing.JOptionPane.showMessageDialog(this, mensaje, "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+}
+private void mostrarAdvertencia(String mensaje) {
+    javax.swing.JOptionPane.showMessageDialog(this, mensaje, "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
+}
+ private void mostrarInformacion(String mensaje) {
+    javax.swing.JOptionPane.showMessageDialog(this, mensaje, "Información", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Configuracion;
@@ -1015,6 +1232,7 @@ private void actualizarGraficoThroughput() {
     private javax.swing.JTextArea areaLog;
     private javax.swing.JTextArea areaTerminados;
     private javax.swing.JButton btnAplicarDuracion;
+    private javax.swing.JButton btnCargarProcesosArchivo;
     private javax.swing.JButton btnCrearProceso;
     private javax.swing.JButton btnGuardarCambios;
     private javax.swing.JButton btnGuardarDefaultsProceso;

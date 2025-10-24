@@ -9,6 +9,9 @@ import CoreV2.AlgorithmsStrategies.ISchedulingAlgorithm;
 import java.util.concurrent.Semaphore;
 import sistemasoperativos1.SimuladorGUI;
 import javax.swing.SwingUtilities;
+import java.util.HashMap;
+import java.util.Map;
+import CoreV2.AlgorithmsStrategies.ISchedulingAlgorithm.SchedulingType;
 //import java.util.*;
 
 
@@ -18,6 +21,7 @@ import javax.swing.SwingUtilities;
  */
 // 🔹 Sistema operativo que maneja colas, CPU, memoria y disco
 public class OperatingSystem {
+    private String nextProcessName = null;
     private final Scheduler scheduler;
     private final CPU cpu;
     private final MainMemory memory;
@@ -49,6 +53,12 @@ public class OperatingSystem {
     private int stat_procesosTotalesTerminados = 0;
     private int stat_ioBoundTerminados = 0;
     private int stat_cpuBoundTerminados = 0;
+    // Guarda el tipo de la política actual
+    private SchedulingType currentPolicyType;
+    // Guarda los procesos terminados por cada tipo de política
+    private Map<SchedulingType, Integer> terminosPorPolitica;
+    // Guarda los ciclos de reloj ejecutados por cada tipo de política
+    private Map<SchedulingType, Long> ciclosPorPolitica;
 
     public OperatingSystem(CPU cpu, MainMemory memory, Disk disk, DMA dma, Scheduler scheduler, Clock clock) {
         this.cpu = cpu;
@@ -59,6 +69,16 @@ public class OperatingSystem {
         this.clock = clock;
         this.processCounter = 1;
         this.stopQuantumThread = false;
+        
+        this.terminosPorPolitica = new HashMap<>();
+        this.ciclosPorPolitica = new HashMap<>();
+        for (SchedulingType type : SchedulingType.values()) {
+            this.terminosPorPolitica.put(type, 0);
+            this.ciclosPorPolitica.put(type, 0L);
+    }
+    // Guarda el tipo de política inicial
+    // Necesitaremos añadir getAlgoritmo() a Scheduler
+           this.currentPolicyType = scheduler.getAlgoritmo().getSchedulingType();
     }
     
     public void setGUI(SimuladorGUI gui) {
@@ -67,9 +87,16 @@ public class OperatingSystem {
     
     //NO IO Bound
     public void crearProceso(int id, Proceso.Tipo tipo, int instrucciones, int tamano, long tiempoES, int prioridad) {
-//        System.out.println("entro A CRar");
-        String nombre = "P"+processCounter;
-        processCounter++;
+        String nombre;
+            // Verifica si hay un nombre personalizado pendiente
+            if (this.nextProcessName != null && !this.nextProcessName.trim().isEmpty()) {
+                nombre = this.nextProcessName; // Usa el nombre personalizado
+                this.nextProcessName = null; // Lo resetea para que no se use de nuevo accidentalmente
+            } else {
+                // Si no hay nombre personalizado, genera el nombre P + contador
+                nombre = "P" + processCounter;
+                processCounter++;
+            }
         Proceso p = new Proceso(id, tipo, nombre, instrucciones, this.cpu.getQuantumCiclos(),tiempoES, tamano, 0, 0);
         p.setEstado(Proceso.Estado.NUEVO);
         moverANuevos(p);
@@ -79,9 +106,16 @@ public class OperatingSystem {
     //IO Bound
     public void crearProceso(int id, Proceso.Tipo tipo, int instrucciones, int tamano, long tiempoES, int prioridad, int instruccionesParaES, int ciclosParaCopletarES) {
 //        System.out.println("entro A CRar");
-        String nombre = "P"+processCounter;
-        processCounter++;
-
+        String nombre;
+    // Verifica si hay un nombre personalizado pendiente
+        if (this.nextProcessName != null && !this.nextProcessName.trim().isEmpty()) {
+            nombre = this.nextProcessName; // Usa el nombre personalizado
+            this.nextProcessName = null; // Lo resetea para que no se use de nuevo accidentalmente
+        } else {
+            // Si no hay nombre personalizado, genera el nombre P + contador
+            nombre = "P" + processCounter;
+            processCounter++;
+        }
         Proceso p = new Proceso(id, tipo, nombre, instrucciones, this.cpu.getQuantumCiclos(),tiempoES, tamano, instruccionesParaES, ciclosParaCopletarES);
         p.setEstado(Proceso.Estado.NUEVO);
         
@@ -167,6 +201,11 @@ public class OperatingSystem {
         } else if (p.getTipo() == Proceso.Tipo.CPU_BOUND) {
             this.stat_cpuBoundTerminados++;
         }
+        
+        // Contar terminados por política
+        if (currentPolicyType != null) {
+            terminosPorPolitica.put(currentPolicyType, terminosPorPolitica.getOrDefault(currentPolicyType, 0) + 1);
+        }
     }
 
     // 🔹 Bloquear proceso por E/S
@@ -195,8 +234,10 @@ public class OperatingSystem {
 
     // 🔹 Cambiar algoritmo de planificación
     public void setAlgoritmo(ISchedulingAlgorithm algoritmo) {
+        // Actualizar la política actual
+        this.currentPolicyType = algoritmo.getSchedulingType();
         scheduler.setAlgoritmo(algoritmo);
-        logEvent("SO: Algoritmo de planificación cambiado a " + algoritmo.getSchedulingType()); // <-- Añadir log
+        logEvent("SO: Algoritmo de planificación cambiado a " + this.currentPolicyType); // <-- Añadir log
         System.out.println("SO: Algoritmo de planificación cambiado");
     }
     
@@ -241,6 +282,12 @@ public class OperatingSystem {
     }
     public void notifyTic() {
         try {
+            
+            // Contar ciclos por política
+            if (currentPolicyType != null) {
+                ciclosPorPolitica.put(currentPolicyType, ciclosPorPolitica.getOrDefault(currentPolicyType, 0L) + 1);
+            }
+            
             mutex.acquire();
             if (cpu.getProcesoActual() != null) {
                 cpu.ejecutarInstruccion( this);
@@ -469,6 +516,19 @@ public class OperatingSystem {
             System.out.printf("[Tick %d] %s%n", clock.getTic(), message);
         }   
     }
+    
+    public void setNextProcessName(String name) {
+        this.nextProcessName = name;
+    }
+    
+    public int getTerminadosPorPolitica(SchedulingType tipo) {
+        return this.terminosPorPolitica.getOrDefault(tipo, 0);
+    }
+
+    public long getCiclosPorPolitica(SchedulingType tipo) {
+        return this.ciclosPorPolitica.getOrDefault(tipo, 0L);
+    }
+
 }
 
 

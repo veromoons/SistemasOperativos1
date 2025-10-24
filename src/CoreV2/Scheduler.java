@@ -23,9 +23,9 @@ public class Scheduler {
         this.algoritmo = algoritmoInicial;
     }
 
-    public void setAlgoritmo(ISchedulingAlgorithm nuevoAlgoritmo) {  //para pasar el algoritmo sig
-        this.algoritmo = nuevoAlgoritmo;
-    }
+    //public void setAlgoritmo(ISchedulingAlgorithm nuevoAlgoritmo) {  //para pasar el algoritmo sig
+    //    this.algoritmo = nuevoAlgoritmo;
+    //}
     
 
     public void agregarProcesos(Proceso p) {
@@ -46,13 +46,29 @@ public class Scheduler {
     
     public void setSO(OperatingSystem so){  //para pasarle al scheduler el SO, necesitas cosas del SO en el scheduler
         this.so = so;
+        // Configura el algoritmo INICIAL con las colas
         this.algoritmo.setColaNuevos(so.getColaNuevos());
         this.algoritmo.setColaListos(so.getColaListos());
-        this.algoritmo.setColaBloqueadoSuspendido(so.getColaBloqueadoSuspendido());
-        this.algoritmo.setColaBloqueados(so.getColaBloqueados());
-        this.algoritmo.setColaTerminados(so.getColaTerminados());
-        this.algoritmo.setColaListoSuspendido(so.getColaListoSuspendido());
+        this.algoritmo.setColaBloqueados(so.getColaBloqueados()); // Añadido Bloqueados
+        this.algoritmo.setColaTerminados(so.getColaTerminados()); // Añadido Terminados
+        this.algoritmo.setColaListoSuspendido(so.getColaListoSuspendido()); // Añadido ListoSuspendido
+        this.algoritmo.setColaBloqueadoSuspendido(so.getColaBloqueadoSuspendido()); // Añadido BloqueadoSuspendido
     }
+    
+    public void setAlgoritmo(ISchedulingAlgorithm nuevoAlgoritmo) {
+            this.algoritmo = nuevoAlgoritmo; // <-- Esto ya lo tenías
+
+            // ⬇️ AÑADE ESTO (es la lógica que está en setSO) ⬇️
+            // Para asegurarnos de que la NUEVA instancia del algoritmo conozca las colas
+            if (this.so != null) {
+                this.algoritmo.setColaNuevos(so.getColaNuevos());
+                this.algoritmo.setColaListos(so.getColaListos());
+                this.algoritmo.setColaBloqueados(so.getColaBloqueados());
+                this.algoritmo.setColaTerminados(so.getColaTerminados());
+                this.algoritmo.setColaListoSuspendido(so.getColaListoSuspendido());
+                this.algoritmo.setColaBloqueadoSuspendido(so.getColaBloqueadoSuspendido());
+            }
+        }
     
 }
 

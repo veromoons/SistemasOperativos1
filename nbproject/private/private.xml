@@ -12,10 +12,21 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/CoreV2/Scheduler.java</file>
             <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/sistemasoperativos1/Main.java</file>
             <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/sistemasoperativos1/SimuladorGUI.java</file>
             <file>file:/C:/Users/verol/Documents/Sistemas/Materias%20Sist/Operativos/proyectos/SistemasOperativos1/src/CoreV2/OperatingSystem.java</file>
+=======
+            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/sistemasoperativos1/Main.java</file>
+            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/CoreV2/OperatingSystem.java</file>
+            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/sistemasoperativos1/SimuladorGUI.java</file>
+            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/CoreV2/Clock.java</file>
+            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/CoreV2/CPU.java</file>
+            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/CoreV2/Scheduler.java</file>
+            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/CoreV2/Cola.java</file>
+            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/CoreV2/AlgorithmsStrategies/FeedbackScheduling.java</file>
+>>>>>>> 1d18e82a9638c318672edb1977d7ac1f24e465d4
         </group>
     </open-files>
 </project-private>

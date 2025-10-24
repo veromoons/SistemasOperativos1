@@ -15,6 +15,11 @@
             <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/sistemasoperativos1/Main.java</file>
             <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/CoreV2/OperatingSystem.java</file>
             <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/sistemasoperativos1/SimuladorGUI.java</file>
+            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/CoreV2/Clock.java</file>
+            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/CoreV2/CPU.java</file>
+            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/CoreV2/Scheduler.java</file>
+            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/CoreV2/Cola.java</file>
+            <file>file:/C:/Users/juanr/OneDrive/Escritorio/PROYECTO%20OPERATIVOS/SistemasOperativos1/src/CoreV2/AlgorithmsStrategies/FeedbackScheduling.java</file>
         </group>
     </open-files>
 </project-private>

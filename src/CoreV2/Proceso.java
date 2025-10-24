@@ -5,6 +5,8 @@
  */
 package CoreV2;
 
+import java.util.Random;
+
 /**
  *
  * @author verol
@@ -37,6 +39,7 @@ public class Proceso {
     private PCB pcb;
     
     private int queuePriority = 0;
+    
 
     public int getActualInstruccion() {
         return actualInstruccion;
@@ -63,7 +66,8 @@ public class Proceso {
     }
 
     // 🔹 Dirección de inicio en memoria principal
-    private int startAddress = -1;
+    Random random = new Random();
+    private int startAddress = random.nextInt(1000) + 100; // Ejemplo: entre 100 y 1099
     
     public Proceso(int id, Tipo tipo, String nombre, int instrucciones, long quantum, long tiempoES, int tamano, int instruccionesParaES, int ciclosParaCompletarES) { //constructor simplificado
        
@@ -77,13 +81,22 @@ public class Proceso {
         this.tiempoES = tiempoES;
         this.tamano = tamano;
         this.estado = Estado.NUEVO;
-        this.programCounter = 0;
-        this.memoryAddressRegister = -1;
+        this.programCounter = this.startAddress;
+        this.memoryAddressRegister = this.programCounter * this.instrucciones;
         this.instruccionesParaES = instruccionesParaES;
         this.ciclosParaCompletarES = ciclosParaCompletarES;
         this.pcb = new PCB(id, nombre, this.estado, this.programCounter, this.memoryAddressRegister);
+    }
+     // 🔹 Método para avanzar el PC y el MAR sincronizados
+    public void incrementarPCyMAR() {
+        this.programCounter++;
+        this.memoryAddressRegister++;
         
-
+        // Actualizamos también el PCB
+        this.setMemoryAddressRegister(memoryAddressRegister);
+        this.setProgramCounter(programCounter);
+        this.pcb.setPc(this.programCounter);
+        this.pcb.setMar(this.memoryAddressRegister);
     }
 
     public PCB getPcb() {

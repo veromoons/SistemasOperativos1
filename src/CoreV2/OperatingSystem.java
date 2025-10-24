@@ -243,6 +243,12 @@ public class OperatingSystem {
         try {
             mutex.acquire();
             if (cpu.getProcesoActual() != null) {
+                
+                Proceso actual = cpu.getProcesoActual();
+            // 💡 Simulación de avance de PC y MAR solo si está en ejecución
+            if (actual.getEstado() == Proceso.Estado.EJECUCION) {
+                actual.incrementarPCyMAR(); // <-- 👈 actualización simulada
+            }
                 cpu.ejecutarInstruccion( this);
             }
             // 🔹 Actualizamos tiempos de espera para los procesos en cola de corto plazo

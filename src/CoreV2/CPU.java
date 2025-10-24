@@ -81,8 +81,8 @@ public class CPU {
         procesoActual.nextInstruccion();
         // Simular ejecución de una instrucción
         procesoActual.incrementarTiempoEjecutado();
-        procesoActual.setProgramCounter(procesoActual.getProgramCounter() + 1);
-        procesoActual.setMemoryAddressRegister(procesoActual.getStartAddress() + procesoActual.getProgramCounter());
+//        procesoActual.setProgramCounter(procesoActual.getProgramCounter() + 1);
+//        procesoActual.setMemoryAddressRegister(procesoActual.getStartAddress() + procesoActual.getProgramCounter());
         tiempoOcupado++;
         
         // 🔹 Simular solicitud de E/S (interrupción de inicio)

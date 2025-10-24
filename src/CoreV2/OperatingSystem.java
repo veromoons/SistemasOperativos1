@@ -59,6 +59,9 @@ public class OperatingSystem {
     private Map<SchedulingType, Integer> terminosPorPolitica;
     // Guarda los ciclos de reloj ejecutados por cada tipo de política
     private Map<SchedulingType, Long> ciclosPorPolitica;
+    private Map<SchedulingType, Integer> terminosIOBoundPorPolitica;
+    private Map<SchedulingType, Integer> terminosCPUBoundPorPolitica;
+    
 
     public OperatingSystem(CPU cpu, MainMemory memory, Disk disk, DMA dma, Scheduler scheduler, Clock clock) {
         this.cpu = cpu;
@@ -72,9 +75,14 @@ public class OperatingSystem {
         
         this.terminosPorPolitica = new HashMap<>();
         this.ciclosPorPolitica = new HashMap<>();
+        this.terminosIOBoundPorPolitica = new HashMap<>(); // <-- Añadir
+        this.terminosCPUBoundPorPolitica = new HashMap<>(); // <-- Añadir
+        
         for (SchedulingType type : SchedulingType.values()) {
             this.terminosPorPolitica.put(type, 0);
             this.ciclosPorPolitica.put(type, 0L);
+            this.terminosIOBoundPorPolitica.put(type, 0); // <-- Añadir
+            this.terminosCPUBoundPorPolitica.put(type, 0); // <-- Añadir
     }
     // Guarda el tipo de política inicial
     // Necesitaremos añadir getAlgoritmo() a Scheduler
@@ -202,9 +210,18 @@ public class OperatingSystem {
             this.stat_cpuBoundTerminados++;
         }
         
-        // Contar terminados por política
+    // Actualizar estadísticas por política
         if (currentPolicyType != null) {
+            // Contar terminados totales (ya lo teníamos)
             terminosPorPolitica.put(currentPolicyType, terminosPorPolitica.getOrDefault(currentPolicyType, 0) + 1);
+
+            // ⬇️ AÑADE ESTO PARA CONTAR POR TIPO DE PROCESO Y POLÍTICA ⬇️
+            if (p.getTipo() == Proceso.Tipo.IO_BOUND) {
+                terminosIOBoundPorPolitica.put(currentPolicyType, terminosIOBoundPorPolitica.getOrDefault(currentPolicyType, 0) + 1);
+            } else if (p.getTipo() == Proceso.Tipo.CPU_BOUND) {
+                terminosCPUBoundPorPolitica.put(currentPolicyType, terminosCPUBoundPorPolitica.getOrDefault(currentPolicyType, 0) + 1);
+            }
+            // --- FIN ---
         }
     }
 
@@ -527,6 +544,14 @@ public class OperatingSystem {
 
     public long getCiclosPorPolitica(SchedulingType tipo) {
         return this.ciclosPorPolitica.getOrDefault(tipo, 0L);
+    }
+    
+    public int getTerminadosIOBoundPorPolitica(SchedulingType tipo) {
+        return this.terminosIOBoundPorPolitica.getOrDefault(tipo, 0);
+    }
+
+    public int getTerminadosCPUBoundPorPolitica(SchedulingType tipo) {
+        return this.terminosCPUBoundPorPolitica.getOrDefault(tipo, 0);
     }
 
 }

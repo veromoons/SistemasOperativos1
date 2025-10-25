@@ -70,5 +70,9 @@ public class Scheduler {
             }
         }
     
+    public ISchedulingAlgorithm getAlgoritmo() {
+        return algoritmo;
+    }
+   
 }
 

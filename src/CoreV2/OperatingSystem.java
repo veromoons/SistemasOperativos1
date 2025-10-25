@@ -9,6 +9,9 @@ import CoreV2.AlgorithmsStrategies.ISchedulingAlgorithm;
 import java.util.concurrent.Semaphore;
 import sistemasoperativos1.SimuladorGUI;
 import javax.swing.SwingUtilities;
+import java.util.HashMap;
+import java.util.Map;
+import CoreV2.AlgorithmsStrategies.ISchedulingAlgorithm.SchedulingType;
 //import java.util.*;
 
 
@@ -18,6 +21,7 @@ import javax.swing.SwingUtilities;
  */
 // 🔹 Sistema operativo que maneja colas, CPU, memoria y disco
 public class OperatingSystem {
+    private String nextProcessName = null;
     private final Scheduler scheduler;
     private final CPU cpu;
     private final MainMemory memory;
@@ -49,6 +53,15 @@ public class OperatingSystem {
     private int stat_procesosTotalesTerminados = 0;
     private int stat_ioBoundTerminados = 0;
     private int stat_cpuBoundTerminados = 0;
+    // Guarda el tipo de la política actual
+    private SchedulingType currentPolicyType;
+    // Guarda los procesos terminados por cada tipo de política
+    private Map<SchedulingType, Integer> terminosPorPolitica;
+    // Guarda los ciclos de reloj ejecutados por cada tipo de política
+    private Map<SchedulingType, Long> ciclosPorPolitica;
+    private Map<SchedulingType, Integer> terminosIOBoundPorPolitica;
+    private Map<SchedulingType, Integer> terminosCPUBoundPorPolitica;
+    
 
     public OperatingSystem(CPU cpu, MainMemory memory, Disk disk, DMA dma, Scheduler scheduler, Clock clock) {
         this.cpu = cpu;
@@ -59,6 +72,21 @@ public class OperatingSystem {
         this.clock = clock;
         this.processCounter = 1;
         this.stopQuantumThread = false;
+        
+        this.terminosPorPolitica = new HashMap<>();
+        this.ciclosPorPolitica = new HashMap<>();
+        this.terminosIOBoundPorPolitica = new HashMap<>(); // <-- Añadir
+        this.terminosCPUBoundPorPolitica = new HashMap<>(); // <-- Añadir
+        
+        for (SchedulingType type : SchedulingType.values()) {
+            this.terminosPorPolitica.put(type, 0);
+            this.ciclosPorPolitica.put(type, 0L);
+            this.terminosIOBoundPorPolitica.put(type, 0); // <-- Añadir
+            this.terminosCPUBoundPorPolitica.put(type, 0); // <-- Añadir
+    }
+    // Guarda el tipo de política inicial
+    // Necesitaremos añadir getAlgoritmo() a Scheduler
+           this.currentPolicyType = scheduler.getAlgoritmo().getSchedulingType();
     }
     
     public void setGUI(SimuladorGUI gui) {
@@ -170,6 +198,20 @@ public class OperatingSystem {
         } else if (p.getTipo() == Proceso.Tipo.CPU_BOUND) {
             this.stat_cpuBoundTerminados++;
         }
+        
+    // Actualizar estadísticas por política
+        if (currentPolicyType != null) {
+            // Contar terminados totales (ya lo teníamos)
+            terminosPorPolitica.put(currentPolicyType, terminosPorPolitica.getOrDefault(currentPolicyType, 0) + 1);
+
+            // ⬇️ AÑADE ESTO PARA CONTAR POR TIPO DE PROCESO Y POLÍTICA ⬇️
+            if (p.getTipo() == Proceso.Tipo.IO_BOUND) {
+                terminosIOBoundPorPolitica.put(currentPolicyType, terminosIOBoundPorPolitica.getOrDefault(currentPolicyType, 0) + 1);
+            } else if (p.getTipo() == Proceso.Tipo.CPU_BOUND) {
+                terminosCPUBoundPorPolitica.put(currentPolicyType, terminosCPUBoundPorPolitica.getOrDefault(currentPolicyType, 0) + 1);
+            }
+            // --- FIN ---
+        }
     }
 
     // 🔹 Bloquear proceso por E/S
@@ -198,8 +240,10 @@ public class OperatingSystem {
 
     // 🔹 Cambiar algoritmo de planificación
     public void setAlgoritmo(ISchedulingAlgorithm algoritmo) {
+        // Actualizar la política actual
+        this.currentPolicyType = algoritmo.getSchedulingType();
         scheduler.setAlgoritmo(algoritmo);
-        logEvent("SO: Algoritmo de planificación cambiado a " + algoritmo.getSchedulingType()); // <-- Añadir log
+        logEvent("SO: Algoritmo de planificación cambiado a " + this.currentPolicyType); // <-- Añadir log
         System.out.println("SO: Algoritmo de planificación cambiado");
     }
     
@@ -244,6 +288,12 @@ public class OperatingSystem {
     }
     public void notifyTic() {
         try {
+            
+            // Contar ciclos por política
+            if (currentPolicyType != null) {
+                ciclosPorPolitica.put(currentPolicyType, ciclosPorPolitica.getOrDefault(currentPolicyType, 0L) + 1);
+            }
+            
             mutex.acquire();
             if (cpu.getProcesoActual() != null) {
                 
@@ -481,6 +531,27 @@ public class OperatingSystem {
             System.out.printf("[Tick %d] %s%n", clock.getTic(), message);
         }   
     }
+    
+    public void setNextProcessName(String name) {
+        this.nextProcessName = name;
+    }
+    
+    public int getTerminadosPorPolitica(SchedulingType tipo) {
+        return this.terminosPorPolitica.getOrDefault(tipo, 0);
+    }
+
+    public long getCiclosPorPolitica(SchedulingType tipo) {
+        return this.ciclosPorPolitica.getOrDefault(tipo, 0L);
+    }
+    
+    public int getTerminadosIOBoundPorPolitica(SchedulingType tipo) {
+        return this.terminosIOBoundPorPolitica.getOrDefault(tipo, 0);
+    }
+
+    public int getTerminadosCPUBoundPorPolitica(SchedulingType tipo) {
+        return this.terminosCPUBoundPorPolitica.getOrDefault(tipo, 0);
+    }
+
 }
 
 

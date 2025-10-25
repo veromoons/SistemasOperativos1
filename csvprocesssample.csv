@@ -1,0 +1,3 @@
+nombre,instrucciones,tipo,instruccionesParaES,ciclosParaCompletarES
+"Proceso A - CPU",15,CPU_BOUND,0,0
+"Proceso B - I/O",30,IO_BOUND,5,10

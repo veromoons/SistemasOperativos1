@@ -47,6 +47,7 @@ public class CPU {
         Proceso terminado = this.procesoActual;
         this.procesoActual = null;
         this.ocupado = false;
+        System.out.println("----> "+tiempoOcupado);
         return terminado;
     }
 
@@ -106,6 +107,7 @@ public class CPU {
                 os.stopQuantumTime();
                 this.interrupt = false;
             }
+            
             os.procesoFinalizado(procesoActual); // 🔹 cambia a TERMINADO y libera memoria
             procesoActual = null;
             ocupado = false;

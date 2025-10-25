@@ -1,0 +1,14 @@
+[
+ {
+ "instrucciones": 15,
+   "tipo": "CPU_BOUND",
+   "instruccionesParaES": 3,
+   "ciclosParaCompletarES": 5
+ },
+  {
+ "instrucciones": 15,
+   "tipo": "IO_BOUND",
+   "instruccionesParaES": 3,
+   "ciclosParaCompletarES": 5
+ }
+]

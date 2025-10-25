@@ -101,6 +101,7 @@ public class OperatingSystem {
 //        Proceso p = new Proceso(id, tipo, nombre, instrucciones, this.cpu.getQuantumCiclos(),tiempoES, tamano, 0, 0);
         Proceso p = new Proceso(processCounter, tipo, nombre, instrucciones, 0, 0);
         p.setEstado(Proceso.Estado.NUEVO);
+        p.setPrimerTicEjecucion(clock.getTic());
         moverANuevos(p);
         this.agregarProceso(p);
         processCounter++;
@@ -113,6 +114,7 @@ public class OperatingSystem {
 
         Proceso p = new Proceso(processCounter, tipo, nombre, instrucciones, instruccionesParaES, ciclosParaCopletarES);
         p.setEstado(Proceso.Estado.NUEVO);
+        p.setPrimerTicEjecucion(clock.getTic());
         
         logEvent("Proceso " + p.getNombre() + " creado.");
         // ...
@@ -191,7 +193,8 @@ public class OperatingSystem {
         memory.liberarProceso(p);
         logEvent("Proceso " + p.getNombre() + " pasa a TERMINADO y se libera memoria."); // <-- Añadir log
         System.out.println("SO: " + p.getNombre() + " finalizado y liberado de memoria");
-        
+        System.out.println("--->----> "+p.getTiempoEsperando());
+        p.setSalidaTicEjecucion(clock.getTic());
         this.stat_procesosTotalesTerminados++;
         if (p.getTipo() == Proceso.Tipo.IO_BOUND) {
             this.stat_ioBoundTerminados++;

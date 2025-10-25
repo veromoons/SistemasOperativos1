@@ -69,6 +69,34 @@ public SimuladorGUI(OperatingSystem so) {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         Simulador = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
+        panelCentral = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        panelContenidoListos = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        panelContenidoBloqueados = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        panelContenidoTerminados = new javax.swing.JPanel();
+        jLabel23 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        areaLog = new javax.swing.JTextArea();
+        panelDerecho = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        lblCpuProceso = new javax.swing.JLabel();
+        lblCpuID = new javax.swing.JLabel();
+        lblCpuPC = new javax.swing.JLabel();
+        lblCpuMAR = new javax.swing.JLabel();
+        lblCpuStatus = new javax.swing.JLabel();
+        lblCpuTipo = new javax.swing.JLabel();
+        jLabel50 = new javax.swing.JLabel();
         panelIzquierdo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         spinnerInstrucciones = new javax.swing.JSpinner();
@@ -86,33 +114,7 @@ public SimuladorGUI(OperatingSystem so) {
         lblRelojGlobal = new javax.swing.JLabel();
         btnGuardarDefaultsProceso = new javax.swing.JButton();
         btnCargarProcesosArchivo = new javax.swing.JButton();
-        panelDerecho = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        lblCpuProceso = new javax.swing.JLabel();
-        lblCpuID = new javax.swing.JLabel();
-        lblCpuPC = new javax.swing.JLabel();
-        lblCpuMAR = new javax.swing.JLabel();
-        lblCpuStatus = new javax.swing.JLabel();
-        lblCpuTipo = new javax.swing.JLabel();
-        panelCentral = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        panelContenidoListos = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        panelContenidoBloqueados = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        panelContenidoTerminados = new javax.swing.JPanel();
-        jLabel23 = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        areaLog = new javax.swing.JTextArea();
+        jLabel49 = new javax.swing.JLabel();
         Configuracion = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         spinnerDuracionCiclo = new javax.swing.JSpinner();
@@ -191,9 +193,137 @@ public SimuladorGUI(OperatingSystem so) {
 
         jPanel5.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("Cant. Instrucciones");
+        panelCentral.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setText("Tipo:");
+        jLabel7.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel7.setText("Colas De Listos");
+        panelCentral.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 30, -1, -1));
+
+        panelContenidoListos.setLayout(new javax.swing.BoxLayout(panelContenidoListos, javax.swing.BoxLayout.X_AXIS));
+        jScrollPane1.setViewportView(panelContenidoListos);
+
+        panelCentral.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, 690, 110));
+
+        jLabel8.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel8.setText("Cola de Bloqueados");
+        panelCentral.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, -1, -1));
+
+        panelContenidoBloqueados.setLayout(new javax.swing.BoxLayout(panelContenidoBloqueados, javax.swing.BoxLayout.X_AXIS));
+        jScrollPane2.setViewportView(panelContenidoBloqueados);
+
+        panelCentral.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 190, 690, 120));
+
+        jLabel9.setBackground(new java.awt.Color(51, 51, 51));
+        jLabel9.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel9.setText("Cola de Terminados");
+        panelCentral.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 330, -1, -1));
+
+        panelContenidoTerminados.setLayout(new javax.swing.BoxLayout(panelContenidoTerminados, javax.swing.BoxLayout.X_AXIS));
+        jScrollPane3.setViewportView(panelContenidoTerminados);
+
+        panelCentral.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 350, 690, 120));
+
+        jLabel23.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel23.setText("Log de Eventos");
+        panelCentral.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 480, -1, -1));
+
+        areaLog.setEditable(false);
+        areaLog.setColumns(20);
+        areaLog.setRows(5);
+        jScrollPane4.setViewportView(areaLog);
+
+        panelCentral.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 500, 690, 160));
+
+        panelDerecho.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel10.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel10.setText("CPU ");
+        panelDerecho.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, -1, -1));
+
+        jLabel11.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel11.setText("Proceso en Ejecución:");
+        panelDerecho.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
+
+        jLabel12.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel12.setText("ID: ");
+        panelDerecho.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
+
+        jLabel13.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel13.setText("PC: ");
+        panelDerecho.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 40, -1));
+
+        jLabel14.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel14.setText("MAR:");
+        panelDerecho.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 167, -1, -1));
+
+        jLabel15.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel15.setText("Status:");
+        panelDerecho.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, -1));
+
+        jLabel16.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel16.setText("Tipo:");
+        panelDerecho.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, -1, -1));
+
+        lblCpuProceso.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblCpuProceso.setForeground(new java.awt.Color(51, 51, 51));
+        lblCpuProceso.setText("---");
+        panelDerecho.add(lblCpuProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, 25, -1));
+
+        lblCpuID.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblCpuID.setForeground(new java.awt.Color(51, 51, 51));
+        lblCpuID.setText("---");
+        panelDerecho.add(lblCpuID, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 122, -1));
+
+        lblCpuPC.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblCpuPC.setForeground(new java.awt.Color(51, 51, 51));
+        lblCpuPC.setText("---");
+        panelDerecho.add(lblCpuPC, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 130, 93, -1));
+
+        lblCpuMAR.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblCpuMAR.setForeground(new java.awt.Color(51, 51, 51));
+        lblCpuMAR.setText("---");
+        panelDerecho.add(lblCpuMAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 87, -1));
+
+        lblCpuStatus.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblCpuStatus.setForeground(new java.awt.Color(51, 51, 51));
+        lblCpuStatus.setText("---");
+        panelDerecho.add(lblCpuStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, 84, -1));
+
+        lblCpuTipo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblCpuTipo.setForeground(new java.awt.Color(51, 51, 51));
+        lblCpuTipo.setText("---");
+        panelDerecho.add(lblCpuTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, 117, -1));
+
+        jLabel50.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaces/Diseño sin título.jpg"))); // NOI18N
+        panelDerecho.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, -20, 230, 330));
+
+        panelCentral.add(panelDerecho, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 40, 180, 290));
+
+        panelIzquierdo.setOpaque(false);
+        panelIzquierdo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setBackground(new java.awt.Color(51, 51, 51));
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel1.setText("Cantidad de Instrucciones");
+        panelIzquierdo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, -1, -1));
+        panelIzquierdo.add(spinnerInstrucciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(91, 34, 70, -1));
+
+        jLabel2.setBackground(new java.awt.Color(51, 51, 51));
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel2.setText("Tipo");
+        panelIzquierdo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(111, 68, -1, -1));
 
         comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CPU bound", "I/O bound" }));
         comboTipo.addItemListener(new java.awt.event.ItemListener() {
@@ -206,10 +336,21 @@ public SimuladorGUI(OperatingSystem so) {
                 comboTipoActionPerformed(evt);
             }
         });
+        panelIzquierdo.add(comboTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(82, 90, -1, -1));
 
-        jLabel3.setText("Ciclos para generar Excepcion");
+        jLabel3.setBackground(new java.awt.Color(51, 51, 51));
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel3.setText("Ciclos para generar Excepción");
+        panelIzquierdo.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 220, 25));
+        panelIzquierdo.add(spinnerCiclosExcepcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 150, 70, -1));
 
-        jLabel4.setText("Ciclos para Satisfacer Excepción:");
+        jLabel4.setBackground(new java.awt.Color(51, 51, 51));
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel4.setText("Ciclos para Satisfacer Excepción");
+        panelIzquierdo.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, -1, -1));
+        panelIzquierdo.add(spinnerCiclosSatisfacer, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, 70, -1));
 
         btnCrearProceso.setText("Crear Proceso");
         btnCrearProceso.addActionListener(new java.awt.event.ActionListener() {
@@ -217,10 +358,16 @@ public SimuladorGUI(OperatingSystem so) {
                 btnCrearProcesoActionPerformed(evt);
             }
         });
+        panelIzquierdo.add(btnCrearProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 250, -1, -1));
 
+        jLabel5.setBackground(new java.awt.Color(51, 51, 51));
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(51, 51, 51));
         jLabel5.setText("Cambiar Política de Planificación");
+        panelIzquierdo.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, -1, -1));
 
         comboPolitica.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "Round Robin", "SPN", "SRT", "HRRN", "Feedback" }));
+        panelIzquierdo.add(comboPolitica, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 330, -1, -1));
 
         btnGuardarCambios.setText("Guardar Cambios");
         btnGuardarCambios.addActionListener(new java.awt.event.ActionListener() {
@@ -228,11 +375,20 @@ public SimuladorGUI(OperatingSystem so) {
                 btnGuardarCambiosActionPerformed(evt);
             }
         });
+        panelIzquierdo.add(btnGuardarCambios, new org.netbeans.lib.awtextra.AbsoluteConstraints(59, 370, -1, -1));
 
-        jLabel6.setText("Ciclo de reloj Global");
+        jLabel6.setBackground(new java.awt.Color(51, 51, 51));
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel6.setText("Ciclo de reloj global");
+        panelIzquierdo.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 420, -1, -1));
 
+        lblRelojGlobal.setBackground(new java.awt.Color(51, 51, 51));
         lblRelojGlobal.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+        lblRelojGlobal.setForeground(new java.awt.Color(51, 51, 51));
+        lblRelojGlobal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblRelojGlobal.setText("0");
+        panelIzquierdo.add(lblRelojGlobal, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 440, 120, 63));
 
         btnGuardarDefaultsProceso.setText("Guardar Default");
         btnGuardarDefaultsProceso.addActionListener(new java.awt.event.ActionListener() {
@@ -240,6 +396,7 @@ public SimuladorGUI(OperatingSystem so) {
                 btnGuardarDefaultsProcesoActionPerformed(evt);
             }
         });
+        panelIzquierdo.add(btnGuardarDefaultsProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 520, -1, -1));
 
         btnCargarProcesosArchivo.setText("Cargar Procesos Archivo");
         btnCargarProcesosArchivo.addActionListener(new java.awt.event.ActionListener() {
@@ -247,288 +404,13 @@ public SimuladorGUI(OperatingSystem so) {
                 btnCargarProcesosArchivoActionPerformed(evt);
             }
         });
+        panelIzquierdo.add(btnCargarProcesosArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 570, -1, -1));
 
-        javax.swing.GroupLayout panelIzquierdoLayout = new javax.swing.GroupLayout(panelIzquierdo);
-        panelIzquierdo.setLayout(panelIzquierdoLayout);
-        panelIzquierdoLayout.setHorizontalGroup(
-            panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 125, Short.MAX_VALUE))
-            .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(spinnerInstrucciones, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(spinnerCiclosExcepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spinnerCiclosSatisfacer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblRelojGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnCargarProcesosArchivo)
-                            .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel5)
-                                .addComponent(btnGuardarCambios, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(21, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIzquierdoLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIzquierdoLayout.createSequentialGroup()
-                        .addComponent(btnCrearProceso)
-                        .addGap(75, 75, 75))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIzquierdoLayout.createSequentialGroup()
-                        .addComponent(comboPolitica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(77, 77, 77))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIzquierdoLayout.createSequentialGroup()
-                        .addComponent(btnGuardarDefaultsProceso)
-                        .addGap(62, 62, 62))))
-        );
-        panelIzquierdoLayout.setVerticalGroup(
-            panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(spinnerInstrucciones, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(spinnerCiclosExcepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(spinnerCiclosSatisfacer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCrearProceso)
-                .addGap(32, 32, 32)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(comboPolitica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnGuardarCambios)
-                .addGap(10, 10, 10)
-                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(lblRelojGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnGuardarDefaultsProceso)
-                .addGap(26, 26, 26)
-                .addComponent(btnCargarProcesosArchivo)
-                .addContainerGap(572, Short.MAX_VALUE))
-        );
+        panelCentral.add(panelIzquierdo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 250, 630));
 
-        jPanel5.add(panelIzquierdo, java.awt.BorderLayout.LINE_START);
-
-        jLabel10.setText("CPU 1");
-
-        jLabel11.setText("Proceso en Ejecución:");
-
-        jLabel12.setText("ID: ");
-
-        jLabel13.setText("PC: ");
-
-        jLabel14.setText("MAR:");
-
-        jLabel15.setText("Status:");
-
-        jLabel16.setText("Tipo:");
-
-        lblCpuProceso.setText("N/A");
-
-        lblCpuID.setText("N/A");
-
-        lblCpuPC.setText("N/A");
-
-        lblCpuMAR.setText("N/A");
-
-        lblCpuStatus.setText("N/A");
-
-        lblCpuTipo.setText("N/A");
-
-        javax.swing.GroupLayout panelDerechoLayout = new javax.swing.GroupLayout(panelDerecho);
-        panelDerecho.setLayout(panelDerechoLayout);
-        panelDerechoLayout.setHorizontalGroup(
-            panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDerechoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelDerechoLayout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblCpuProceso, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelDerechoLayout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDerechoLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel10)
-                                .addGap(32, 32, 32))
-                            .addGroup(panelDerechoLayout.createSequentialGroup()
-                                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panelDerechoLayout.createSequentialGroup()
-                                        .addComponent(jLabel12)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lblCpuID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(panelDerechoLayout.createSequentialGroup()
-                                        .addComponent(jLabel13)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lblCpuPC, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))
-                                .addContainerGap())))
-                    .addGroup(panelDerechoLayout.createSequentialGroup()
-                        .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelDerechoLayout.createSequentialGroup()
-                                .addComponent(jLabel16)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblCpuTipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(panelDerechoLayout.createSequentialGroup()
-                                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(panelDerechoLayout.createSequentialGroup()
-                                        .addComponent(jLabel15)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lblCpuStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(panelDerechoLayout.createSequentialGroup()
-                                        .addComponent(jLabel14)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(lblCpuMAR, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
-        );
-        panelDerechoLayout.setVerticalGroup(
-            panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDerechoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(lblCpuProceso))
-                .addGap(29, 29, 29)
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(lblCpuID))
-                .addGap(29, 29, 29)
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(lblCpuPC))
-                .addGap(33, 33, 33)
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(lblCpuMAR))
-                .addGap(34, 34, 34)
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(lblCpuStatus))
-                .addGap(42, 42, 42)
-                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(lblCpuTipo))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel5.add(panelDerecho, java.awt.BorderLayout.LINE_END);
-
-        jLabel7.setText("Colas De Listos");
-
-        panelContenidoListos.setLayout(new javax.swing.BoxLayout(panelContenidoListos, javax.swing.BoxLayout.X_AXIS));
-        jScrollPane1.setViewportView(panelContenidoListos);
-
-        jLabel8.setText("Cola de Bloqueados");
-
-        panelContenidoBloqueados.setLayout(new javax.swing.BoxLayout(panelContenidoBloqueados, javax.swing.BoxLayout.X_AXIS));
-        jScrollPane2.setViewportView(panelContenidoBloqueados);
-
-        jLabel9.setText("Cola de Terminados");
-
-        panelContenidoTerminados.setLayout(new javax.swing.BoxLayout(panelContenidoTerminados, javax.swing.BoxLayout.X_AXIS));
-        jScrollPane3.setViewportView(panelContenidoTerminados);
-
-        jLabel23.setText("Log de Eventos:");
-
-        areaLog.setEditable(false);
-        areaLog.setColumns(20);
-        areaLog.setRows(5);
-        jScrollPane4.setViewportView(areaLog);
-
-        javax.swing.GroupLayout panelCentralLayout = new javax.swing.GroupLayout(panelCentral);
-        panelCentral.setLayout(panelCentralLayout);
-        panelCentralLayout.setHorizontalGroup(
-            panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3)
-            .addGroup(panelCentralLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelCentralLayout.createSequentialGroup()
-                        .addComponent(jScrollPane2)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addGap(285, 285, 285))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(278, 278, 278))))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel23)
-                .addGap(295, 295, 295))
-            .addGroup(panelCentralLayout.createSequentialGroup()
-                .addGap(341, 341, 341)
-                .addComponent(jLabel7)
-                .addContainerGap(643, Short.MAX_VALUE))
-            .addGroup(panelCentralLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1))
-        );
-        panelCentralLayout.setVerticalGroup(
-            panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelCentralLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel23)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(526, Short.MAX_VALUE))
-        );
+        jLabel49.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaces/wp5819605.jpg"))); // NOI18N
+        jLabel49.setText("jLabel49");
+        panelCentral.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(-40, -140, 2940, 1360));
 
         jPanel5.add(panelCentral, java.awt.BorderLayout.CENTER);
 
@@ -536,7 +418,7 @@ public SimuladorGUI(OperatingSystem so) {
         Simulador.setLayout(SimuladorLayout);
         SimuladorLayout.setHorizontalGroup(
             SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 1185, Short.MAX_VALUE)
         );
         SimuladorLayout.setVerticalGroup(
             SimuladorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -545,43 +427,28 @@ public SimuladorGUI(OperatingSystem so) {
 
         jTabbedPane1.addTab("Simulador", Simulador);
 
+        Configuracion.setBackground(new java.awt.Color(153, 204, 255));
+        Configuracion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel22.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(51, 51, 51));
         jLabel22.setText("Duracion de Ciclo (ms)");
+        Configuracion.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 31, -1, -1));
 
         spinnerDuracionCiclo.setModel(new javax.swing.SpinnerNumberModel(500, 10, 5000, 50));
+        Configuracion.add(spinnerDuracionCiclo, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 90, 30));
 
-        btnAplicarDuracion.setText("Aplicar Duración");
+        btnAplicarDuracion.setText("Aplicar");
         btnAplicarDuracion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAplicarDuracionActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout ConfiguracionLayout = new javax.swing.GroupLayout(Configuracion);
-        Configuracion.setLayout(ConfiguracionLayout);
-        ConfiguracionLayout.setHorizontalGroup(
-            ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ConfiguracionLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel22)
-                .addGap(18, 18, 18)
-                .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAplicarDuracion)
-                    .addComponent(spinnerDuracionCiclo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(1189, Short.MAX_VALUE))
-        );
-        ConfiguracionLayout.setVerticalGroup(
-            ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ConfiguracionLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spinnerDuracionCiclo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel22))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAplicarDuracion)
-                .addContainerGap(949, Short.MAX_VALUE))
-        );
+        Configuracion.add(btnAplicarDuracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 30, 89, -1));
 
         jTabbedPane1.addTab("Configuracion", Configuracion);
+
+        Graficos.setBackground(new java.awt.Color(153, 204, 255));
 
         panelGrafico.setLayout(new java.awt.BorderLayout());
 
@@ -590,14 +457,14 @@ public SimuladorGUI(OperatingSystem so) {
         GraficosLayout.setHorizontalGroup(
             GraficosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(GraficosLayout.createSequentialGroup()
-                .addComponent(panelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 1468, Short.MAX_VALUE)
+                .addComponent(panelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 1179, Short.MAX_VALUE)
                 .addContainerGap())
         );
         GraficosLayout.setVerticalGroup(
             GraficosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(GraficosLayout.createSequentialGroup()
                 .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 573, Short.MAX_VALUE))
+                .addGap(0, 216, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Graficos", Graficos);
@@ -674,7 +541,7 @@ public SimuladorGUI(OperatingSystem so) {
                     .addComponent(jLabel20)
                     .addComponent(lblStatsIOBound)
                     .addComponent(lblStatsCicloActual))
-                .addContainerGap(248, Short.MAX_VALUE))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
 
         Estadisticas.add(EstadisticasGenerales);
@@ -749,7 +616,7 @@ public SimuladorGUI(OperatingSystem so) {
                     .addComponent(jLabel37)
                     .addComponent(lblStatsIOBound3)
                     .addComponent(lblStatsCicloActual3))
-                .addContainerGap(248, Short.MAX_VALUE))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
 
         Estadisticas.add(jPanel9);
@@ -824,7 +691,7 @@ public SimuladorGUI(OperatingSystem so) {
                     .addComponent(jLabel32)
                     .addComponent(lblStatsIOBound2)
                     .addComponent(lblStatsCicloActual2))
-                .addContainerGap(248, Short.MAX_VALUE))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
 
         Estadisticas.add(jPanel8);
@@ -899,7 +766,7 @@ public SimuladorGUI(OperatingSystem so) {
                     .addComponent(jLabel42)
                     .addComponent(lblStatsIOBound4)
                     .addComponent(lblStatsCicloActual4))
-                .addContainerGap(248, Short.MAX_VALUE))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
 
         Estadisticas.add(jPanel10);
@@ -955,7 +822,7 @@ public SimuladorGUI(OperatingSystem so) {
                         .addComponent(jLabel47, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblStatsCicloActual5)))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -974,7 +841,7 @@ public SimuladorGUI(OperatingSystem so) {
                     .addComponent(jLabel47)
                     .addComponent(lblStatsIOBound5)
                     .addComponent(lblStatsCicloActual5))
-                .addContainerGap(248, Short.MAX_VALUE))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
 
         Estadisticas.add(jPanel11);
@@ -1049,7 +916,7 @@ public SimuladorGUI(OperatingSystem so) {
                     .addComponent(jLabel27)
                     .addComponent(lblStatsIOBound1)
                     .addComponent(lblStatsCicloActual1))
-                .addContainerGap(248, Short.MAX_VALUE))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
 
         Estadisticas.add(jPanel7);
@@ -1060,11 +927,13 @@ public SimuladorGUI(OperatingSystem so) {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1187, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 701, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -1227,12 +1096,12 @@ public void actualizarGUI() {
         lblCpuStatus.setText(pCPU.getEstado().toString());
         lblCpuTipo.setText(pCPU.getTipo().toString());
     } else {
-        lblCpuProceso.setText("N/A");
-        lblCpuID.setText("N/A");
-        lblCpuPC.setText("N/A");
-        lblCpuMAR.setText("N/A");
+        lblCpuProceso.setText("---");
+        lblCpuID.setText("---");
+        lblCpuPC.setText("---");
+        lblCpuMAR.setText("---");
         lblCpuStatus.setText("IDLE");
-        lblCpuTipo.setText("N/A");
+        lblCpuTipo.setText("---");
     }
 
     // 3. Actualizar Paneles de Colas (NUEVA LÓGICA)
@@ -1427,18 +1296,20 @@ private void actualizarGraficoThroughput() {
     
     // Método principal llamado por el botón
 private void cargarProcesosDesdeArchivo() {
+    
+            System.out.println("entro 1");
     JFileChooser fileChooser = new JFileChooser();
     fileChooser.setCurrentDirectory(new File(".")); // Directorio del proyecto
     fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos de Procesos (.json, .csv)", "json", "csv"));
     fileChooser.setDialogTitle("Seleccionar archivo de procesos (.json o .csv)");
 
     int result = fileChooser.showOpenDialog(this);
-
+ System.out.println("entro 2");
     if (result == JFileChooser.APPROVE_OPTION) {
         File selectedFile = fileChooser.getSelectedFile();
         String fileName = selectedFile.getName().toLowerCase();
         Lista<ProcesoConfig> procesosParaCargar = null; // Usa tu clase Lista
-
+ System.out.println("entro 3");
         try {
             // Determinar tipo y parsear
             if (fileName.endsWith(".json")) {
@@ -1449,16 +1320,17 @@ private void cargarProcesosDesdeArchivo() {
                 mostrarError("Tipo de archivo no soportado. Seleccione .json o .csv.");
                 return;
             }
+             System.out.println("entro 4");
 
             // Validar resultado del parseo
             if (procesosParaCargar == null || procesosParaCargar.isEmpty()) {
                mostrarAdvertencia("El archivo está vacío o tiene un formato incorrecto.");
                return;
             }
-
+            System.out.println("entro");
             // Crear los procesos en el SO
             crearProcesosDesdeConfig(procesosParaCargar);
-
+            System.out.println("salio");
             mostrarInformacion("Procesos cargados desde " + selectedFile.getName());
 
         } catch (FileNotFoundException e) {
@@ -1478,9 +1350,12 @@ private void cargarProcesosDesdeArchivo() {
 private Lista<ProcesoConfig> parseJson(File file) throws IOException, com.google.gson.JsonSyntaxException {
     Gson gson = new Gson();
     Lista<ProcesoConfig> listaProcesos = new Lista<>(); // Crea tu Lista
+    System.out.println("a ver 1");
     try (FileReader reader = new FileReader(file)) {
         // Gson parsea a un array normal
+        System.out.println("a ver 1.1\n"+reader);
         ProcesoConfig[] procesosArray = gson.fromJson(reader, ProcesoConfig[].class);
+    System.out.println("a ver 2");
 
         // Copia manualmente del array a tu Lista
         if (procesosArray != null) {
@@ -1520,10 +1395,9 @@ private Lista<ProcesoConfig> parseCsv(File file) throws IOException, NumberForma
                 ProcesoConfig proc = new ProcesoConfig();
 
                 // Asignar usando setters
-                proc.setNombreManual(fields[0].trim());
+//                proc.setNombreManual(fields[0].trim());
                 proc.setInstruccionesManual(Integer.parseInt(fields[1].trim()));
                 proc.setTipoManual(fields[2].trim());
-                proc.setTamanoManual(Integer.parseInt(fields[3].trim()));
 
                 // Campos opcionales IO_BOUND
                 if (fields.length > 4 && !fields[4].trim().isEmpty()) {
@@ -1562,35 +1436,35 @@ private Lista<ProcesoConfig> parseCsv(File file) throws IOException, NumberForma
             // Validaciones básicas (mejoradas)
             if (configProc.getTipo() == null || configProc.getTipo().trim().isEmpty() ||
                 configProc.getInstrucciones() <= 0 || configProc.getTamano() <= 0) {
-                System.err.println("WARN: Proceso inválido o incompleto, omitido: Nombre=" + configProc.getNombre());
+                System.err.println("WARN: Proceso inválido o incompleto, omitido");
                 continue;
             }
 
             // Convertir String a Enum
             Proceso.Tipo tipoEnum;
-            try {
-                tipoEnum = Proceso.Tipo.valueOf(configProc.getTipo().trim().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                System.err.println("WARN: Tipo de proceso desconocido '" + configProc.getTipo() + "' para " + configProc.getNombre() );
-            }
+            tipoEnum = Proceso.Tipo.valueOf(configProc.getTipo().trim().toUpperCase());
 
-            int id = so.getProcessCounter(); // SO asigna ID incremental
+//            try {
+//                tipoEnum = Proceso.Tipo.valueOf(configProc.getTipo().trim().toUpperCase());
+//            } catch (IllegalArgumentException e) {
+//                System.err.println("WARN: Tipo de proceso desconocido '" + configProc.getTipo() + "' para " + configProc.getNombre() );
+//            }
+
+//            int id = so.getProcessCounter(); // SO asigna ID incremental
             int prioridad = 0; // Fijo por ahora
 
             // Pasar nombre opcional al SO
-            if (configProc.getNombre() != null && !configProc.getNombre().trim().isEmpty()) {
-                so.setNextProcessName(configProc.getNombre());
-            }
+//            if (configProc.getNombre() != null && !configProc.getNombre().trim().isEmpty()) {
+//                so.setNextProcessName(configProc.getNombre());
+//            }
 
             // Llamar al método crearProceso adecuado
             if (tipoEnum == Proceso.Tipo.IO_BOUND) {
-                so.crearProceso(id, tipoEnum, configProc.getInstrucciones(), configProc.getTamano(),
-                                0, // tiempoES no usado aquí
+                so.crearProceso(tipoEnum, configProc.getInstrucciones(),
                                 prioridad, configProc.getInstruccionesParaES(), configProc.getCiclosParaCompletarES());
             } else {
-                long tiempoESFijo = 5L; // Valor placeholder
-                so.crearProceso(id, tipoEnum, configProc.getInstrucciones(), configProc.getTamano(),
-                                tiempoESFijo, prioridad);
+                so.crearProceso( tipoEnum, configProc.getInstrucciones() ,
+                                prioridad);
             }
          } // Fin del bucle for
     } // Fin del método
@@ -1663,7 +1537,9 @@ private void mostrarAdvertencia(String mensaje) {
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

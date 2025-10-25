@@ -26,6 +26,9 @@ public class Proceso {
 //    private final long quantum;       // 0 si no tiene quantum
 //    private final long tiempoES;      // en ticks, si hace E/S
     private int tamano;               // tamaño de memoria requerido
+    private long primerTicEjecucion;           // tic en el cual comenzo el procesp
+    private long salidaTicEjecucion;           // tic en el cual comenzo el procesp
+
     private long ticInicioEspera = 0;        // tic en que empezó a esperar
     private long ultimoTicEjecucion = 0;     // tic de última ejecución
     private long tiempoEjecutado = 0;        // ticks ya ejecutados
@@ -87,6 +90,19 @@ public class Proceso {
         this.ciclosParaCompletarES = ciclosParaCompletarES;
         this.pcb = new PCB(id, nombre, this.estado, this.programCounter, this.memoryAddressRegister);
     }
+
+    public void setPrimerTicEjecucion(long primerTicEjecucion) {
+        this.primerTicEjecucion = primerTicEjecucion;
+    }
+    
+    public void setSalidaTicEjecucion(long salidaTicEjecucion) {
+        this.salidaTicEjecucion = salidaTicEjecucion;
+    }
+    
+    public long getEquidad() {
+        return (salidaTicEjecucion-primerTicEjecucion)/instrucciones;
+    }
+    
     
      // 🔹 Método para avanzar el PC y el MAR sincronizados
     public void incrementarPCyMAR() {
@@ -136,9 +152,23 @@ public class Proceso {
     }
 
     public void actualizarTiempoEsperando(long ticActual) {
-        tiempoEsperando += (ticActual - ticInicioEspera);
-        ticInicioEspera = ticActual;
+        
+        System.out.println("aja->"+ticActual+"---"+ticInicioEspera);
+        if(ticInicioEspera==0){
+            ticInicioEspera = ticActual;
+        }
+        else{
+            tiempoEsperando += (ticActual - ticInicioEspera);
+            ticInicioEspera = ticActual;
+        }
+        
+        
     }
+    
+//    public void actualizarTiempoEsperando(long ticActual) {
+//        tiempoEsperando ++;
+//        ticInicioEspera = ticActual;
+//    }
 
     // 🔹 Método reincorporado para compatibilidad con CPU/Scheduler
     public void incrementarTiempoEjecutado() {

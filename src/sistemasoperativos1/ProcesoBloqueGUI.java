@@ -43,39 +43,72 @@ public class ProcesoBloqueGUI extends javax.swing.JPanel {
         jLabel11 = new javax.swing.JLabel();
         lblTipo = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(51, 153, 255));
+        setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setMaximumSize(new java.awt.Dimension(150, 100));
+        setMinimumSize(new java.awt.Dimension(150, 100));
         setPreferredSize(new java.awt.Dimension(150, 100));
         setLayout(new java.awt.GridLayout(6, 2));
 
         jLabel1.setBackground(new java.awt.Color(204, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(51, 51, 51));
         jLabel1.setText("ID: ");
         add(jLabel1);
+
+        lblId.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        lblId.setForeground(new java.awt.Color(51, 51, 51));
         add(lblId);
 
         jLabel2.setBackground(new java.awt.Color(204, 255, 255));
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(51, 51, 51));
         jLabel2.setText("Nombre:");
         add(jLabel2);
+
+        lblNombre.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        lblNombre.setForeground(new java.awt.Color(51, 51, 51));
         add(lblNombre);
 
         jLabel4.setBackground(new java.awt.Color(204, 255, 255));
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(51, 51, 51));
         jLabel4.setText("PC:");
         add(jLabel4);
+
+        lblPc.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        lblPc.setForeground(new java.awt.Color(51, 51, 51));
         add(lblPc);
 
         jLabel6.setBackground(new java.awt.Color(204, 255, 255));
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(51, 51, 51));
         jLabel6.setText("MAR:");
         add(jLabel6);
+
+        lblMar.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        lblMar.setForeground(new java.awt.Color(51, 51, 51));
         add(lblMar);
 
         jLabel9.setBackground(new java.awt.Color(204, 255, 255));
+        jLabel9.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(51, 51, 51));
         jLabel9.setText("Status:");
         add(jLabel9);
+
+        lblStatus.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        lblStatus.setForeground(new java.awt.Color(51, 51, 51));
         add(lblStatus);
 
         jLabel11.setBackground(new java.awt.Color(204, 255, 255));
+        jLabel11.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(51, 51, 51));
         jLabel11.setText("Tipo:");
         add(jLabel11);
+
+        lblTipo.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
+        lblTipo.setForeground(new java.awt.Color(51, 51, 51));
         add(lblTipo);
     }// </editor-fold>//GEN-END:initComponents
 

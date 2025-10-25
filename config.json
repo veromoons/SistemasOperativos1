@@ -1,0 +1,7 @@
+{
+  "duracionCicloMs": 300,
+  "defaultInstrucciones": 17,
+  "defaultTipoProceso": "CPU bound",
+  "defaultCiclosGenExcepcion": 5,
+  "defaultCiclosSatExcepcion": 10
+}

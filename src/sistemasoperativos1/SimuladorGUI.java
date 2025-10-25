@@ -57,8 +57,6 @@ public SimuladorGUI(OperatingSystem so) {
         Simulador = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         panelIzquierdo = new javax.swing.JPanel();
-        nombre = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         spinnerInstrucciones = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
@@ -124,20 +122,11 @@ public SimuladorGUI(OperatingSystem so) {
 
         jPanel5.setLayout(new java.awt.BorderLayout());
 
-        nombre.setText("Nombre");
-
-        txtNombre.setToolTipText("Ingrese nombre del proceso");
-        txtNombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setText("Cant. Instrucciones");
+        jLabel1.setText("Cantidad de Instrucciones");
 
         jLabel2.setText("Tipo:");
 
-        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CPU bound", "I/O bound", " " }));
+        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CPU bound", "I/O bound" }));
         comboTipo.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 comboTipoItemStateChanged(evt);
@@ -151,7 +140,9 @@ public SimuladorGUI(OperatingSystem so) {
 
         jLabel3.setText("Ciclos para generar Excepcion");
 
-        jLabel4.setText("Ciclos para Satisfacer Excepción:");
+        spinnerCiclosExcepcion.setToolTipText("");
+
+        jLabel4.setText("Ciclos para Satisfacer Excepción");
 
         btnCrearProceso.setText("Crear Proceso");
         btnCrearProceso.addActionListener(new java.awt.event.ActionListener() {
@@ -187,25 +178,8 @@ public SimuladorGUI(OperatingSystem so) {
         panelIzquierdo.setLayout(panelIzquierdoLayout);
         panelIzquierdoLayout.setHorizontalGroup(
             panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIzquierdoLayout.createSequentialGroup()
-                .addGap(0, 41, Short.MAX_VALUE)
-                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel1))
-                .addGap(44, 44, 44))
             .addGroup(panelIzquierdoLayout.createSequentialGroup()
                 .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(95, 95, 95)
-                        .addComponent(nombre))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)))
                     .addGroup(panelIzquierdoLayout.createSequentialGroup()
                         .addGap(78, 78, 78)
                         .addComponent(comboPolitica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -213,48 +187,51 @@ public SimuladorGUI(OperatingSystem so) {
                         .addGap(49, 49, 49)
                         .addComponent(btnGuardarCambios, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(jLabel6))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
                         .addGap(110, 110, 110)
                         .addComponent(lblRelojGlobal))
                     .addGroup(panelIzquierdoLayout.createSequentialGroup()
                         .addGap(77, 77, 77)
                         .addComponent(spinnerCiclosExcepcion, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(spinnerCiclosSatisfacer, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelIzquierdoLayout.createSequentialGroup()
-                            .addGap(68, 68, 68)
-                            .addComponent(btnCrearProceso))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                        .addGap(68, 68, 68)
+                        .addComponent(btnCrearProceso))
+                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(spinnerCiclosSatisfacer, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnGuardarDefaultsProceso)
+                            .addComponent(jLabel6)))
+                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel5)
+                            .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel4)
+                                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel3))))))
+                .addContainerGap(51, Short.MAX_VALUE))
             .addGroup(panelIzquierdoLayout.createSequentialGroup()
+                .addGap(80, 80, 80)
                 .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(80, 80, 80)
-                        .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(jLabel2))
-                            .addComponent(spinnerInstrucciones, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(btnGuardarDefaultsProceso)))
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel2))
+                    .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(spinnerInstrucciones, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(comboTipo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         panelIzquierdoLayout.setVerticalGroup(
             panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelIzquierdoLayout.createSequentialGroup()
-                .addComponent(nombre)
-                .addGap(12, 12, 12)
-                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(58, 58, 58)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spinnerInstrucciones, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(spinnerInstrucciones, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -262,30 +239,30 @@ public SimuladorGUI(OperatingSystem so) {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(spinnerCiclosExcepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(spinnerCiclosSatisfacer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(12, 12, 12)
                 .addComponent(btnCrearProceso)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(comboPolitica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGuardarCambios)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblRelojGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGuardarDefaultsProceso)
-                .addContainerGap(165, Short.MAX_VALUE))
+                .addContainerGap(171, Short.MAX_VALUE))
         );
 
         jPanel5.add(panelIzquierdo, java.awt.BorderLayout.LINE_START);
 
-        jLabel10.setText("CPU 1");
+        jLabel10.setText("CPU");
 
         jLabel11.setText("Proceso en Ejecución:");
 
@@ -325,22 +302,16 @@ public SimuladorGUI(OperatingSystem so) {
                     .addGroup(panelDerechoLayout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDerechoLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel10)
-                                .addGap(32, 32, 32))
                             .addGroup(panelDerechoLayout.createSequentialGroup()
-                                .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panelDerechoLayout.createSequentialGroup()
-                                        .addComponent(jLabel12)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lblCpuID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(panelDerechoLayout.createSequentialGroup()
-                                        .addComponent(jLabel13)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lblCpuPC, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))
-                                .addContainerGap())))
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblCpuID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(panelDerechoLayout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblCpuPC, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
                     .addGroup(panelDerechoLayout.createSequentialGroup()
                         .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelDerechoLayout.createSequentialGroup()
@@ -359,6 +330,10 @@ public SimuladorGUI(OperatingSystem so) {
                                         .addComponent(lblCpuMAR, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
+            .addGroup(panelDerechoLayout.createSequentialGroup()
+                .addGap(65, 65, 65)
+                .addComponent(jLabel10)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         panelDerechoLayout.setVerticalGroup(
             panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -389,7 +364,7 @@ public SimuladorGUI(OperatingSystem so) {
                 .addGroup(panelDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
                     .addComponent(lblCpuTipo))
-                .addContainerGap(377, Short.MAX_VALUE))
+                .addContainerGap(422, Short.MAX_VALUE))
         );
 
         jPanel5.add(panelDerecho, java.awt.BorderLayout.LINE_END);
@@ -415,7 +390,7 @@ public SimuladorGUI(OperatingSystem so) {
         areaTerminados.setRows(5);
         jScrollPane3.setViewportView(areaTerminados);
 
-        jLabel23.setText("Log de Eventos:");
+        jLabel23.setText("Log de Eventos");
 
         areaLog.setEditable(false);
         areaLog.setColumns(20);
@@ -426,35 +401,41 @@ public SimuladorGUI(OperatingSystem so) {
         panelCentral.setLayout(panelCentralLayout);
         panelCentralLayout.setHorizontalGroup(
             panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3)
             .addGroup(panelCentralLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(panelCentralLayout.createSequentialGroup()
-                        .addComponent(jScrollPane2)
-                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 280, Short.MAX_VALUE)
                         .addGroup(panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addGap(285, 285, 285))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
                                 .addComponent(jLabel9)
-                                .addGap(278, 278, 278))))))
+                                .addGap(278, 278, 278))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel23)
                 .addGap(295, 295, 295))
             .addGroup(panelCentralLayout.createSequentialGroup()
-                .addGap(341, 341, 341)
-                .addComponent(jLabel7)
-                .addContainerGap(255, Short.MAX_VALUE))
-            .addGroup(panelCentralLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane4)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCentralLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3)
+                .addContainerGap())
+            .addGroup(panelCentralLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
+            .addGroup(panelCentralLayout.createSequentialGroup()
+                .addGap(298, 298, 298)
+                .addComponent(jLabel7)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelCentralLayout.setVerticalGroup(
             panelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -474,8 +455,8 @@ public SimuladorGUI(OperatingSystem so) {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel23)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(162, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(126, Short.MAX_VALUE))
         );
 
         jPanel5.add(panelCentral, java.awt.BorderLayout.CENTER);
@@ -497,7 +478,7 @@ public SimuladorGUI(OperatingSystem so) {
 
         spinnerDuracionCiclo.setModel(new javax.swing.SpinnerNumberModel(500, 10, 5000, 50));
 
-        btnAplicarDuracion.setText("Aplicar Duración");
+        btnAplicarDuracion.setText("Aplicar ");
         btnAplicarDuracion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAplicarDuracionActionPerformed(evt);
@@ -512,24 +493,23 @@ public SimuladorGUI(OperatingSystem so) {
                 .addGap(28, 28, 28)
                 .addComponent(jLabel22)
                 .addGap(18, 18, 18)
-                .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAplicarDuracion)
-                    .addComponent(spinnerDuracionCiclo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(801, Short.MAX_VALUE))
+                .addComponent(spinnerDuracionCiclo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnAplicarDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(739, Short.MAX_VALUE))
         );
         ConfiguracionLayout.setVerticalGroup(
             ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ConfiguracionLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(23, 23, 23)
+                .addGroup(ConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(spinnerDuracionCiclo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAplicarDuracion)
                     .addComponent(jLabel22))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAplicarDuracion)
-                .addContainerGap(585, Short.MAX_VALUE))
+                .addContainerGap(658, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Configuracion", Configuracion);
+        jTabbedPane1.addTab("Configuración", Configuracion);
 
         panelGrafico.setLayout(new java.awt.BorderLayout());
 
@@ -548,7 +528,7 @@ public SimuladorGUI(OperatingSystem so) {
                 .addGap(0, 209, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Graficos", Graficos);
+        jTabbedPane1.addTab("Gráficos", Graficos);
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Estadisticas Generales"));
 
@@ -579,15 +559,13 @@ public SimuladorGUI(OperatingSystem so) {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel17)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblStatsTotales))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblStatsIOBound)))
-                .addGap(125, 125, 125)
+                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblStatsTotales, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblStatsIOBound, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(88, 88, 88)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel19)
@@ -600,8 +578,8 @@ public SimuladorGUI(OperatingSystem so) {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblStatsCicloActual)))
-                .addContainerGap(369, Short.MAX_VALUE))
+                        .addComponent(lblStatsCicloActual, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(366, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -638,7 +616,7 @@ public SimuladorGUI(OperatingSystem so) {
                 .addGap(0, 545, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Estadisticas", Estadisticas);
+        jTabbedPane1.addTab("Estadísticas", Estadisticas);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -654,32 +632,27 @@ public SimuladorGUI(OperatingSystem so) {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreActionPerformed
-
     private void btnCrearProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearProcesoActionPerformed
         // TODO add your handling code here:
         try {
                 // 1. Leer datos comunes de la interfaz
                 int id = so.getProcessCounter(); // Usamos un getter ahora (lo crearemos)
-                String nombreManual = txtNombre.getText(); // Leemos el nombre
+//                String nombreManual = txtNombre.getText(); // Leemos el nombre
 
                 // Validar que el nombre no esté vacío
-                if (nombreManual == null || nombreManual.trim().isEmpty()) {
-                    // Si está vacío, usamos el contador automático del SO
-                    // (No hacemos nada aquí, el SO ya genera P + contador)
-                } else {
-                     // Si el usuario escribió algo, intentamos usarlo
-                     // Necesitaríamos un método en SO para esto, ej: so.setNextProcessName(nombreManual)
-                     // Por simplicidad ahora, lo ignoramos y dejamos que SO use P + contador
-                     // O podrías modificar el constructor de Proceso/SO para aceptarlo
-                }
+//                if (nombreManual == null || nombreManual.trim().isEmpty()) {
+//                    // Si está vacío, usamos el contador automático del SO
+//                    // (No hacemos nada aquí, el SO ya genera P + contador)
+//                } else {
+//                     // Si el usuario escribió algo, intentamos usarlo
+//                     // Necesitaríamos un método en SO para esto, ej: so.setNextProcessName(nombreManual)
+//                     // Por simplicidad ahora, lo ignoramos y dejamos que SO use P + contador
+//                     // O podrías modificar el constructor de Proceso/SO para aceptarlo
+//                }
 
                 int instrucciones = (int) spinnerInstrucciones.getValue();
 
                 // --- VALORES FIJOS TEMPORALES (¡DEBERÍAS AÑADIR SPINNERS PARA ESTOS!) ---
-                int tamano = 20; // Tamaño fijo temporal
                 long tiempoESFijo = 5L; // Tiempo ES fijo temporal (usado por CPU Bound)
                 int prioridad = 0; // Prioridad fija temporal
                 // --- FIN VALORES FIJOS ---
@@ -692,7 +665,7 @@ public SimuladorGUI(OperatingSystem so) {
                 } else if (tipoStr.equals("I/O bound")) {
                     tipo = Proceso.Tipo.IO_BOUND;
                 } else {
-                    tipo = Proceso.Tipo.NORMAL; // Asumimos Normal si no es ninguno
+                    tipo = Proceso.Tipo.CPU_BOUND; 
                 }
 
                 // 2. Llamar al método crearProceso adecuado
@@ -702,17 +675,17 @@ public SimuladorGUI(OperatingSystem so) {
                     int ciclosParaES = (int) spinnerCiclosSatisfacer.getValue();
 
                     // Llamar a la versión IO Bound de crearProceso
-                    so.crearProceso(id, tipo, instrucciones, tamano, 0, prioridad, instParaES, ciclosParaES); 
+                    so.crearProceso(tipo, instrucciones, prioridad, instParaES, ciclosParaES); 
                     // Nota: Pasé 0 como tiempoES porque este constructor no lo usa directamente para I/O
 
                 } else { 
                     // Para CPU_BOUND o NORMAL
                     // Llamar a la versión NO IO Bound de crearProceso
-                    so.crearProceso(id, tipo, instrucciones, tamano, tiempoESFijo, prioridad);
+                    so.crearProceso(tipo, instrucciones, prioridad);
                 }
 
                 // Limpiar campo de nombre después de crear (opcional)
-                txtNombre.setText(""); 
+//                txtNombre.setText(""); 
 
             } catch (Exception e) {
                 // Mostrar un error si algo sale mal
@@ -1062,7 +1035,6 @@ private void actualizarGraficoThroughput() {
     private javax.swing.JLabel lblStatsIOBound;
     private javax.swing.JLabel lblStatsThroughput;
     private javax.swing.JLabel lblStatsTotales;
-    private javax.swing.JLabel nombre;
     private javax.swing.JPanel panelCentral;
     private javax.swing.JPanel panelDerecho;
     private javax.swing.JPanel panelGrafico;
@@ -1071,6 +1043,5 @@ private void actualizarGraficoThroughput() {
     private javax.swing.JSpinner spinnerCiclosSatisfacer;
     private javax.swing.JSpinner spinnerDuracionCiclo;
     private javax.swing.JSpinner spinnerInstrucciones;
-    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }

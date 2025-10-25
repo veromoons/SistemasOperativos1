@@ -66,23 +66,24 @@ public class OperatingSystem {
     }
     
     //NO IO Bound
-    public void crearProceso(int id, Proceso.Tipo tipo, int instrucciones, int tamano, long tiempoES, int prioridad) {
+    public void crearProceso(Proceso.Tipo tipo, int instrucciones, int prioridad) {
 //        System.out.println("entro A CRar");
         String nombre = "P"+processCounter;
-        processCounter++;
-        Proceso p = new Proceso(id, tipo, nombre, instrucciones, this.cpu.getQuantumCiclos(),tiempoES, tamano, 0, 0);
+        
+//        Proceso p = new Proceso(id, tipo, nombre, instrucciones, this.cpu.getQuantumCiclos(),tiempoES, tamano, 0, 0);
+        Proceso p = new Proceso(processCounter, tipo, nombre, instrucciones, 0, 0);
         p.setEstado(Proceso.Estado.NUEVO);
         moverANuevos(p);
         this.agregarProceso(p);
+        processCounter++;
     }
     
     //IO Bound
-    public void crearProceso(int id, Proceso.Tipo tipo, int instrucciones, int tamano, long tiempoES, int prioridad, int instruccionesParaES, int ciclosParaCopletarES) {
+    public void crearProceso(Proceso.Tipo tipo, int instrucciones, int prioridad, int instruccionesParaES, int ciclosParaCopletarES) {
 //        System.out.println("entro A CRar");
         String nombre = "P"+processCounter;
-        processCounter++;
 
-        Proceso p = new Proceso(id, tipo, nombre, instrucciones, this.cpu.getQuantumCiclos(),tiempoES, tamano, instruccionesParaES, ciclosParaCopletarES);
+        Proceso p = new Proceso(processCounter, tipo, nombre, instrucciones, instruccionesParaES, ciclosParaCopletarES);
         p.setEstado(Proceso.Estado.NUEVO);
         
         logEvent("Proceso " + p.getNombre() + " creado.");
@@ -94,7 +95,7 @@ public class OperatingSystem {
 //             logEvent("Memoria llena. Intentando suspender para Proceso " + p.getNombre() + ".");
 //             // ...
 //        }
-        
+        processCounter++;
         moverANuevos(p);
         this.agregarProceso(p);
     }
@@ -410,6 +411,8 @@ public class OperatingSystem {
 //        System.out.println(colaListos.size());
         logEvent("Proceso " + p.getNombre() + " movido a Cola de Listos."); // <-- Añade/Verifica este log
         System.out.println("SO: " + p.getNombre() + " pasa a la cola de listos");
+//                System.out.println("!!!!!!tamanoooo de proceso = " +p.getTamano());
+
     }
 
     public void moverABloqueados(Proceso p) {

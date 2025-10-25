@@ -13,7 +13,7 @@ import java.util.Random;
  */
 
 public class Proceso {
-    public enum Tipo { NORMAL, IO_BOUND, CPU_BOUND };
+    public enum Tipo { IO_BOUND, CPU_BOUND };
     private final Tipo tipo;
     public enum Estado { NUEVO, LISTO, EJECUCION, BLOQUEADO, LISTOSUSPENDIDO, BLOQUEADOSUSPENDIDO, TERMINADO };
     private Estado estado;
@@ -23,8 +23,8 @@ public class Proceso {
     private int memoryAddressRegister; // MAR: última dirección de memoria accedida
     private final int instrucciones;  //cant total de instrucciones
     private final long duracionTotal; // en ticks
-    private final long quantum;       // 0 si no tiene quantum
-    private final long tiempoES;      // en ticks, si hace E/S
+//    private final long quantum;       // 0 si no tiene quantum
+//    private final long tiempoES;      // en ticks, si hace E/S
     private int tamano;               // tamaño de memoria requerido
     private long ticInicioEspera = 0;        // tic en que empezó a esperar
     private long ultimoTicEjecucion = 0;     // tic de última ejecución
@@ -69,7 +69,7 @@ public class Proceso {
     Random random = new Random();
     private int startAddress = random.nextInt(1000) + 100; // Ejemplo: entre 100 y 1099
     
-    public Proceso(int id, Tipo tipo, String nombre, int instrucciones, long quantum, long tiempoES, int tamano, int instruccionesParaES, int ciclosParaCompletarES) { //constructor simplificado
+    public Proceso(int id, Tipo tipo, String nombre, int instrucciones, int instruccionesParaES, int ciclosParaCompletarES) { //constructor simplificado
        
         this.id = id;
         this.nombre = nombre;
@@ -77,9 +77,9 @@ public class Proceso {
         this.instrucciones = instrucciones;
         this.actualInstruccion = 0;
         this.duracionTotal = instrucciones;  //Todas las instrucciones se ejecutan en un único ciclo de instrucción
-        this.quantum = quantum;
-        this.tiempoES = tiempoES;
-        this.tamano = tamano;
+//        this.quantum = quantum;
+//        this.tiempoES = tiempoES;
+        this.tamano = this.instrucciones*2;
         this.estado = Estado.NUEVO;
         this.programCounter = this.startAddress;
         this.memoryAddressRegister = this.programCounter * this.instrucciones;
@@ -87,6 +87,7 @@ public class Proceso {
         this.ciclosParaCompletarES = ciclosParaCompletarES;
         this.pcb = new PCB(id, nombre, this.estado, this.programCounter, this.memoryAddressRegister);
     }
+    
      // 🔹 Método para avanzar el PC y el MAR sincronizados
     public void incrementarPCyMAR() {
         this.programCounter++;
@@ -112,10 +113,10 @@ public class Proceso {
     public int getId() { return this.pcb.getId(); }
     public Tipo getTipo() { return tipo; }
     public long getDuracionTotal() { return duracionTotal; }
-    public long getQuantum() { return quantum; }
-    public long getTiempoES() { return tiempoES; }
+//    public long getQuantum() { return quantum; }
+//    public long getTiempoES() { return tiempoES; }
     public int getTamano() { return tamano; }
-    public void setTamano(int tamano) { this.tamano = tamano; }
+//    public void setTamano(int tamano) { this.tamano = tamano; }
 
     public boolean isInterrumpido() { return interrumpido; }
     public void setInterrumpido(boolean interrumpido) { this.interrumpido = interrumpido; }

@@ -87,13 +87,13 @@ public class OperatingSystem {
         
         logEvent("Proceso " + p.getNombre() + " creado.");
         // ...
-        if (memory.cargarProceso(p)) {
-             logEvent("Proceso " + p.getNombre() + " cargado en memoria principal (LISTO).");
-             // ...
-        } else {
-             logEvent("Memoria llena. Intentando suspender para Proceso " + p.getNombre() + ".");
-             // ...
-        }
+//        if (memory.cargarProceso(p)) {
+//             logEvent("Proceso " + p.getNombre() + " cargado en memoria principal (LISTO).");
+//             // ...
+//        } else {
+//             logEvent("Memoria llena. Intentando suspender para Proceso " + p.getNombre() + ".");
+//             // ...
+//        }
         
         moverANuevos(p);
         this.agregarProceso(p);
@@ -109,6 +109,7 @@ public class OperatingSystem {
             if (memory.cargarProceso(p)) {
 //                memory.agregarAColaCortoPlazo(p);
                 System.out.println("SO: " + p.getNombre() + " cargado en memoria principal");
+             logEvent("Proceso " + p.getNombre() + " cargado en memoria principal (LISTO).");
                 colaNuevos.remove(p);
                 p.setEstado(Proceso.Estado.LISTO);
                 
@@ -117,6 +118,7 @@ public class OperatingSystem {
 //        System.out.println("+++"+colaListos.size());
             } else{
                 verificarYSuspenderProcesos(p);
+             logEvent("Memoria llena. Intentando suspender para Proceso " + p.getNombre() + ".");
             }
 //            else {
 //                // Si no hay espacio, lo mandamos a disco
@@ -397,7 +399,8 @@ public class OperatingSystem {
     
     // ----- Métodos de transición ----- No se cambian estados porque se cambian en los metodos
     public void moverANuevos(Proceso p) {
-        colaNuevos.add(p);
+         colaNuevos.add(p);
+        
     }
     
     // 🔹 Mover proceso a cola de listos (después de interrupción)

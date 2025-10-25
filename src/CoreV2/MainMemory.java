@@ -48,6 +48,7 @@ public class MainMemory {
     public boolean cargarProceso(Proceso p) {
         try {
             mutex.acquire();
+            System.out.println("memoria capacidad: "+ bloquesLibres.get(0).size);
             for (int i = 0; i < bloquesLibres.size(); i++) {
                 MemoryBlock block = bloquesLibres.get(i);
 
@@ -65,6 +66,7 @@ public class MainMemory {
                     return true;
                 }
             }
+            System.out.println("No pude cargar proceso");
             return false;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -75,6 +77,7 @@ public class MainMemory {
     }
     
     public boolean hayEspacioDisponible() {
+        System.out.println("consultando bloques libres: "+bloquesLibres.size());
         for (int i = 0; i < bloquesLibres.size(); i++) {
             MemoryBlock block = bloquesLibres.get(i);
             if (block.size > 0) return true;
@@ -90,8 +93,12 @@ public class MainMemory {
             procesosEnMemoria.remove(p);
             bloquesLibres.add(new MemoryBlock(p.getStartAddress(), p.getTamano()));
             fusionarBloquesLibres();
+            System.out.println("memoria liberada: "+p.getTamano());
+            System.out.println("bloques libres: "+bloquesLibres.get(0).size+" "+bloquesLibres.size());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            System.out.println("memoria no liberada: "+p.getTamano());
+
         } finally {
             mutex.release();
         }

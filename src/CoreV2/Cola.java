@@ -37,6 +37,19 @@ public class Cola {
         }
         size++;
     }
+    
+    // Agrega al final
+    public void add(PCB pcb) {
+        Nodo nuevo = new Nodo(pcb);
+        if (fin != null) {
+            fin.setSiguiente(nuevo);
+        }
+        fin = nuevo;
+        if (frente == null) {
+            frente = nuevo;
+        }
+        size++;
+    }
 
     // Equivalente a poll(): saca el primer elemento
     public Proceso poll() {
@@ -61,6 +74,30 @@ public class Cola {
         Nodo actual = frente;
         while (actual.getSiguiente() != null) {
             if (actual.getSiguiente().getProceso() == p) {
+                actual.setSiguiente(actual.getSiguiente().getSiguiente());
+                if (actual.getSiguiente() == null) fin = actual;
+                size--;
+                return true;
+            }
+            actual = actual.getSiguiente();
+        }
+        return false; // no se encontró
+    }
+    
+    
+     // Saca un proceso específico
+    public boolean remove(PCB pcb) {
+        if (frente == null) return false;
+
+        if (frente.getProceso().getPcb() == pcb) {
+            poll();
+            size--;
+            return true;
+        }
+
+        Nodo actual = frente;
+        while (actual.getSiguiente() != null) {
+            if (actual.getSiguiente().getProceso().getPcb() == pcb) {
                 actual.setSiguiente(actual.getSiguiente().getSiguiente());
                 if (actual.getSiguiente() == null) fin = actual;
                 size--;

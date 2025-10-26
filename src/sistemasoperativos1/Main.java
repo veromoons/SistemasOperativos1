@@ -28,7 +28,7 @@ import CoreV2.AlgorithmsStrategies.SRTScheduling;
 public class Main {
      public static void main(String[] args) throws InterruptedException {
         long unidadTiempoMs = 500; // duración de un tick (0.5s)
-        int memoriaTotal = 50;    // tamaño de memoria
+        int memoriaTotal = 200;    // tamaño de memoria
 
         MainMemory memory = new MainMemory(memoriaTotal);
         Disk disk = new Disk();

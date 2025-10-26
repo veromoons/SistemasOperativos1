@@ -24,42 +24,33 @@ import CoreV2.AlgorithmsStrategies.SRTScheduling;
  * @author verol
  */
 
-/**
- * Main: punto de entrada de la simulación.
- * Crea módulos, procesos (CPU-bound / IO-bound) y arranca el sistema.
- */
 
 public class Main {
      public static void main(String[] args) throws InterruptedException {
         long unidadTiempoMs = 500; // duración de un tick (0.5s)
-        int memoriaTotal = 1000;    // tamaño de memoria
+        int memoriaTotal = 50;    // tamaño de memoria
 
-        // 🔹 Instanciamos los componentes
         MainMemory memory = new MainMemory(memoriaTotal);
         Disk disk = new Disk();
         DMA dma = new DMA(unidadTiempoMs);
-        CPU cpu = new CPU(); // SO se setea después
-        Scheduler scheduler = new Scheduler(new FIFOScheduling()); // FIFO inicial
+        CPU cpu = new CPU(); 
+        Scheduler scheduler = new Scheduler(new FIFOScheduling()); 
         Clock clock = new Clock(unidadTiempoMs);
         OperatingSystem so = new OperatingSystem(cpu, memory, disk, dma, scheduler, clock);
         clock.setSO(so);
         scheduler.setSO(so);
 
-        // 🔹 Seteamos el SO en la CPU
         cpu = new CPU();
         int quantumDefault=0;
         if(scheduler.algoritmoTieneQuantum()){
             quantumDefault = 5;
         }
-        so.setCPUQuantum(quantumDefault); // SI ES 0 ES SIN QUANTUM (para los preemptivos debe ser >0)
+        so.setCPUQuantum(quantumDefault); 
         
-        //Creamos la GUI y pasamos el SO
-        SimuladorGUI ventana = new SimuladorGUI(so, cpu, clock);
+       SimuladorGUI ventana = new SimuladorGUI(so, cpu, clock);
         
-        //Pasamos GUI al SO
         so.setGUI(ventana);
         
-        // MOSTRAR VENTANA
         java.awt.EventQueue.invokeLater(() -> {
             ventana.setVisible(true);
         });
@@ -67,7 +58,6 @@ public class Main {
         
         clock.startClock();
 
-        // 🔹 Creamos procesos
 //        so.crearProceso(1, Proceso.Tipo.CPU_BOUND, 20, 20, 2L, 8);      // tamaño 20, 2 ticks de E/S
 //        so.crearProceso(2, Proceso.Tipo.IO_BOUND, 5, 5, 10, 1, 3, 10);    // tamaño 30, 5 ticks de E/S
 //        so.crearProceso(3,Proceso.Tipo.NORMAL,10, 10, 5L, 7);   // tamaño 10, sin E/S
@@ -75,10 +65,8 @@ public class Main {
 //        so.crearProceso(4,Proceso.Tipo.NORMAL,8, 8, 5L, 7);   // tamaño 10, sin E/S
 
 
-        // 🔹 Asignamos procesos a CPU según disponibilidad
 //        so.asignarProcesoACPU();
 
-        // 🔹 Simulamos un tic global (ej. 20 ticks)
 //        for (int i = 0; i < 20; i++) {
 //            Thread.sleep(unidadTiempoMs);
 //            // Revisar si CPU está libre y asignar siguiente
@@ -90,7 +78,6 @@ public class Main {
 //            }
 //        }
 
-        // 🔹 Detener CPU al final
 //        clock.stopClock();
 //
 //        System.out.println("Simulación completada");

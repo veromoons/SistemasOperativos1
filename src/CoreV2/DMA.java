@@ -21,7 +21,6 @@ public class DMA {
         this.unidadTiempoMs = unidadTiempoMs;
     }
 
-    // 🔹 Ejecutar operación de E-S para un proceso
     public void ejecutarES(Proceso p, Runnable callback) {
         new Thread(() -> {
             try {

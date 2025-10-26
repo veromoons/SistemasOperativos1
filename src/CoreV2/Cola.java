@@ -25,7 +25,6 @@ public class Cola {
         return size;
     }
     
-    // Agrega al final
     public void add(Proceso p) {
         Nodo nuevo = new Nodo(p);
         if (fin != null) {
@@ -38,7 +37,6 @@ public class Cola {
         size++;
     }
     
-    // Agrega al final
     public void add(PCB pcb) {
         Nodo nuevo = new Nodo(pcb);
         if (fin != null) {
@@ -51,7 +49,6 @@ public class Cola {
         size++;
     }
 
-    // Equivalente a poll(): saca el primer elemento
     public Proceso poll() {
         if (frente == null) return null;
         Proceso p = frente.getProceso();
@@ -61,7 +58,6 @@ public class Cola {
         return p;
     }
 
-    // Saca un proceso específico
     public boolean remove(Proceso p) {
         if (frente == null) return false;
 
@@ -85,7 +81,6 @@ public class Cola {
     }
     
     
-     // Saca un proceso específico
     public boolean remove(PCB pcb) {
         if (frente == null) return false;
 
@@ -105,7 +100,7 @@ public class Cola {
             }
             actual = actual.getSiguiente();
         }
-        return false; // no se encontró
+        return false; 
     }
 
     public Proceso peek() {

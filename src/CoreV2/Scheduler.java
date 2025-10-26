@@ -11,10 +11,8 @@ import CoreV2.AlgorithmsStrategies.ISchedulingAlgorithm;
  *
  * @author verol
  */
-// 🔹 Interfaz genérica para algoritmos de planificació
 
 
-// 🔹 Scheduler que utiliza un algoritmo dinámico
 public class Scheduler {
     private ISchedulingAlgorithm algoritmo;
     private OperatingSystem so;
@@ -58,8 +56,6 @@ public class Scheduler {
     public void setAlgoritmo(ISchedulingAlgorithm nuevoAlgoritmo) {
             this.algoritmo = nuevoAlgoritmo; // <-- Esto ya lo tenías
 
-            // ⬇️ AÑADE ESTO (es la lógica que está en setSO) ⬇️
-            // Para asegurarnos de que la NUEVA instancia del algoritmo conozca las colas
             if (this.so != null) {
                 this.algoritmo.setColaNuevos(so.getColaNuevos());
                 this.algoritmo.setColaListos(so.getColaListos());

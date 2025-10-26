@@ -14,9 +14,8 @@ import java.util.logging.Logger;
  * @author verol
  */
 public class Disk {
-    private final Semaphore mutex = new Semaphore(1); // protege acceso concurrente
+    private final Semaphore mutex = new Semaphore(1); 
 
-    // 🔹 Guardar un proceso en disco (long-term)
     public void guardarProceso(Proceso p) {
         try {
             mutex.acquire();
@@ -39,7 +38,6 @@ public class Disk {
     }
     
 
-    // 🔹 Cargar un proceso desde disco (para pasar a memoria principal)
 //    public Proceso cargarProceso() {
 //        try {
 //            mutex.acquire();
@@ -57,7 +55,6 @@ public class Disk {
 //    }
 
 
-    // 🔹 Consultar si hay procesos en disco
 //    public boolean hayProcesosLongTerm() {
 //        try {
 //            mutex.acquire();

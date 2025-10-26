@@ -23,7 +23,7 @@ public class Clock {
     }
     
     public void setTicTimeMs(long nuevoTiempoMs) {
-        if (nuevoTiempoMs > 0) { // Asegurarse de que no sea cero o negativo
+        if (nuevoTiempoMs > 0) {
             this.ticTimeMs = nuevoTiempoMs;
             System.out.println("Clock: Duración del tick cambiada a " + nuevoTiempoMs + " ms");
         } else {
@@ -48,12 +48,10 @@ public class Clock {
         thread = new Thread(() -> {
             while (running) {
                 try {
-                    // ⬇️ LEER ticTimeMs DENTRO DEL BUCLE ⬇️
                     long currentTicTime = this.ticTimeMs; 
                     if (currentTicTime > 0) { // Evita sleep(0)
                        Thread.sleep(currentTicTime); 
                     } else {
-                        // Si es 0 o menos, espera un poco para no bloquear la CPU
                         Thread.sleep(10); 
                     }
 

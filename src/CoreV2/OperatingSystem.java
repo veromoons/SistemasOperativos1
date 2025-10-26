@@ -19,7 +19,6 @@ import CoreV2.AlgorithmsStrategies.ISchedulingAlgorithm.SchedulingType;
  *
  * @author verol
  */
-// 🔹 Sistema operativo que maneja colas, CPU, memoria y disco
 public class OperatingSystem {
     private String nextProcessName = null;
     private final Scheduler scheduler;
@@ -48,20 +47,16 @@ public class OperatingSystem {
     private boolean stopQuantumThread;
     
 
-    private final Semaphore mutex = new Semaphore(1); // protege acceso concurrente
+    private final Semaphore mutex = new Semaphore(1); 
 
     private int stat_procesosTotalesTerminados = 0;
     private int stat_ioBoundTerminados = 0;
     private int stat_cpuBoundTerminados = 0;
-    // Guarda el tipo de la política actual
     private SchedulingType currentPolicyType;
-    // Guarda los procesos terminados por cada tipo de política
     private Map<SchedulingType, Integer> terminosPorPolitica;
-    // Guarda los ciclos de reloj ejecutados por cada tipo de política
     private Map<SchedulingType, Long> ciclosPorPolitica;
     private Map<SchedulingType, Integer> terminosIOBoundPorPolitica;
     private Map<SchedulingType, Integer> terminosCPUBoundPorPolitica;
-    // 🔹 Tiempo total de espera acumulado por política
     private final Map<SchedulingType, Long> tiempoEsperaTotalPorPolitica = new HashMap<>();
     private Lista<Float>[] equidadesPorPolitica;
 
@@ -78,10 +73,9 @@ public class OperatingSystem {
         
         this.terminosPorPolitica = new HashMap<>();
         this.ciclosPorPolitica = new HashMap<>();
-        this.terminosIOBoundPorPolitica = new HashMap<>(); // <-- Añadir
-        this.terminosCPUBoundPorPolitica = new HashMap<>(); // <-- Añadir
+        this.terminosIOBoundPorPolitica = new HashMap<>(); 
+        this.terminosCPUBoundPorPolitica = new HashMap<>(); 
         
-        // Inicializar arreglo
     equidadesPorPolitica = new Lista[SchedulingType.values().length];
 for (int i = 0; i < equidadesPorPolitica.length; i++) {
     equidadesPorPolitica[i] = new Lista<>();
@@ -90,11 +84,10 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
         for (SchedulingType type : SchedulingType.values()) {
             this.terminosPorPolitica.put(type, 0);
             this.ciclosPorPolitica.put(type, 0L);
-            this.terminosIOBoundPorPolitica.put(type, 0); // <-- Añadir
-            this.terminosCPUBoundPorPolitica.put(type, 0); // <-- Añadir
+            this.terminosIOBoundPorPolitica.put(type, 0); 
+            this.terminosCPUBoundPorPolitica.put(type, 0);
     }
-    // Guarda el tipo de política inicial
-    // Necesitaremos añadir getAlgoritmo() a Scheduler
+
            this.currentPolicyType = scheduler.getAlgoritmo().getSchedulingType();
     }
     
@@ -139,7 +132,6 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
         this.agregarProceso(p);
     }
 
-    // 🔹 Agregar proceso al sistema
     public void agregarProceso(Proceso p) {
         try {
             
@@ -195,7 +187,6 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
         moverAColaListos(p);
     }
 
-    // 🔹 Proceso finalizado
     public void procesoFinalizado(Proceso p) {
         p.setEstado(Proceso.Estado.TERMINADO);
         p.setSalidaTicEjecucion(clock.getTic());
@@ -217,10 +208,8 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
             this.stat_cpuBoundTerminados++;
         }
         
-        // 🔹 Acumular tiempo de espera promedio por política
         if (currentPolicyType != null) {
             long esperaActual = p.getTiempoEsperando();
-            // Sumar al total acumulado
             tiempoEsperaTotalPorPolitica.put(
                 currentPolicyType,
                 tiempoEsperaTotalPorPolitica.getOrDefault(currentPolicyType, 0L) + esperaActual
@@ -228,28 +217,22 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
         }
         
         if (currentPolicyType != null) {
-    // Guardar equidad del proceso
     equidadesPorPolitica[currentPolicyType.ordinal()].add(p.getEquidad());
 }
 
         
-        // Actualizar estadísticas por política
         if (currentPolicyType != null) {
-            // Contar terminados totales (ya lo teníamos)
             terminosPorPolitica.put(currentPolicyType, terminosPorPolitica.getOrDefault(currentPolicyType, 0) + 1);
 
-            // ⬇️ AÑADE ESTO PARA CONTAR POR TIPO DE PROCESO Y POLÍTICA ⬇️
             if (p.getTipo() == Proceso.Tipo.IO_BOUND) {
                 terminosIOBoundPorPolitica.put(currentPolicyType, terminosIOBoundPorPolitica.getOrDefault(currentPolicyType, 0) + 1);
             } else if (p.getTipo() == Proceso.Tipo.CPU_BOUND) {
                 terminosCPUBoundPorPolitica.put(currentPolicyType, terminosCPUBoundPorPolitica.getOrDefault(currentPolicyType, 0) + 1);
             }
-            // --- FIN ---
         }
         
     }
 
-    // 🔹 Bloquear proceso por E/S
     public void bloquearProcesoES(Proceso p) {
         logEvent("Proceso " + p.getNombre() + " pasa a BLOQUEADO por E/S."); // <-- Añadir log
         System.out.println("SO: " + p.getNombre() + " bloqueado por E/S");
@@ -273,7 +256,6 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
         });
     }
 
-    // 🔹 Cambiar algoritmo de planificación
     public void setAlgoritmo(ISchedulingAlgorithm algoritmo) {
         // Actualizar la política actual
         this.currentPolicyType = algoritmo.getSchedulingType();
@@ -324,7 +306,6 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
     public void notifyTic() {
         try {
             
-            // Contar ciclos por política
             if (currentPolicyType != null) {
                 ciclosPorPolitica.put(currentPolicyType, ciclosPorPolitica.getOrDefault(currentPolicyType, 0L) + 1);
             }
@@ -333,20 +314,17 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
             if (cpu.getProcesoActual() != null) {
                 
                 Proceso actual = cpu.getProcesoActual();
-            // 💡 Simulación de avance de PC y MAR solo si está en ejecución
             if (actual.getEstado() == Proceso.Estado.EJECUCION) {
                 actual.incrementarPCyMAR(); // <-- 👈 actualización simulada
             }
                 cpu.ejecutarInstruccion( this);
             }
-            // 🔹 Actualizamos tiempos de espera para los procesos en cola de corto plazo
 //            colaListos.forEach(p -> p.actualizarTiempoEsperando(clock.getTic()));
 //            for (Proceso p : this.colaListos) {
 ////                System.out.println(this.colaListos.size());
 //                p.actualizarTiempoEsperando(clock.getTic());
 //            }
 
-            // 🔹 Intentamos asignar proceso a CPU
             if (!cpu.estaOcupado() && scheduler.hayProcesos()) {
                 Proceso siguiente = scheduler.obtenerSiguienteProceso();
                 if (siguiente != null) {
@@ -364,7 +342,6 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
             verificarMoverListosSuspendidosAListos();
             
             if (this.gui != null) {
-                // Pide al hilo de la GUI que ejecute la actualización
                 SwingUtilities.invokeLater(() -> {
                     gui.actualizarGUI();
                 });
@@ -404,10 +381,8 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
                 if (!colaBloqueados.isEmpty()) {
                 candidato = colaBloqueados.poll(); // Saca el primero bloqueado
                 } 
-                // Si no hay bloqueados, pasa nuevo proceso a Listo Susp (menos ideal, pero necesario)
                 else {
                     candidato = null;
-                    // Si no hay espacio, lo mandamos a disco
                     colaNuevos.remove(p);
                     p.setEstado(Proceso.Estado.LISTOSUSPENDIDO);
                     moverAListoSuspendidos(p);
@@ -419,7 +394,7 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
                 if (candidato != null) {
                     this.memory.liberarProceso(candidato);
                     suspenderProceso(candidato);
-//                    System.out.println("🔸 Proceso " + candidato.getNombre() + " suspendido por falta de memoria.");
+//                    System.out.println("Proceso " + candidato.getNombre() + " suspendido por falta de memoria.");
                     if (memory.hayEspacioDisponible() && this.memory.findAvailableBlock(p)){
                         this.memory.cargarProceso(p);
                         p.setEstado(Proceso.Estado.LISTO);
@@ -430,12 +405,10 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
                     candidato = null; 
                 }
             }
-            // Primero busca un proceso bloqueado (porque suspender bloqueados es más realista)
             
         }
     }
 
-    // 🔹 Suspende un proceso (lo pasa de memoria principal a disco)
     public void suspenderProceso(Proceso p) {
 //        colaBloqueados.remove(p); //ya se hace POLL de candidato
         memory.liberarProceso(p);
@@ -446,7 +419,6 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
         System.out.println("SO: " + p.getNombre() + " suspendido (bloqueado/suspendido) para liberar memoria.");
     }
     
-//    // 🔹 Reactiva un proceso suspendido si hay memoria libre en bloqueados
 //    public void reactivarProcesosBloqueadoSuspendidos() {
 //        if (!colaBloqueadoSuspendido.isEmpty()) {
 //            Proceso p = colaBloqueadoSuspendido.peek();
@@ -489,7 +461,6 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
         
     }
     
-    // 🔹 Mover proceso a cola de listos (después de interrupción)
     public void moverAColaListos(Proceso p) {
 //        scheduler.agregarProcesos(p);
         colaListos.add(p);
@@ -545,25 +516,19 @@ for (int i = 0; i < equidadesPorPolitica.length; i++) {
     }
 
     public void setDuracionCiclo(long nuevoTiempoMs) {
-        // Simplemente pasa la llamada al clock
         this.clock.setTicTimeMs(nuevoTiempoMs);
         this.dma.setUnidadTiempoMs(nuevoTiempoMs);
     }
     
     public void logEvent(String message) {
-    // Asegurarnos de que tenemos una GUI y el área de log existe
         if (this.gui != null && this.gui.getAreaLog() != null) {
-            // Formatear el mensaje con el tick actual
             String logMessage = String.format("[Tick %d] %s%n", clock.getTic(), message);
 
-            // Usar invokeLater para actualizar la GUI desde el hilo correcto
             SwingUtilities.invokeLater(() -> {
                 gui.getAreaLog().append(logMessage);
-                // Opcional: Auto-scroll hacia abajo
                 gui.getAreaLog().setCaretPosition(gui.getAreaLog().getDocument().getLength());
             });
         } else {
-            // Si no hay GUI, imprimir en consola como fallback
             System.out.printf("[Tick %d] %s%n", clock.getTic(), message);
         }   
     }

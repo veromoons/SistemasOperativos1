@@ -24,7 +24,6 @@ class MemoryBlock {
     }
 }
 
-// Simulación de la memoria principal
 public class MainMemory {
     private final int capacidad;                      // tamaño total de memoria
     private final Lista<MemoryBlock> bloquesLibres;    // lista de bloques libres
@@ -44,7 +43,6 @@ public class MainMemory {
         this.procesosEnMemoria = new Lista<>();
     }
 
-    // 🔹 Intenta cargar un proceso en memoria
     public boolean cargarProceso(Proceso p) {
         try {
             mutex.acquire();
@@ -86,7 +84,6 @@ public class MainMemory {
     }
 
 
-    // 🔹 Libera la memoria de un proceso
     public void liberarProceso(Proceso p) {
         try {
             mutex.acquire();
@@ -104,7 +101,6 @@ public class MainMemory {
         }
     }
     
-    // Ordena la lista de MemoryBlock por start ascendente
     public void sortByStart(Lista<MemoryBlock> lista) {
         int n = lista.size();
         for (int i = 0; i < n - 1; i++) {
@@ -121,7 +117,6 @@ public class MainMemory {
     }
 
 
-    // 🔹 Fusiona bloques contiguos para evitar fragmentación
     private void fusionarBloquesLibres() {
         sortByStart(bloquesLibres);
         Lista<MemoryBlock> fusionados = new Lista<>();
@@ -159,7 +154,6 @@ public class MainMemory {
 
    
     
-//    // 🔹 Métodos para la cola de corto plazo
 //    public void agregarAColaCortoPlazo(Proceso p) {
 //        try {
 //            mutex.acquire();
@@ -195,7 +189,6 @@ public class MainMemory {
 //        }
 //    }
 //
-//    // 🔹 Métodos para la cola de mediano plazo
 //    public void agregarAColaMedianoPlazo(Proceso p) {
 //        try {
 //            mutex.acquire();
@@ -231,7 +224,6 @@ public class MainMemory {
 //        }
 //    }
 //
-//    // 🔹 Getters públicos para SO
 //    public List<Proceso> getProcesosCortoPlazo() {
 //        return new ArrayList<>(colaCortoPlazo);
 //    }

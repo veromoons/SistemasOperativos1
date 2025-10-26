@@ -68,7 +68,6 @@ public class Proceso {
         return this.instrucciones - this.actualInstruccion;
     }
 
-    // 🔹 Dirección de inicio en memoria principal
     Random random = new Random();
     private int startAddress = random.nextInt(1000) + 100; // Ejemplo: entre 100 y 1099
     
@@ -112,12 +111,10 @@ public class Proceso {
     }
     
     
-     // 🔹 Método para avanzar el PC y el MAR sincronizados
     public void incrementarPCyMAR() {
         this.programCounter++;
         this.memoryAddressRegister++;
         
-        // Actualizamos también el PCB
         this.setMemoryAddressRegister(memoryAddressRegister);
         this.setProgramCounter(programCounter);
         this.pcb.setPc(this.programCounter);
@@ -133,7 +130,6 @@ public class Proceso {
     }
     
 
-    // 🔹 Getters y setters
     public int getId() { return this.pcb.getId(); }
     public Tipo getTipo() { return tipo; }
     public long getDuracionTotal() { return duracionTotal; }
@@ -148,7 +144,6 @@ public class Proceso {
     public int getStartAddress() { return startAddress; }
     public void setStartAddress(int address) { this.startAddress = address; }
 
-    // 🔹 Control de tiempos
     public void setTicInicioEspera(long tic) { this.ticInicioEspera = tic; } //tiempo en el que empezo E/S
     public long getTicInicioEspera(){ return this.ticInicioEspera; }
     public long getUltimoTicEjecucion(){ return this.ultimoTicEjecucion; } //cuando se dejo de ejecutar en que tic iba
@@ -176,12 +171,10 @@ public class Proceso {
 //        ticInicioEspera = ticActual;
 //    }
 
-    // 🔹 Método reincorporado para compatibilidad con CPU/Scheduler
     public void incrementarTiempoEjecutado() {
         tiempoEjecutado++;
     }
 
-    // 🔹 Consultas de estado
     public long getTiempoEjecutado() { return tiempoEjecutado; }
     public long getTiempoEsperando() { return tiempoEsperando; }
 
@@ -212,7 +205,6 @@ public class Proceso {
         Estado anterior = this.pcb.getEstado();
         this.estado = nuevoEstado; 
         this.pcb.setEstado(nuevoEstado);
-        // 🔹 Mostrar cambio de estado
     System.out.printf(
         "📄 [%s] Estado cambiado: %s → %s | PC=%d | MAR=%d%n",
         nombre, anterior, nuevoEstado, this.pcb.getPc(), this.pcb.getMar()

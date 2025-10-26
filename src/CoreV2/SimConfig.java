@@ -9,28 +9,22 @@ package CoreV2;
  * @author juanr
  */
 public class SimConfig {
-// Parámetro existente
     private long duracionCicloMs;
 
-    // Nuevos parámetros para defaults de creación de procesos
     private int defaultInstrucciones;
-    private String defaultTipoProceso; // Guardaremos "CPU bound" o "I/O bound"
+    private String defaultTipoProceso; 
     private int defaultCiclosGenExcepcion;
     private int defaultCiclosSatExcepcion;
 
-    // Constructor con valores por defecto
     public SimConfig() {
-        // Valor por defecto existente
         this.duracionCicloMs = 500;
 
-        // Valores por defecto para nuevos parámetros
-        this.defaultInstrucciones = 10; // Ejemplo, pon el que prefieras
-        this.defaultTipoProceso = "CPU bound"; // Ejemplo
-        this.defaultCiclosGenExcepcion = 5; // Ejemplo
-        this.defaultCiclosSatExcepcion = 10; // Ejemplo
+        this.defaultInstrucciones = 10; 
+        this.defaultTipoProceso = "CPU bound"; 
+        this.defaultCiclosGenExcepcion = 5;
+        this.defaultCiclosSatExcepcion = 10;
     }
 
-    // --- Getters y Setters ---
 
     public long getDuracionCicloMs() {
         return duracionCicloMs;

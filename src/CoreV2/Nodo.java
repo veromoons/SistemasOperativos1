@@ -20,7 +20,6 @@ public class Nodo {
         this.siguiente = null;
     }
     
-     // Constructor para PCBs
     public Nodo(PCB pcb) {
         this.pcb = pcb;
         this.proceso = null;

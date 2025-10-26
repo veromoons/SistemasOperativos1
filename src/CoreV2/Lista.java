@@ -28,7 +28,6 @@ public class Lista<T> {
         size = 0;
     }
 
-    // 🔹 Agregar al final
     public void add(T elemento) {
         Nodo nuevo = new Nodo(elemento);
         if (cabeza == null) {
@@ -43,7 +42,6 @@ public class Lista<T> {
         size++;
     }
 
-    // 🔹 Eliminar un elemento específico
     public boolean remove(T elemento) {
         if (cabeza == null) return false;
 
@@ -66,7 +64,6 @@ public class Lista<T> {
         return false;
     }
 
-    // 🔹 Obtener elemento por índice
     public T get(int index) {
         if (index < 0 || index >= size) throw new RuntimeException("IndexOutOfBounds");
         Nodo actual = cabeza;
@@ -76,23 +73,19 @@ public class Lista<T> {
         return actual.dato;
     }
 
-    // 🔹 Tamaño de la lista
     public int size() {
         return size;
     }
 
-    // 🔹 Verificar si está vacía
     public boolean isEmpty() {
         return size == 0;
     }
 
-    // 🔹 Limpiar lista
     public void clear() {
         cabeza = null;
         size = 0;
     }
 
-    // 🔹 Recorrer toda la lista y ejecutar un callback
     public void forEach(Accion<T> accion) {
         Nodo actual = cabeza;
         while (actual != null) {
@@ -101,7 +94,6 @@ public class Lista<T> {
         }
     }
 
-    // 🔹 Interfaz para callback
     public interface Accion<T> {
         void ejecutar(T elemento);
     }

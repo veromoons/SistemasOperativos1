@@ -12,7 +12,6 @@ package CoreV2;
 
 public class HashMap<K, V> implements Map<K, V> {
 
-    // Clase interna para guardar pares clave-valor
     private class Entry {
         K key;
         V value;
@@ -42,7 +41,6 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public void put(K key, V value) {
-        // Si la clave existe, actualizar
         for (int i = 0; i < lista.size(); i++) {
             Entry e = lista.get(i);
             if ((key == null && e.key == null) || (key != null && key.equals(e.key))) {
@@ -51,7 +49,6 @@ public class HashMap<K, V> implements Map<K, V> {
                 return;
             }
         }
-        // Si no existe, agregar
         lista.add(new Entry(key, value));
     }
 

@@ -9,8 +9,8 @@ import CoreV2.AlgorithmsStrategies.ISchedulingAlgorithm;
 import java.util.concurrent.Semaphore;
 import sistemasoperativos1.SimuladorGUI;
 import javax.swing.SwingUtilities;
-import java.util.HashMap;
-import java.util.Map;
+//import java.util.HashMap;
+//import java.util.Map;
 import CoreV2.AlgorithmsStrategies.ISchedulingAlgorithm.SchedulingType;
 //import java.util.*;
 

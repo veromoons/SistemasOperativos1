@@ -14,7 +14,7 @@ import java.util.concurrent.Semaphore;
 public class DMA {
     private final Semaphore mutex = new Semaphore(1); // protege acceso concurrente
     private boolean running = false;
-    private final long unidadTiempoMs; // duración de un tick
+    private long unidadTiempoMs; // duración de un tick
     private Runnable onESComplete; // callback al completar E-S
 
     public DMA(long unidadTiempoMs) {
@@ -30,11 +30,13 @@ public class DMA {
                 this.onESComplete = callback;
 
                 long tiempoES = p.getCiclosParaCompletarES(); // en ticks
-//                System.out.println(unidadTiempoMs+"---"+tiempoES);
-                Thread.sleep(unidadTiempoMs*tiempoES);
+//                System.out.println("TEIMPO E/S DMA---"+tiempoES);
+//                System.out.println("sleeping 4: "+unidadTiempoMs*tiempoES);
+                Thread.sleep(unidadTiempoMs*tiempoES); //QUE??
 //                for (long i = 0; i < tiempoES; i++) {
 //                    Thread.sleep(unidadTiempoMs); // simula tiempo de E-S
 //                }
+//                System.out.println("salio");
 
                 System.out.println("DMA: Operación E/S completada → genera interrupción al SO (" + p.getNombre() + ")");
 
@@ -54,5 +56,11 @@ public class DMA {
     public boolean estaOcupado() {
         return running;
     }
+
+    public void setUnidadTiempoMs(long unidadTiempoMs) {
+        this.unidadTiempoMs = unidadTiempoMs;
+    }
+    
+    
 }
 

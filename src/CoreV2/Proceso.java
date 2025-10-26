@@ -27,11 +27,11 @@ public class Proceso {
 //    private final long tiempoES;      // en ticks, si hace E/S
     private int tamano;               // tamaño de memoria requerido
     private long primerTicEjecucion;           // tic en el cual comenzo el procesp
-    private long salidaTicEjecucion;           // tic en el cual comenzo el procesp
+    private long salidaTicEjecucion;           // tic en el cual salio el procesp
 
     private long ticInicioEspera = 0;        // tic en que empezó a esperar
     private long ultimoTicEjecucion = 0;     // tic de última ejecución
-    private long tiempoEjecutado = 0;        // ticks ya ejecutados
+    private long tiempoEjecutado = 0;        // ticks ya ejecutados IGNORAR
     private long tiempoEsperando = 0;        // ticks total en espera
     private boolean interrumpido = false;
     private int actualInstruccion;   //por la cual va
@@ -91,6 +91,14 @@ public class Proceso {
         this.pcb = new PCB(id, nombre, this.estado, this.programCounter, this.memoryAddressRegister);
     }
 
+    public long getPrimerTicEjecucion() {
+        return primerTicEjecucion;
+    }
+
+    public long getSalidaTicEjecucion() {
+        return salidaTicEjecucion;
+    }
+    
     public void setPrimerTicEjecucion(long primerTicEjecucion) {
         this.primerTicEjecucion = primerTicEjecucion;
     }
@@ -99,8 +107,8 @@ public class Proceso {
         this.salidaTicEjecucion = salidaTicEjecucion;
     }
     
-    public long getEquidad() {
-        return (salidaTicEjecucion-primerTicEjecucion)/instrucciones;
+    public float getEquidad() {
+        return (float)(((float)salidaTicEjecucion-(float)primerTicEjecucion)/(float)instrucciones);
     }
     
     
@@ -151,19 +159,17 @@ public class Proceso {
         ultimoTicEjecucion = ticActual;
     }
 
-    public void actualizarTiempoEsperando(long ticActual) {
-        
-        System.out.println("aja->"+ticActual+"---"+ticInicioEspera);
-        if(ticInicioEspera==0){
-            ticInicioEspera = ticActual;
-        }
-        else{
-            tiempoEsperando += (ticActual - ticInicioEspera);
-            ticInicioEspera = ticActual;
-        }
-        
-        
-    }
+//    public void actualizarTiempoEsperando(long ticActual) {
+//        
+//        System.out.println("aja->"+ticActual+"---"+ticInicioEspera);
+//        if(ticInicioEspera==0){
+//            ticInicioEspera = ticActual;
+//        }
+//        else{
+//            tiempoEsperando += (ticActual - ticInicioEspera);
+//            ticInicioEspera = ticActual;
+//        }
+//    }
     
 //    public void actualizarTiempoEsperando(long ticActual) {
 //        tiempoEsperando ++;
@@ -178,6 +184,17 @@ public class Proceso {
     // 🔹 Consultas de estado
     public long getTiempoEjecutado() { return tiempoEjecutado; }
     public long getTiempoEsperando() { return tiempoEsperando; }
+
+    public void setTiempoEsperando(long tiempoEsperando) {
+        this.tiempoEsperando = tiempoEsperando;
+    }
+
+    public int getInstrucciones() {
+        return instrucciones;
+    }
+    
+    
+    
 
     public boolean estaCompletado() {
 //      System.out.println("[Proceso a validar "+this.id+"] "+"Validando completacion --> tiempo ejecutado: "+ tiempoEjecutado+ " duracionTotal: "+ duracionTotal);

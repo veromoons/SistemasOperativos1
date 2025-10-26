@@ -60,6 +60,7 @@ public class Clock {
                     ticGlobal++;
                     notifySO();
                     System.out.println("Tic Global: " + ticGlobal);
+//                    System.out.println("tictimems: "+ currentTicTime);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;

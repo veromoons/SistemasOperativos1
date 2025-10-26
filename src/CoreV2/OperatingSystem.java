@@ -61,7 +61,10 @@ public class OperatingSystem {
     private Map<SchedulingType, Long> ciclosPorPolitica;
     private Map<SchedulingType, Integer> terminosIOBoundPorPolitica;
     private Map<SchedulingType, Integer> terminosCPUBoundPorPolitica;
-    
+    // 🔹 Tiempo total de espera acumulado por política
+    private final Map<SchedulingType, Long> tiempoEsperaTotalPorPolitica = new HashMap<>();
+    private Lista<Float>[] equidadesPorPolitica;
+
 
     public OperatingSystem(CPU cpu, MainMemory memory, Disk disk, DMA dma, Scheduler scheduler, Clock clock) {
         this.cpu = cpu;
@@ -77,6 +80,12 @@ public class OperatingSystem {
         this.ciclosPorPolitica = new HashMap<>();
         this.terminosIOBoundPorPolitica = new HashMap<>(); // <-- Añadir
         this.terminosCPUBoundPorPolitica = new HashMap<>(); // <-- Añadir
+        
+        // Inicializar arreglo
+    equidadesPorPolitica = new Lista[SchedulingType.values().length];
+for (int i = 0; i < equidadesPorPolitica.length; i++) {
+    equidadesPorPolitica[i] = new Lista<>();
+}
         
         for (SchedulingType type : SchedulingType.values()) {
             this.terminosPorPolitica.put(type, 0);
@@ -189,12 +198,18 @@ public class OperatingSystem {
     // 🔹 Proceso finalizado
     public void procesoFinalizado(Proceso p) {
         p.setEstado(Proceso.Estado.TERMINADO);
+        p.setSalidaTicEjecucion(clock.getTic());
+        long tiempoEsperando = (p.getSalidaTicEjecucion() - p.getPrimerTicEjecucion())-p.getInstrucciones();
+        p.setTiempoEsperando(tiempoEsperando);
         moverATerminados(p);
         memory.liberarProceso(p);
         logEvent("Proceso " + p.getNombre() + " pasa a TERMINADO y se libera memoria."); // <-- Añadir log
         System.out.println("SO: " + p.getNombre() + " finalizado y liberado de memoria");
-        System.out.println("--->----> "+p.getTiempoEsperando());
-        p.setSalidaTicEjecucion(clock.getTic());
+//        System.out.println("--->----> "+p.getTiempoEsperando());
+        System.out.println("TIC DE INICIO: "+p.getPrimerTicEjecucion());
+        System.out.println("TIC DE FIN: "+p.getSalidaTicEjecucion());
+        System.out.println("TIEMPO ESPERADO: "+ tiempoEsperando);
+        System.out.println("EQUIDAD: "+p.getEquidad());
         this.stat_procesosTotalesTerminados++;
         if (p.getTipo() == Proceso.Tipo.IO_BOUND) {
             this.stat_ioBoundTerminados++;
@@ -202,7 +217,23 @@ public class OperatingSystem {
             this.stat_cpuBoundTerminados++;
         }
         
-    // Actualizar estadísticas por política
+        // 🔹 Acumular tiempo de espera promedio por política
+        if (currentPolicyType != null) {
+            long esperaActual = p.getTiempoEsperando();
+            // Sumar al total acumulado
+            tiempoEsperaTotalPorPolitica.put(
+                currentPolicyType,
+                tiempoEsperaTotalPorPolitica.getOrDefault(currentPolicyType, 0L) + esperaActual
+            );
+        }
+        
+        if (currentPolicyType != null) {
+    // Guardar equidad del proceso
+    equidadesPorPolitica[currentPolicyType.ordinal()].add(p.getEquidad());
+}
+
+        
+        // Actualizar estadísticas por política
         if (currentPolicyType != null) {
             // Contar terminados totales (ya lo teníamos)
             terminosPorPolitica.put(currentPolicyType, terminosPorPolitica.getOrDefault(currentPolicyType, 0) + 1);
@@ -215,6 +246,7 @@ public class OperatingSystem {
             }
             // --- FIN ---
         }
+        
     }
 
     // 🔹 Bloquear proceso por E/S
@@ -308,7 +340,7 @@ public class OperatingSystem {
                 cpu.ejecutarInstruccion( this);
             }
             // 🔹 Actualizamos tiempos de espera para los procesos en cola de corto plazo
-            colaListos.forEach(p -> p.actualizarTiempoEsperando(clock.getTic()));
+//            colaListos.forEach(p -> p.actualizarTiempoEsperando(clock.getTic()));
 //            for (Proceso p : this.colaListos) {
 ////                System.out.println(this.colaListos.size());
 //                p.actualizarTiempoEsperando(clock.getTic());
@@ -515,6 +547,7 @@ public class OperatingSystem {
     public void setDuracionCiclo(long nuevoTiempoMs) {
         // Simplemente pasa la llamada al clock
         this.clock.setTicTimeMs(nuevoTiempoMs);
+        this.dma.setUnidadTiempoMs(nuevoTiempoMs);
     }
     
     public void logEvent(String message) {
@@ -554,6 +587,26 @@ public class OperatingSystem {
     public int getTerminadosCPUBoundPorPolitica(SchedulingType tipo) {
         return this.terminosCPUBoundPorPolitica.getOrDefault(tipo, 0);
     }
+    
+    public double getTiempoEsperaPromedioPorPolitica(SchedulingType tipo) {
+        long totalEspera = tiempoEsperaTotalPorPolitica.getOrDefault(tipo, 0L);
+        int terminados = terminosPorPolitica.getOrDefault(tipo, 0);
+        if (terminados == 0) return 0.0; // evitar división por cero
+        return (double) totalEspera / terminados;
+    }
+    
+    public double getEquidadPromedioPorPolitica(SchedulingType tipo) {
+    Lista<Float> lista = equidadesPorPolitica[tipo.ordinal()];
+    if (lista.isEmpty()) return 0.0;
+
+    double suma = 0;
+    for (int i = 0; i < lista.size(); i++) {
+        suma += lista.get(i);
+    }
+
+    return suma / lista.size();
+}
+
 
 }
 
